@@ -14,7 +14,7 @@ export function FAQSection({ faqs }: FAQSectionProps) {
   if (!faqs.length) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#226d71] pb-16 pt-8">
+    <section className="relative z-0 w-full overflow-hidden bg-[#226d71] pb-16 pt-8">
       <div className="relative z-10 mx-auto w-full max-w-2xl px-6">
         <h2 className="mb-8 text-center text-[63px] font-medium uppercase tracking-wide text-white">
           FAQ

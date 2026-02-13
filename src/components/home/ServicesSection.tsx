@@ -115,16 +115,19 @@ export function ServicesSection({
 
       <div className="relative z-10 mx-auto flex w-full flex-col items-center px-6 text-center">
         {/* Counters stacked vertically with line between rows */}
-        <div className="mb-10 flex w-full flex-col gap-4 text-left px-6">
+        <div className="mx-auto mb-10 flex w-full max-w-[240px] flex-col gap-4 px-0 text-left">
           {(counters ?? []).map((item, index) => (
             <div key={`${item.counter_text}-${index}`} className="w-full">
               {index > 0 && (
                 <div className="my-4 h-px w-full bg-white/25" aria-hidden />
               )}
               <div className="hero-text-shadow flex w-full items-center justify-between gap-4">
-                <div className="flex items-baseline gap-1 text-[52px] md:text-[64px] font-normal leading-none text-white">
-                  <span>{item.counter_number}</span>
-                  <span>{item.counter_suffix}</span>
+                <div
+                  className="flex items-baseline gap-1 text-[52px] md:text-[64px] leading-none text-white"
+                  style={{ fontWeight: 200 }}
+                >
+                  <span style={{ fontWeight: 200 }}>{item.counter_number}</span>
+                  <span style={{ fontWeight: 200 }}>{item.counter_suffix}</span>
                 </div>
                 <div className="max-w-[55%] text-left text-[18px] md:text-[22px] font-normal leading-snug text-white">
                   {item.counter_text}

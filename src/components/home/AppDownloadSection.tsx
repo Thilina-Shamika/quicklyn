@@ -48,7 +48,7 @@ export function AppDownloadSection({ data }: AppDownloadSectionProps) {
   };
 
   return (
-    <section className="relative z-20 w-full overflow-hidden bg-[#226d71] py-16">
+    <section className="relative isolate z-[100] w-full overflow-x-hidden overflow-y-visible bg-[#226d71] py-16">
       {/* Phone/hand image as right-aligned background */}
       {bgImage && (
         <div
@@ -62,6 +62,13 @@ export function AppDownloadSection({ data }: AppDownloadSectionProps) {
             className="object-contain object-right"
             sizes="55vw"
             unoptimized={bgImage.includes("quicklyn-headless.local")}
+          />
+          {/* Gradient overlay: transparent top → #226d71 bottom */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(to bottom, transparent 0%, #226d71 100%)",
+            }}
           />
         </div>
       )}
