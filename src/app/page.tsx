@@ -4,19 +4,22 @@ import {
   getServices,
   getTestimonials,
   getFaqs,
+  getAppLink,
 } from "@/lib/wordpress";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ServiceAreasSection } from "@/components/home/ServiceAreasSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
+import { AppDownloadSection } from "@/components/home/AppDownloadSection";
 
 export default async function HomePage() {
-  const [page, services, testimonials, faqs] = await Promise.all([
+  const [page, services, testimonials, faqs, appLink] = await Promise.all([
     getHomePage(),
     getServices(),
     getTestimonials(),
     getFaqs(),
+    getAppLink(),
   ]);
 
   if (!page?.acf) {
@@ -43,6 +46,7 @@ export default async function HomePage() {
       <ServiceAreasSection data={page.acf} />
       <TestimonialsSection testimonials={testimonials} />
       <FAQSection faqs={faqs} />
+      <AppDownloadSection data={appLink} />
       {/* Global floating CTA button above all sections */}
       <Link
         href={page.acf.estimate_button_link?.url || "#"}

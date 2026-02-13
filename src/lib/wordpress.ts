@@ -1,4 +1,4 @@
-import type { WPPage, HomePageACF } from "@/types/wordpress";
+import type { WPImage, WPPage, HomePageACF } from "@/types/wordpress";
 import { fallbackHomePage } from "./fallback-home";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL ?? "http://quicklyn-headless.local";
@@ -174,5 +174,37 @@ export async function getFaqs(): Promise<WPFAQ[]> {
     return Array.isArray(data) && data.length > 0 ? data : fallbackFaqs;
   } catch {
     return fallbackFaqs;
+  }
+}
+
+export interface WPAppLink {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  acf: {
+    heading?: string;
+    sub_heading?: string;
+    discount_code?: string;
+    image_01?: WPImage;
+    link_01?: { title: string; url: string; target: string };
+    image_02?: WPImage;
+    link_02?: string;
+    booking_text?: string;
+    booking_link?: { title: string; url: string; target: string };
+    description?: string;
+    background_image?: WPImage;
+  };
+}
+
+export async function getAppLink(): Promise<WPAppLink | null> {
+  try {
+    const res = await fetch(getApiUrl("/app-link?acf_format=standard"), {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as WPAppLink[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
   }
 }
