@@ -29,7 +29,7 @@ export function WhyQuicklynSection({ heading, items = [] }: WhyQuicklynSectionPr
               <div key={`${item.list_heading}-${index}`} className="flex items-start gap-4">
                 {/* Icon + connecting line */}
                 <div className="flex flex-col items-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#175c5e] shadow-lg">
+                  <div className="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-full p-[20px] shadow-lg" style={{ backgroundColor: "#348284" }}>
                     {iconUrl && (
                       <Image
                         src={iconUrl}
@@ -46,7 +46,7 @@ export function WhyQuicklynSection({ heading, items = [] }: WhyQuicklynSectionPr
 
                 {/* Text */}
                 <div className="flex-1 text-left">
-                  <p className="hero-text-shadow text-[16px] font-medium leading-snug text-white">
+                  <p className="hero-text-shadow text-[21px] font-normal leading-snug text-white">
                     {item.list_heading}
                   </p>
                   <p className="mt-1 text-[12px] font-normal text-white/60">Learn More...</p>

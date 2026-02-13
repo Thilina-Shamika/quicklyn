@@ -138,7 +138,7 @@ export function ServicesSection({
         </div>
 
         {/* Section heading (two lines: Our / Services) */}
-        <h2 className="mt-10 mb-[30px] text-[40px] leading-[38px] md:text-[56px] md:leading-[52px] lg:text-[68px] lg:leading-[58px] font-medium text-white">
+        <h2 className="mt-10 mb-[30px] text-[68px] font-medium leading-[58px] text-white">
           <span className="block">Our</span>
           <span className="block">Services</span>
         </h2>
@@ -146,7 +146,7 @@ export function ServicesSection({
         {/* Services cards carousel */}
         <div
           ref={trackRef}
-          className="no-scrollbar mt-[10px] flex w-screen -ml-[calc((100vw-100%)/2)] pl-6 pr-6 overflow-x-auto pb-2 pt-1 cursor-grab"
+          className="no-scrollbar mt-[10px] flex w-screen -ml-[calc((100vw-100%)/2)] -mr-6 pl-6 pr-6 overflow-x-auto pb-2 pt-1 cursor-grab"
           style={{
             scrollSnapType: "x mandatory",
             scrollSnapStop: "always",
@@ -162,41 +162,41 @@ export function ServicesSection({
           {services.map((service, index) => (
             <article
               key={service.id}
-              className="group my-[20px] flex-shrink-0 snap-center rounded-3xl bg-[#175c5e] p-[30px] text-left text-white transition-transform hover:-translate-y-1"
+              className="group relative my-[20px] flex-shrink-0 snap-center overflow-visible rounded-2xl bg-[#175c5e] p-6 text-left text-white transition-transform hover:-translate-y-1"
               style={{
-                minWidth: "80%",
-                maxWidth: "68%",
-                minHeight: "240px",
+                minWidth: "61%",
+                maxWidth: "53%",
+                minHeight: "180px",
                 marginLeft: index === 0 ? "20px" : undefined,
-              }} // card ~65-70% of viewport width, taller height
+              }}
             >
-              <div className="mb-3 flex items-start justify-between">
-                <h3 className="text-[23px] font-semibold">
+              {/* Arrow circle fixed in top-right corner, snug to corner like reference */}
+              <Link
+                href={service.acf?.link?.url || "#"}
+                className="absolute right-2 top-2 z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FFDA00] p-0 text-[#1B5B5D] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+              >
+                <svg
+                  aria-hidden
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M8 16L16 8" />
+                  <path d="M9 8H16V15" />
+                </svg>
+              </Link>
+
+              <div className="mb-3 pr-10">
+                <h3 className="text-[18px] font-semibold">
                   {service.acf?.service_heading || service.title.rendered}
                 </h3>
-                {/* Only the circle is clickable */}
-                <Link
-                  href={service.acf?.link?.url || "#"}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFDA00] text-[#1B5B5D] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
-                >
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    {/* Arrow up-right icon */}
-                    <path d="M8 16L16 8" />
-                    <path d="M9 8H16V15" />
-                  </svg>
-                </Link>
               </div>
 
-              <p className="mb-4 text-[14px] leading-relaxed text-white/80">
+              <p className="mb-3 text-[10px] leading-relaxed text-white/80">
                 {service.acf?.service_description}
               </p>
             </article>
@@ -234,13 +234,13 @@ export function ServicesSection({
             {/* Learn more text + arrow, aligned right */}
             <Link
               href={services[0]?.acf?.link?.url || "#"}
-              className="flex items-center gap-2 text-sm font-medium text-white"
+              className="flex items-center gap-2 text-base font-medium text-white"
             >
               <span>Learn more</span>
               <svg
                 aria-hidden
                 viewBox="0 0 24 24"
-                className="h-4 w-4 text-white"
+                className="h-6 w-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -263,17 +263,17 @@ export function ServicesSection({
             </h2>
             )}
 
-            <div className="mx-auto w-full max-w-md space-y-3">
+            <div className="mx-auto w-full max-w-sm space-y-3">
               {whyList.map((item, index) => {
                 const isLast = index === whyList.length - 1;
                 const isOpen = openWhyIndex === index;
                 const iconUrl = item.icon?.url;
 
                 return (
-                  <div key={`${item.list_heading}-${index}`} className="flex items-start gap-4">
+                  <div key={`${item.list_heading}-${index}`} className="flex items-stretch gap-4">
                     {/* Icon + connecting line */}
                     <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#175c5e] shadow-lg">
+                      <div className="flex h-[80px] w-[80px] flex-shrink-0 items-center justify-center rounded-full p-[20px] shadow-lg" style={{ backgroundColor: "#348284" }}>
                         {iconUrl && (
                           <Image
                             src={iconUrl}
@@ -285,7 +285,12 @@ export function ServicesSection({
                           />
                         )}
                       </div>
-                      {!isLast && <div className="mt-2 h-10 w-px bg-white/20" aria-hidden />}
+                      {!isLast && (
+                        <div
+                          className="mt-2 min-h-[40px] flex-1 w-0 border-l-2 border-dashed border-white transition-all duration-300"
+                          aria-hidden
+                        />
+                      )}
                     </div>
 
                     {/* Text */}
