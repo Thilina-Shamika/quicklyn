@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import type React from "react";
 import type { WPTestimonial } from "@/lib/wordpress";
 
 interface TestimonialsSectionProps {
@@ -35,6 +36,8 @@ function QuoteIcon({ className }: { className?: string }) {
 export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const count = testimonials.length;
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
 
   const goPrev = useCallback(() => {
     setCurrentIndex((i) => (i <= 0 ? count - 1 : i - 1));
@@ -43,6 +46,36 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   const goNext = useCallback(() => {
     setCurrentIndex((i) => (i >= count - 1 ? 0 : i + 1));
   }, [count]);
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = true;
+    dragStartXRef.current = event.clientX;
+    (event.currentTarget as HTMLDivElement).setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    const deltaX = event.clientX - dragStartXRef.current;
+    const threshold = 20;
+    if (deltaX > threshold) {
+      isDraggingRef.current = false;
+      goPrev();
+    } else if (deltaX < -threshold) {
+      isDraggingRef.current = false;
+      goNext();
+    }
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    try {
+      (event.currentTarget as HTMLDivElement).releasePointerCapture(
+        event.pointerId,
+      );
+    } catch {
+      // ignore
+    }
+    isDraggingRef.current = false;
+  };
 
   if (!count) return null;
 
@@ -54,7 +87,14 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
         </h2>
 
         {/* Curved carousel: center card prominent, sides faded and rotated */}
-        <div className="relative mx-auto h-[340px] w-full overflow-hidden">
+        <div
+          className="relative mx-auto h-[340px] w-full overflow-hidden cursor-grab"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+          style={{ touchAction: "pan-y" }}
+        >
           {testimonials.map((item, index) => {
             const offset = index - currentIndex;
             const isCenter = offset === 0;
@@ -71,7 +111,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             return (
               <div
                 key={item.id}
-                className="absolute left-1/2 top-1/2 w-[85%] max-w-[320px] rounded-2xl border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
+                className="absolute left-1/2 top-1/2 w-[85%] max-w-[320px] rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotate(${rotate}deg)`,
                   opacity,
