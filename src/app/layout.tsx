@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getFooter, getAppLink } from "@/lib/wordpress";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,15 +9,18 @@ export const metadata: Metadata = {
     "Trusted, vetted cleaning professionals delivering consistent, white-glove service across NYC.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [footer, appLink] = await Promise.all([getFooter(), getAppLink()]);
+
   return (
     <html lang="en" className="scroll-smooth">
       <body className="font-sans antialiased">
         {children}
+        <Footer data={footer} appLink={appLink} />
       </body>
     </html>
   );

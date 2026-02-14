@@ -208,3 +208,37 @@ export async function getAppLink(): Promise<WPAppLink | null> {
     return null;
   }
 }
+
+export interface WPFooterNavItem {
+  acf_fc_layout: string;
+  menu_name: string;
+  page_link: { title: string; url: string; target: string };
+}
+
+export interface WPFooter {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  acf: {
+    logo?: WPImage;
+    footer_description?: string;
+    footer_navigation?: WPFooterNavItem[];
+    subscription_text?: string;
+    download_text?: string;
+    copyright_and_branding?: string;
+    footer_background?: WPImage;
+  };
+}
+
+export async function getFooter(): Promise<WPFooter | null> {
+  try {
+    const res = await fetch(getApiUrl("/footer?acf_format=standard"), {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as WPFooter[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
