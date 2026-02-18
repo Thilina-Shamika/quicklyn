@@ -45,6 +45,12 @@ export async function getOurServicesPage(): Promise<OurServicesPage | null> {
   }
 }
 
+export interface ServiceApproximateTimeItem {
+  acf_fc_layout?: string;
+  type: string;
+  hours: string;
+}
+
 export interface WPService {
   id: number;
   slug: string;
@@ -57,6 +63,13 @@ export interface WPService {
       url: string;
       target: string;
     };
+    service_image?: WPImage;
+    whats_included?: string;
+    supplies?: string;
+    approximate_time_list?: ServiceApproximateTimeItem[];
+    hourly_rate?: string;
+    note?: string;
+    id?: string;
   };
 }
 

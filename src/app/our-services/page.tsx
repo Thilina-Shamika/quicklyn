@@ -1,13 +1,17 @@
 import Link from "next/link";
-import { getOurServicesPage } from "@/lib/wordpress";
+import { getOurServicesPage, getServices } from "@/lib/wordpress";
 import { OurServicesHero } from "@/components/our-services/OurServicesHero";
+import { OurMainServicesSection } from "@/components/our-services/OurMainServicesSection";
 
 export default async function OurServicesPage() {
-  const page = await getOurServicesPage();
+  const [page, services] = await Promise.all([
+    getOurServicesPage(),
+    getServices(),
+  ]);
 
   if (!page?.acf) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#226d71] p-6">
+      <main className="flex min-h-screen items-center justify-center bg-[#2a7a7c] p-6">
         <p className="max-w-xs text-center text-sm text-white/80">
           Our Services content is not available. Please ensure the WordPress
           page with ACF fields is published.
@@ -33,7 +37,7 @@ export default async function OurServicesPage() {
       .filter(Boolean) ?? [];
 
   return (
-    <main className="min-h-screen bg-[#226d71] text-white">
+    <main className="min-h-screen bg-[#2a7a7c] text-white">
       <OurServicesHero
         heading={page_heading ?? "Our Services"}
         subHeading={service_sub_heading ?? undefined}
@@ -42,6 +46,8 @@ export default async function OurServicesPage() {
         heroImageAlt={heroImage?.alt || undefined}
         isLocalHero={isLocalHero}
       />
+
+      <OurMainServicesSection services={services} />
 
       {/* Floating CTA at bottom, same behaviour as home page */}
       <Link

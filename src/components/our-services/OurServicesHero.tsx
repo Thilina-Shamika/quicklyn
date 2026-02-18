@@ -56,7 +56,7 @@ export function OurServicesHero({
     : "scale(1.8) translateX(0%)";
 
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-0 w-full items-center justify-center overflow-hidden py-16 md:py-20">
       {/* Van background from ACF (no cropping, original image) */}
       {heroImageUrl && (
         <div className="pointer-events-none absolute inset-0 z-0 flex items-start justify-end pt-[90px]">
@@ -76,16 +76,6 @@ export function OurServicesHero({
           </div>
         </div>
       )}
-
-      {/* Teal overlay gradient: solid on left, fades to transparent on right */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{
-          background:
-            "linear-gradient(to right, #2A7A7C 0%, rgba(42,122,124,0) 100%)",
-        }}
-        aria-hidden
-      />
 
       {/* Content column */}
       <div className="relative z-10 mx-auto flex w-full flex-col items-center px-6 py-16 text-center">
