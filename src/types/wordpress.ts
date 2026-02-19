@@ -90,3 +90,19 @@ export interface WPPage {
   content: { rendered: string; protected?: boolean };
   acf: HomePageACF;
 }
+
+export interface ContactUsACF {
+  heading?: string;
+  description?: string;
+  email?: string;
+  phone_number?: string;
+  background_image?: WPImage;
+}
+
+export interface ContactUsPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content: { rendered: string; protected?: boolean };
+  acf: ContactUsACF;
+}

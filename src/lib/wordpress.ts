@@ -3,6 +3,7 @@ import type {
   WPPage,
   HomePageACF,
   OurServicesPage,
+  ContactUsPage,
 } from "@/types/wordpress";
 import { fallbackHomePage } from "./fallback-home";
 
@@ -39,6 +40,20 @@ export async function getOurServicesPage(): Promise<OurServicesPage | null> {
     );
     if (!res.ok) return null;
     const data = (await res.json()) as OurServicesPage[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getContactUsPage(): Promise<ContactUsPage | null> {
+  try {
+    const res = await fetch(
+      getApiUrl("/pages?slug=contact-us&acf_format=standard"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as ContactUsPage[];
     return Array.isArray(data) && data.length > 0 ? data[0] : null;
   } catch {
     return null;
