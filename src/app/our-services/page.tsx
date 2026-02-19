@@ -3,6 +3,7 @@ import { getOurServicesPage, getServices } from "@/lib/wordpress";
 import { OurServicesHero } from "@/components/our-services/OurServicesHero";
 import { OurMainServicesSection } from "@/components/our-services/OurMainServicesSection";
 import { OurServicesExtrasSection } from "@/components/our-services/OurServicesExtrasSection";
+import { OurServicesFeatureListSection } from "@/components/our-services/OurServicesFeatureListSection";
 
 export default async function OurServicesPage() {
   const [page, services] = await Promise.all([
@@ -51,6 +52,11 @@ export default async function OurServicesPage() {
       <OurMainServicesSection services={services} />
 
       <OurServicesExtrasSection extras={page.acf.extras_list ?? []} />
+
+      <OurServicesFeatureListSection
+        features={page.acf.feature_list ?? []}
+        backgroundImage={page.acf.background_image}
+      />
 
       {/* Floating CTA at bottom, same behaviour as home page */}
       <Link

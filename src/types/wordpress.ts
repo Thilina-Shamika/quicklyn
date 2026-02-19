@@ -59,12 +59,20 @@ export interface ExtrasListItem {
   extras_description?: string;
 }
 
+export interface FeatureListItem {
+  acf_fc_layout: string;
+  feature_icon?: WPImage;
+  feature_name: string;
+}
+
 export interface OurServicesACF {
   page_heading?: string;
   ["1st_section_background"]?: WPImage;
   service_sub_heading?: string;
   service_description?: string;
   extras_list?: ExtrasListItem[];
+  feature_list?: FeatureListItem[];
+  background_image?: WPImage;
 }
 
 export interface OurServicesPage {
