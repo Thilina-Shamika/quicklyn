@@ -164,3 +164,33 @@ export interface TermsAndConditionsPage {
   content: { rendered: string; protected?: boolean };
   acf: TermsAndConditionsACF;
 }
+
+export interface OurMissionTeamItem {
+  acf_fc_layout: string;
+  employee_image?: WPImage;
+  employee_name?: string;
+  rating_stars?: string;
+}
+
+export interface OurMissionACF {
+  page_heading?: string;
+  hero_image?: WPImage;
+  sub_heading?: string;
+  description?: string;
+  section_image?: WPImage;
+  commitment_heading?: string;
+  commitment_description?: string;
+  team?: OurMissionTeamItem[];
+  background_check_icon?: WPImage;
+  background_check_heading?: string;
+  background_check_desctiption?: string;
+  page_background_image?: WPImage;
+}
+
+export interface OurMissionPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content: { rendered: string; protected?: boolean };
+  acf: OurMissionACF;
+}
