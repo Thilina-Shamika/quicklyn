@@ -4,6 +4,7 @@ import {
   getHeader,
   getHomePage,
   getTestimonials,
+  getAppLink,
 } from "@/lib/wordpress";
 import { HeroMissionText } from "@/components/our-mission/HeroMissionText";
 import { HeroHeadingLogoArrow } from "@/components/our-mission/HeroHeadingLogoArrow";
@@ -11,6 +12,7 @@ import { HeroBackground } from "@/components/our-mission/HeroBackground";
 import { SectionImageScroll } from "@/components/our-mission/SectionImageScroll";
 import { OurTeamSection } from "@/components/our-mission/OurTeamSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { AppDownloadSection } from "@/components/home/AppDownloadSection";
 
 export const metadata = {
   title: "Our Mission | Quicklyn",
@@ -19,11 +21,12 @@ export const metadata = {
 };
 
 export default async function OurMissionPage() {
-  const [page, header, homePage, testimonials] = await Promise.all([
+  const [page, header, homePage, testimonials, appLink] = await Promise.all([
     getOurMissionPage(),
     getHeader(),
     getHomePage(),
     getTestimonials(),
+    getAppLink(),
   ]);
 
   if (!page?.acf) {
@@ -147,6 +150,51 @@ export default async function OurMissionPage() {
 
       {/* Testimonials - same as home page */}
       <TestimonialsSection testimonials={testimonials} transparentBackground />
+
+      {/* Download the app - same section as our services page */}
+      <section className="relative z-10 px-5">
+        <div className="overflow-visible rounded-3xl shadow-[0_16px_32px_rgba(0,0,0,0.45)]">
+          <AppDownloadSection
+            data={appLink ?? null}
+            showBottomCta={false}
+            noInnerBottomPadding
+          />
+        </div>
+      </section>
+
+      {appLink?.acf && (
+        <section className="relative z-10 px-5 pb-16 mt-6 flex flex-col items-end text-right">
+          <p className="text-sm font-medium uppercase tracking-wide text-white">
+            OR
+          </p>
+          <Link
+            href={appLink.acf.booking_link?.url || "#"}
+            target={appLink.acf.booking_link?.target || "_self"}
+            className="mt-3 inline-flex items-center gap-2 text-[20px] font-semibold text-white hover:text-white/90 focus:outline-none"
+          >
+            {appLink.acf.booking_text?.trim() || "Book A Cleaning Now"}
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7 17L17 7M17 7H7M17 7v10"
+              />
+            </svg>
+          </Link>
+          {appLink.acf.description && (
+            <p className="mt-2 text-[14px] text-white/90">
+              {appLink.acf.description.trim()}
+            </p>
+          )}
+        </section>
+      )}
 
       </main>
 
