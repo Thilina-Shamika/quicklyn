@@ -1,5 +1,6 @@
 import type {
   WPImage,
+  WPLink,
   WPPage,
   HomePageACF,
   OurServicesPage,
@@ -469,13 +470,48 @@ export async function getFooter(): Promise<WPFooter | null> {
   }
 }
 
+export interface WPHeaderNavItem {
+  acf_fc_layout?: string;
+  menu_item_name?: string;
+  menu_item_link?: WPLink;
+}
+
 export interface WPHeader {
   id: number;
   slug: string;
   title: { rendered: string };
   acf: {
     header_logo?: WPImage;
+    /** API typo: navitgation */
+    navitgation?: WPHeaderNavItem[];
+    menu_description?: string;
+    navigation_background?: WPImage;
   };
+}
+
+/** Map WordPress menu URLs to Next.js frontend paths (stay on same app). */
+export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
+  if (!wpUrl || typeof wpUrl !== "string") return "/";
+  const u = wpUrl.trim();
+  if (!u || u === "#") return "/#estimate";
+  try {
+    const path = new URL(u, "https://x").pathname.toLowerCase().replace(/\/$/, "") || "/";
+    if (path === "/home" || path === "/") return "/";
+    if (path.includes("our-services")) return "/our-services";
+    if (path.includes("our-mission")) return "/our-mission";
+    if (path.includes("about-us")) return "/about-us";
+    if (path.includes("get-the-app")) return "/get-the-app";
+    if (path.includes("contact-us")) return "/contact-us";
+    if (path.includes("careers")) return "/careers";
+    if (path.includes("terms")) return "/terms-and-conditions";
+    if (path.includes("blogs")) return "/blogs";
+    // Keep hash for same-page anchors
+    const hash = new URL(u, "https://x").hash;
+    if (hash && path === "/") return `/${hash}`;
+    return path.startsWith("/") ? path : `/${path}`;
+  } catch {
+    return u.startsWith("#") ? u : u;
+  }
 }
 
 export async function getHeader(): Promise<WPHeader | null> {
