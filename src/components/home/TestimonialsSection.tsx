@@ -41,6 +41,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const goPrev = useCallback(() => {
@@ -81,7 +82,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
     isDraggingRef.current = false;
   };
 
-  // Native touch handlers (capture phase) so iOS gets events before scroll and we can preventDefault reliably
+  // Native touch: allow vertical scroll (pan-y), only treat horizontal swipes as carousel. No preventDefault so iOS can scroll the page.
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
@@ -90,11 +91,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
       if (e.touches.length !== 1) return;
       isDraggingRef.current = true;
       touchStartXRef.current = e.touches[0].clientX;
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      e.preventDefault();
+      touchStartYRef.current = e.touches[0].clientY;
     };
 
     const onTouchEnd = (e: TouchEvent) => {
@@ -103,25 +100,25 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
         return;
       }
       const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
       const deltaX = endX - touchStartXRef.current;
+      const deltaY = endY - touchStartYRef.current;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
       const threshold = 40;
-      if (deltaX > threshold) {
-        goPrev();
-      } else if (deltaX < -threshold) {
-        goNext();
+      if (absX > absY && absX > threshold) {
+        if (deltaX > 0) goPrev();
+        else goNext();
       }
       isDraggingRef.current = false;
     };
 
-    const opts: AddEventListenerOptions = { capture: true, passive: false };
-    el.addEventListener("touchstart", onTouchStart, opts);
-    el.addEventListener("touchmove", onTouchMove, opts);
-    el.addEventListener("touchend", onTouchEnd, opts);
-    el.addEventListener("touchcancel", onTouchEnd, opts);
+    el.addEventListener("touchstart", onTouchStart, { capture: true });
+    el.addEventListener("touchend", onTouchEnd, { capture: true });
+    el.addEventListener("touchcancel", onTouchEnd, { capture: true });
 
     return () => {
       el.removeEventListener("touchstart", onTouchStart, { capture: true });
-      el.removeEventListener("touchmove", onTouchMove, { capture: true });
       el.removeEventListener("touchend", onTouchEnd, { capture: true });
       el.removeEventListener("touchcancel", onTouchEnd, { capture: true });
     };
@@ -140,14 +137,13 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
         <div className="-ml-[calc((100vw-100%)/2)] w-screen">
           <div
             ref={carouselRef}
-            className="relative mx-auto h-[340px] w-full overflow-hidden cursor-grab touch-none select-none"
+            className="relative mx-auto h-[420px] w-full overflow-hidden cursor-grab select-none"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
             style={{
-              touchAction: "none",
-              WebkitTouchCallout: "none",
+              touchAction: "pan-y",
               WebkitUserSelect: "none",
               userSelect: "none",
             }}
@@ -168,7 +164,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
             return (
               <div
                 key={item.id}
-                className="absolute left-1/2 top-1/2 w-[70%] max-w-[280px] touch-none rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
+                className="absolute left-1/2 top-1/2 w-[70%] max-w-[280px] rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotate(${rotate}deg)`,
                   opacity,
