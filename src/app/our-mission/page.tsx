@@ -72,7 +72,7 @@ export default async function OurMissionPage() {
     .filter(Boolean);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden text-white">
+    <div className="relative min-h-screen overflow-x-hidden text-white">
       {/* Full-page background color - teal base for entire Our Mission page */}
       <div
         className="fixed inset-0 z-0 bg-[#2a7a7c] pointer-events-none"
@@ -86,6 +86,7 @@ export default async function OurMissionPage() {
         className="fixed inset-0 z-0 h-full w-full object-cover object-top object-center pointer-events-none"
         aria-hidden
       />
+      <main className="relative z-10">
       {/* Hero section: centered heading, logo, arrow */}
       <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pt-24 pb-0 md:pt-28">
         {/* Hero image background - scaled down & hidden until scroll, then scale up & visible */}
@@ -145,7 +146,9 @@ export default async function OurMissionPage() {
       />
 
       {/* Testimonials - same as home page */}
-      <TestimonialsSection testimonials={testimonials} />
+      <TestimonialsSection testimonials={testimonials} transparentBackground />
+
+      </main>
 
       {/* Fixed Get An Estimate button */}
       <Link
@@ -160,6 +163,6 @@ export default async function OurMissionPage() {
           {estimateText}
         </span>
       </Link>
-    </main>
+    </div>
   );
 }

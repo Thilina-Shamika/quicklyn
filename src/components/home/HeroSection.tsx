@@ -61,7 +61,9 @@ export function HeroSection({ data, header }: HeroSectionProps) {
   const estimateLink = data.estimate_button_link?.url ?? "#";
   const [isMobile, setIsMobile] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const isLocalImage = bgUrl.includes("quicklyn-headless.local");
+  const isLocalImage =
+    bgUrl.includes("quicklyn-headless.local") ||
+    bgUrl.includes("quick.rootholdings");
   const headerLogoUrl = header?.acf?.header_logo?.url;
   const isLocalLogo = headerLogoUrl?.includes("quicklyn-headless.local");
   // Detect mobile viewport

@@ -24,9 +24,15 @@ export function HomeAppDownloadSection({ data }: HomeAppDownloadSectionProps) {
   const description = acf.description?.trim() || "";
   const bgImage = acf.background_image?.url;
   const isLocal =
-    (googlePlayUrl && googlePlayUrl.includes("quicklyn-headless.local")) ||
-    (appStoreUrl && appStoreUrl.includes("quicklyn-headless.local")) ||
-    (bgImage && bgImage.includes("quicklyn-headless.local"));
+    (googlePlayUrl &&
+      (googlePlayUrl.includes("quicklyn-headless.local") ||
+        googlePlayUrl.includes("quick.rootholdings"))) ||
+    (appStoreUrl &&
+      (appStoreUrl.includes("quicklyn-headless.local") ||
+        appStoreUrl.includes("quick.rootholdings"))) ||
+    (bgImage &&
+      (bgImage.includes("quicklyn-headless.local") ||
+        bgImage.includes("quick.rootholdings")));
 
   const renderSubHeading = () => {
     if (!subHeading) return null;

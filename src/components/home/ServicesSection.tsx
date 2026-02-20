@@ -108,7 +108,10 @@ export function ServicesSection({
             style={{ objectPosition: "center top" }}
             sizes="100vw"
             priority={false}
-            unoptimized={bgUrl.includes("quicklyn-headless.local")}
+            unoptimized={
+            bgUrl.includes("quicklyn-headless.local") ||
+            bgUrl.includes("quick.rootholdings")
+          }
           />
         </div>
       )}
@@ -281,7 +284,10 @@ export function ServicesSection({
                             width={40}
                             height={40}
                             className="h-10 w-10 object-contain"
-                            unoptimized={iconUrl.includes("quicklyn-headless.local")}
+                            unoptimized={
+                            iconUrl.includes("quicklyn-headless.local") ||
+                            iconUrl.includes("quick.rootholdings")
+                          }
                           />
                         )}
                       </div>

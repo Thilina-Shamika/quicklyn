@@ -48,7 +48,9 @@ interface GlobalHeaderProps {
 
 export function GlobalHeader({ header }: GlobalHeaderProps) {
   const headerLogoUrl = header?.acf?.header_logo?.url;
-  const isLocalLogo = headerLogoUrl?.includes("quicklyn-headless.local");
+  const isLocalLogo =
+    headerLogoUrl?.includes("quicklyn-headless.local") ||
+    headerLogoUrl?.includes("quick.rootholdings");
 
   return (
     <div

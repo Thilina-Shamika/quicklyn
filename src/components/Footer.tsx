@@ -45,8 +45,12 @@ export function Footer({ data, appLink }: FooterProps) {
   const appStoreLink =
     typeof link02 === "string" ? link02 : (link02 as { url?: string } | undefined)?.url ?? "#";
   const isLocal =
-    (googlePlayUrl && googlePlayUrl.includes("quicklyn-headless.local")) ||
-    (appStoreUrl && appStoreUrl.includes("quicklyn-headless.local"));
+    (googlePlayUrl &&
+      (googlePlayUrl.includes("quicklyn-headless.local") ||
+        googlePlayUrl.includes("quick.rootholdings"))) ||
+    (appStoreUrl &&
+      (appStoreUrl.includes("quicklyn-headless.local") ||
+        appStoreUrl.includes("quick.rootholdings")));
   const footerBgUrl = acf.footer_background?.url;
 
   return (
@@ -73,7 +77,10 @@ export function Footer({ data, appLink }: FooterProps) {
                 width={120}
                 height={28}
                 className="h-7 w-auto object-contain"
-                unoptimized={logo.includes("quicklyn-headless.local")}
+                unoptimized={
+                logo.includes("quicklyn-headless.local") ||
+                logo.includes("quick.rootholdings")
+              }
               />
             </Link>
           )}
@@ -120,12 +127,16 @@ export function Footer({ data, appLink }: FooterProps) {
           <form
             className="flex w-full overflow-hidden rounded-lg border border-[#AAAAAA]"
             onSubmit={(e) => e.preventDefault()}
+            data-lpignore="true"
+            data-form-type="other"
           >
             <input
               type="email"
               placeholder="Email"
               className="w-[72%] min-w-0 border-0 bg-[#1E1E1E] px-4 py-2.5 text-sm text-white placeholder:text-[#888888] focus:border-0 focus:outline-none focus:ring-0"
               aria-label="Email for newsletter"
+              autoComplete="off"
+              data-lpignore="true"
             />
             <button
               type="submit"

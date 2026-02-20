@@ -73,7 +73,10 @@ export function HeroHeadingLogoArrow({
             width={180}
             height={48}
             className="h-12 w-auto object-contain md:h-16"
-            unoptimized={headerLogoUrl.includes("quicklyn-headless.local")}
+            unoptimized={
+                headerLogoUrl.includes("quicklyn-headless.local") ||
+                headerLogoUrl.includes("quick.rootholdings")
+              }
           />
         ) : (
           <span className="text-3xl font-medium lowercase text-white md:text-4xl">

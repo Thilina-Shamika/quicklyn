@@ -16,7 +16,10 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
   if (!heading && !subHeading && !description && !map) return null;
 
   const mapUrl = map?.url;
-  const isLocalMap = !!mapUrl && mapUrl.includes("quicklyn-headless.local");
+  const isLocalMap =
+    !!mapUrl &&
+    (mapUrl.includes("quicklyn-headless.local") ||
+      mapUrl.includes("quick.rootholdings"));
 
   return (
     <section className="relative w-full overflow-hidden bg-[#226d71] pb-16 pt-14">

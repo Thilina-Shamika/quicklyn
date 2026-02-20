@@ -37,7 +37,10 @@ export function WhyQuicklynSection({ heading, items = [] }: WhyQuicklynSectionPr
                         width={32}
                         height={32}
                         className="h-8 w-8 object-contain"
-                        unoptimized={iconUrl.includes("quicklyn-headless.local")}
+                        unoptimized={
+                          iconUrl.includes("quicklyn-headless.local") ||
+                          iconUrl.includes("quick.rootholdings")
+                        }
                       />
                     )}
                   </div>

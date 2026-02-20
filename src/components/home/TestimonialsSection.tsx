@@ -6,6 +6,8 @@ import type { WPTestimonial } from "@/lib/wordpress";
 
 interface TestimonialsSectionProps {
   testimonials: WPTestimonial[];
+  /** When true, section has no background (e.g. on Our Mission so page background shows). Default false = use teal section background (e.g. home). */
+  transparentBackground?: boolean;
 }
 
 function StarRating({ count = 5 }: { count?: number }) {
@@ -33,7 +35,7 @@ function QuoteIcon({ className }: { className?: string }) {
   );
 }
 
-export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
+export function TestimonialsSection({ testimonials, transparentBackground }: TestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const count = testimonials.length;
   const isDraggingRef = useRef(false);
@@ -104,7 +106,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (!count) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#226d71] pb-8 pt-16">
+    <section className={`relative w-full overflow-hidden pb-8 pt-16 ${transparentBackground ? "" : "bg-[#226d71]"}`}>
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6">
         <h2 className="mb-10 ml-[23px] text-left text-[31px] font-semibold leading-tight text-white">
           Trusted by Our Community
