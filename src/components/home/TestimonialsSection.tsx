@@ -89,21 +89,22 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
 
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
     if (!isDraggingRef.current || event.touches.length !== 1) return;
-    const deltaX = event.touches[0].clientX - touchStartXRef.current;
-    const threshold = 20;
-    if (Math.abs(deltaX) > 10) {
-      event.preventDefault();
-    }
-    if (deltaX > threshold) {
-      isDraggingRef.current = false;
-      goPrev();
-    } else if (deltaX < -threshold) {
-      isDraggingRef.current = false;
-      goNext();
-    }
+    event.preventDefault();
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || !event.changedTouches?.length) {
+      isDraggingRef.current = false;
+      return;
+    }
+    const endX = event.changedTouches[0].clientX;
+    const deltaX = endX - touchStartXRef.current;
+    const threshold = 40;
+    if (deltaX > threshold) {
+      goPrev();
+    } else if (deltaX < -threshold) {
+      goNext();
+    }
     isDraggingRef.current = false;
   };
 
@@ -112,13 +113,10 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
     if (!el) return;
     const onTouchMove = (e: TouchEvent) => {
       if (!isDraggingRef.current || e.touches.length !== 1) return;
-      const deltaX = e.touches[0].clientX - touchStartXRef.current;
-      if (Math.abs(deltaX) > 15) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     };
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    return () => el.removeEventListener("touchmove", onTouchMove);
+    el.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+    return () => el.removeEventListener("touchmove", onTouchMove, { capture: true });
   }, []);
 
   if (!count) return null;
