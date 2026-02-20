@@ -194,3 +194,37 @@ export interface OurMissionPage {
   content: { rendered: string; protected?: boolean };
   acf: OurMissionACF;
 }
+
+export interface AboutUsFeatureItem {
+  acf_fc_layout?: string;
+  feature_icon?: WPImage;
+  feature_title?: string;
+  feature_name?: string;
+}
+
+export interface AboutUsTeamMember {
+  acf_fc_layout?: string;
+  profile_picture?: WPImage;
+  name?: string;
+  designation?: string;
+}
+
+export interface AboutUsACF {
+  heading?: string | null;
+  description?: string | null;
+  features?: AboutUsFeatureItem[] | null;
+  page_background?: WPImage | null;
+  executive_team?: AboutUsTeamMember[] | null;
+  investor_title?: string | null;
+  investor_description?: string | null;
+  contact_email?: string | null;
+  contact_link?: WPLink | null;
+}
+
+export interface AboutUsPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content: { rendered: string; protected?: boolean };
+  acf: AboutUsACF;
+}

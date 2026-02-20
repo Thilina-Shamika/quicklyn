@@ -7,6 +7,7 @@ import type {
   CareersPage,
   TermsAndConditionsPage,
   OurMissionPage,
+  AboutUsPage,
   WPPostRaw,
 } from "@/types/wordpress";
 import { fallbackHomePage } from "./fallback-home";
@@ -100,6 +101,20 @@ export async function getOurMissionPage(): Promise<OurMissionPage | null> {
     );
     if (!res.ok) return null;
     const data = (await res.json()) as OurMissionPage[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getAboutUsPage(): Promise<AboutUsPage | null> {
+  try {
+    const res = await fetch(
+      getApiUrl("/pages?slug=about-us&acf_format=standard"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as AboutUsPage[];
     return Array.isArray(data) && data.length > 0 ? data[0] : null;
   } catch {
     return null;
