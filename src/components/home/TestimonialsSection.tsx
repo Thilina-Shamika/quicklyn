@@ -83,31 +83,37 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
     isDraggingRef.current = false;
   };
 
-  // iOS: lock gesture direction on first move. Horizontal -> we preventDefault and handle carousel; vertical -> let page scroll.
+  // iOS: document-level touch (capture) so swipe works when touch starts on middle of card / text. Direction lock: horizontal = carousel, vertical = page scroll.
+  const touchIdRef = useRef<number | null>(null);
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
 
-    const DIRECTION_THRESHOLD = 12;
+    const DIRECTION_THRESHOLD = 10;
     const SWIPE_THRESHOLD = 35;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      if (!el.contains(touch.target as Node)) return;
       isDraggingRef.current = true;
+      touchIdRef.current = touch.identifier;
       gestureDirectionRef.current = null;
-      touchStartXRef.current = e.touches[0].clientX;
-      touchStartYRef.current = e.touches[0].clientY;
+      touchStartXRef.current = touch.clientX;
+      touchStartYRef.current = touch.clientY;
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
+      if (!isDraggingRef.current || touchIdRef.current === null) return;
+      const touch = Array.from(e.touches).find((t) => t.identifier === touchIdRef.current);
+      if (!touch) return;
       if (gestureDirectionRef.current === null) {
-        const dx = e.touches[0].clientX - touchStartXRef.current;
-        const dy = e.touches[0].clientY - touchStartYRef.current;
+        const dx = touch.clientX - touchStartXRef.current;
+        const dy = touch.clientY - touchStartYRef.current;
         const adx = Math.abs(dx);
         const ady = Math.abs(dy);
         if (adx > DIRECTION_THRESHOLD || ady > DIRECTION_THRESHOLD) {
-          gestureDirectionRef.current = adx > ady ? "horizontal" : "vertical";
+          gestureDirectionRef.current = adx >= ady ? "horizontal" : "vertical";
         }
       }
       if (gestureDirectionRef.current === "horizontal") {
@@ -116,33 +122,35 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
     };
 
     const onTouchEnd = (e: TouchEvent) => {
-      if (!isDraggingRef.current || !e.changedTouches?.length) {
-        isDraggingRef.current = false;
+      const ct = e.changedTouches?.[0];
+      if (!ct || ct.identifier !== touchIdRef.current) return;
+      if (!isDraggingRef.current) {
+        touchIdRef.current = null;
         gestureDirectionRef.current = null;
         return;
       }
       if (gestureDirectionRef.current === "horizontal") {
-        const endX = e.changedTouches[0].clientX;
-        const deltaX = endX - touchStartXRef.current;
+        const deltaX = ct.clientX - touchStartXRef.current;
         if (deltaX > SWIPE_THRESHOLD) goPrev();
         else if (deltaX < -SWIPE_THRESHOLD) goNext();
       }
       isDraggingRef.current = false;
+      touchIdRef.current = null;
       gestureDirectionRef.current = null;
     };
 
     const capture = true;
     const passiveFalse = { capture, passive: false };
-    el.addEventListener("touchstart", onTouchStart, capture);
-    el.addEventListener("touchmove", onTouchMove, passiveFalse);
-    el.addEventListener("touchend", onTouchEnd, capture);
-    el.addEventListener("touchcancel", onTouchEnd, capture);
+    document.addEventListener("touchstart", onTouchStart, capture);
+    document.addEventListener("touchmove", onTouchMove, passiveFalse);
+    document.addEventListener("touchend", onTouchEnd, capture);
+    document.addEventListener("touchcancel", onTouchEnd, capture);
 
     return () => {
-      el.removeEventListener("touchstart", onTouchStart, capture);
-      el.removeEventListener("touchmove", onTouchMove, passiveFalse);
-      el.removeEventListener("touchend", onTouchEnd, capture);
-      el.removeEventListener("touchcancel", onTouchEnd, capture);
+      document.removeEventListener("touchstart", onTouchStart, capture);
+      document.removeEventListener("touchmove", onTouchMove, passiveFalse);
+      document.removeEventListener("touchend", onTouchEnd, capture);
+      document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
   }, [goPrev, goNext]);
 
@@ -186,11 +194,13 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
             return (
               <div
                 key={item.id}
-                className="absolute left-1/2 top-1/2 w-[70%] max-w-[280px] rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
+                className="absolute left-1/2 top-1/2 w-[70%] max-w-[280px] select-none rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotate(${rotate}deg)`,
                   opacity,
                   zIndex,
+                  touchAction: "pan-y",
+                  WebkitTouchCallout: "none",
                 }}
               >
                 <QuoteIcon className="absolute left-4 top-4 h-6 w-6 text-white/80" />

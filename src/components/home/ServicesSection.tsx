@@ -66,6 +66,7 @@ export function ServicesSection({
   const touchStartYRef = useRef(0);
   const touchStartScrollLeftRef = useRef(0);
   const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
+  const touchIdRef = useRef<number | null>(null);
 
   const snapToNearest = useRef(() => {
     const track = trackRef.current;
@@ -113,32 +114,36 @@ export function ServicesSection({
     };
   }, [services.length]);
 
-  // iOS: native touch with direction lock so horizontal swipe works on every card and vertical scroll still works
+  // iOS: document-level touch (capture) so swipe works when touch starts on middle of card. Direction lock: horizontal = carousel, vertical = page scroll.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    const DIRECTION_THRESHOLD = 12;
-    const gap = 20;
+    const DIRECTION_THRESHOLD = 10;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      if (!track.contains(touch.target as Node)) return;
       isDraggingRef.current = true;
+      touchIdRef.current = touch.identifier;
       gestureDirectionRef.current = null;
-      touchStartXRef.current = e.touches[0].clientX;
-      touchStartYRef.current = e.touches[0].clientY;
+      touchStartXRef.current = touch.clientX;
+      touchStartYRef.current = touch.clientY;
       touchStartScrollLeftRef.current = track.scrollLeft;
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      const dx = e.touches[0].clientX - touchStartXRef.current;
-      const dy = e.touches[0].clientY - touchStartYRef.current;
+      if (!isDraggingRef.current || touchIdRef.current === null) return;
+      const touch = Array.from(e.touches).find((t) => t.identifier === touchIdRef.current);
+      if (!touch) return;
+      const dx = touch.clientX - touchStartXRef.current;
+      const dy = touch.clientY - touchStartYRef.current;
       const adx = Math.abs(dx);
       const ady = Math.abs(dy);
 
       if (gestureDirectionRef.current === null && (adx > DIRECTION_THRESHOLD || ady > DIRECTION_THRESHOLD)) {
-        gestureDirectionRef.current = adx > ady ? "horizontal" : "vertical";
+        gestureDirectionRef.current = adx >= ady ? "horizontal" : "vertical";
       }
 
       if (gestureDirectionRef.current === "horizontal") {
@@ -147,27 +152,34 @@ export function ServicesSection({
       }
     };
 
-    const onTouchEnd = () => {
-      if (!isDraggingRef.current) return;
+    const onTouchEnd = (e: TouchEvent) => {
+      const ct = e.changedTouches?.[0];
+      if (!ct || ct.identifier !== touchIdRef.current) return;
+      if (!isDraggingRef.current) {
+        touchIdRef.current = null;
+        gestureDirectionRef.current = null;
+        return;
+      }
       if (gestureDirectionRef.current === "horizontal") {
         snapToNearest.current();
       }
       isDraggingRef.current = false;
+      touchIdRef.current = null;
       gestureDirectionRef.current = null;
     };
 
     const capture = true;
     const passiveFalse = { capture, passive: false };
-    track.addEventListener("touchstart", onTouchStart, capture);
-    track.addEventListener("touchmove", onTouchMove, passiveFalse);
-    track.addEventListener("touchend", onTouchEnd, capture);
-    track.addEventListener("touchcancel", onTouchEnd, capture);
+    document.addEventListener("touchstart", onTouchStart, capture);
+    document.addEventListener("touchmove", onTouchMove, passiveFalse);
+    document.addEventListener("touchend", onTouchEnd, capture);
+    document.addEventListener("touchcancel", onTouchEnd, capture);
 
     return () => {
-      track.removeEventListener("touchstart", onTouchStart, capture);
-      track.removeEventListener("touchmove", onTouchMove, passiveFalse);
-      track.removeEventListener("touchend", onTouchEnd, capture);
-      track.removeEventListener("touchcancel", onTouchEnd, capture);
+      document.removeEventListener("touchstart", onTouchStart, capture);
+      document.removeEventListener("touchmove", onTouchMove, passiveFalse);
+      document.removeEventListener("touchend", onTouchEnd, capture);
+      document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
   }, []);
 
@@ -275,12 +287,14 @@ export function ServicesSection({
           {services.map((service, index) => (
             <article
               key={service.id}
-              className="group relative my-[20px] flex-shrink-0 snap-center overflow-visible rounded-2xl bg-[#175c5e] p-6 text-left text-white transition-transform hover:-translate-y-1"
+              className="group relative my-[20px] flex-shrink-0 snap-center select-none overflow-visible rounded-2xl bg-[#175c5e] p-6 text-left text-white transition-transform hover:-translate-y-1"
               style={{
                 minWidth: "61%",
                 maxWidth: "53%",
                 minHeight: "180px",
                 marginLeft: index === 0 ? "20px" : undefined,
+                touchAction: "pan-y",
+                WebkitTouchCallout: "none",
               }}
             >
               {/* Arrow circle: go to our-services page and expand this service */}
