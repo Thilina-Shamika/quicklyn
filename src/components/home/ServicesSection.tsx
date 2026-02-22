@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { CounterItem, WPImage, WhyListItem } from "@/types/wordpress";
 import type { WPService } from "@/lib/wordpress";
@@ -23,149 +23,150 @@ export function ServicesSection({
   whyList = [],
 }: ServicesSectionProps) {
   const bgUrl = background?.url;
+  const viewportRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const isDraggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartScrollLeftRef = useRef(0);
+  const [scrollOffsetPx, setScrollOffsetPx] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const scrollOffsetRef = useRef(0);
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
+  const touchStartScrollRef = useRef(0);
+  const touchIdRef = useRef<number | null>(null);
+  const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
+  const maxScrollRef = useRef(0);
   const [openWhyIndex, setOpenWhyIndex] = useState<number | null>(null);
 
-  // Sync active index when user scrolls / drags the carousel
-  const handleScroll = () => {
-    const track = trackRef.current;
-    if (!track) return;
-    const firstCard = track.children[0] as HTMLElement | undefined;
-    if (!firstCard) return;
-    const cardWidth = firstCard.offsetWidth;
-    const gap = 20; // gap between cards in px
-    const approxIndex = track.scrollLeft / (cardWidth + gap);
-    setActiveIndex(Math.round(approxIndex));
-  };
+  const gap = 20;
 
-  // (Auto-slide removed so page doesn't auto-scroll to this section)
+  const dragStartXRef = useRef(0);
+  const dragStartScrollRef = useRef(0);
+  const pointerDownRef = useRef(false);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const track = trackRef.current;
-    if (!track) return;
-    isDraggingRef.current = true;
+    const viewport = viewportRef.current;
+    if (!track || !viewport) return;
+    pointerDownRef.current = true;
     dragStartXRef.current = event.clientX;
-    dragStartScrollLeftRef.current = track.scrollLeft;
+    dragStartScrollRef.current = scrollOffsetRef.current;
+    maxScrollRef.current = Math.max(0, track.scrollWidth - viewport.offsetWidth);
     track.setPointerCapture(event.pointerId);
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) return;
+    if (!pointerDownRef.current) return;
     const track = trackRef.current;
     if (!track) return;
     event.preventDefault();
-    const deltaX = event.clientX - dragStartXRef.current;
-    track.scrollLeft = dragStartScrollLeftRef.current - deltaX;
+    const dx = event.clientX - dragStartXRef.current;
+    const next = Math.max(0, Math.min(maxScrollRef.current, dragStartScrollRef.current - dx));
+    scrollOffsetRef.current = next;
+    track.style.transform = `translateX(-${next}px)`;
   };
 
-  const touchStartXRef = useRef(0);
-  const touchStartYRef = useRef(0);
-  const touchStartScrollLeftRef = useRef(0);
-  const touchIdRef = useRef<number | null>(null);
-  const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
-
-  const snapToNearest = useRef(() => {
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    pointerDownRef.current = false;
     const track = trackRef.current;
-    const firstCard = track?.children[0] as HTMLElement | undefined;
-    if (!track || !firstCard) return;
-    const cardWidth = firstCard.offsetWidth;
-    const gap = 20;
-    const approxIndex = track.scrollLeft / (cardWidth + gap);
-    const nearestIndex = Math.max(
-      0,
-      Math.min(services.length - 1, Math.round(approxIndex)),
-    );
-    const target = track.children[nearestIndex] as HTMLElement | undefined;
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    }
-    setActiveIndex(nearestIndex);
-  });
-
-  useEffect(() => {
-    snapToNearest.current = () => {
-      const track = trackRef.current;
-      const firstCard = track?.children[0] as HTMLElement | undefined;
-      if (!track || !firstCard) return;
-      const cardWidth = firstCard.offsetWidth;
-      const gap = 20;
-      const approxIndex = track.scrollLeft / (cardWidth + gap);
-      const nearestIndex = Math.max(
-        0,
-        Math.min(services.length - 1, Math.round(approxIndex)),
-      );
-      const target = track.children[nearestIndex] as HTMLElement | undefined;
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
+    if (track) {
+      try {
+        track.releasePointerCapture(event.pointerId);
+      } catch {
+        // ignore
       }
-      setActiveIndex(nearestIndex);
-    };
+    }
+    snapToNearest();
+  };
+
+  function scrollOffsetForIndex(index: number, cardWidth: number) {
+    return index === 0 ? 0 : 20 + index * (cardWidth + gap);
+  }
+  const snapToNearest = useCallback(() => {
+    const track = trackRef.current;
+    const first = track?.children[0] as HTMLElement | undefined;
+    if (!track || !first) return;
+    const cardWidth = first.offsetWidth;
+    const current = scrollOffsetRef.current;
+    const nearestIndex =
+      current < 20 + (cardWidth + gap) / 2
+        ? 0
+        : Math.max(
+            0,
+            Math.min(
+              services.length - 1,
+              Math.round((current - 20) / (cardWidth + gap)),
+            ),
+          );
+    const snapped = scrollOffsetForIndex(nearestIndex, cardWidth);
+    scrollOffsetRef.current = snapped;
+    setScrollOffsetPx(snapped);
+    setActiveIndex(nearestIndex);
   }, [services.length]);
 
-  // iOS: document-level touch + direction lock (same as testimonials). Horizontal = carousel, vertical = page scroll. Works when touch starts on card.
   useEffect(() => {
+    scrollOffsetRef.current = scrollOffsetPx;
+  }, [scrollOffsetPx]);
+
+  // Document-level touch + direction lock (same as testimonials) so iOS swipe works. No native scroll — we use transform.
+  useEffect(() => {
+    const viewport = viewportRef.current;
     const track = trackRef.current;
-    if (!track) return;
+    if (!viewport || !track) return;
 
     const DIRECTION_THRESHOLD = 8;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
       const touch = e.touches[0];
-      if (!track.contains(touch.target as Node)) return;
-      isDraggingRef.current = true;
+      if (!viewport.contains(touch.target as Node)) return;
       touchIdRef.current = touch.identifier;
       gestureDirectionRef.current = null;
       touchStartXRef.current = touch.clientX;
       touchStartYRef.current = touch.clientY;
-      touchStartScrollLeftRef.current = track.scrollLeft;
+      touchStartScrollRef.current = scrollOffsetRef.current;
+      maxScrollRef.current = Math.max(
+        0,
+        track.scrollWidth - viewport.offsetWidth,
+      );
+      setIsDragging(true);
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || touchIdRef.current === null) return;
-      const touch = Array.from(e.touches).find((t) => t.identifier === touchIdRef.current);
-      if (!touch) return;
-      const dx = touch.clientX - touchStartXRef.current;
-      const dy = touch.clientY - touchStartYRef.current;
+      if (touchIdRef.current === null) return;
+      const t = Array.from(e.touches).find((x) => x.identifier === touchIdRef.current);
+      if (!t) return;
+      const dx = t.clientX - touchStartXRef.current;
+      const dy = t.clientY - touchStartYRef.current;
       const adx = Math.abs(dx);
       const ady = Math.abs(dy);
-
       if (gestureDirectionRef.current === null && (adx > DIRECTION_THRESHOLD || ady > DIRECTION_THRESHOLD)) {
         gestureDirectionRef.current = adx >= ady ? "horizontal" : "vertical";
       }
       if (gestureDirectionRef.current === "horizontal") {
         e.preventDefault();
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        track.scrollLeft = Math.max(0, Math.min(maxScroll, touchStartScrollLeftRef.current - dx));
+        const next = Math.max(
+          0,
+          Math.min(maxScrollRef.current, touchStartScrollRef.current - dx),
+        );
+        scrollOffsetRef.current = next;
+        track.style.transform = `translateX(-${next}px)`;
       }
     };
 
     const onTouchEnd = (e: TouchEvent) => {
       const ct = e.changedTouches?.[0];
       if (!ct || ct.identifier !== touchIdRef.current) {
-        isDraggingRef.current = false;
         touchIdRef.current = null;
         gestureDirectionRef.current = null;
+        setIsDragging(false);
         return;
       }
       if (gestureDirectionRef.current === "horizontal") {
-        snapToNearest.current();
+        snapToNearest();
       }
-      isDraggingRef.current = false;
       touchIdRef.current = null;
       gestureDirectionRef.current = null;
+      setIsDragging(false);
     };
 
     const capture = true;
@@ -174,47 +175,13 @@ export function ServicesSection({
     document.addEventListener("touchmove", onTouchMove, passiveFalse);
     document.addEventListener("touchend", onTouchEnd, capture);
     document.addEventListener("touchcancel", onTouchEnd, capture);
-
     return () => {
       document.removeEventListener("touchstart", onTouchStart, capture);
       document.removeEventListener("touchmove", onTouchMove, passiveFalse);
       document.removeEventListener("touchend", onTouchEnd, capture);
       document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
-  }, []);
-
-  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
-    const track = trackRef.current;
-    if (track) {
-      try {
-        track.releasePointerCapture(event.pointerId);
-      } catch {
-        // ignore if not captured
-      }
-    }
-    isDraggingRef.current = false;
-
-    // After dragging ends, snap to the nearest card so one card stays centered
-    const firstCard = track?.children[0] as HTMLElement | undefined;
-    if (track && firstCard) {
-      const cardWidth = firstCard.offsetWidth;
-      const gap = 20; // gap between cards in px
-      const approxIndex = track.scrollLeft / (cardWidth + gap);
-      const nearestIndex = Math.max(
-        0,
-        Math.min(services.length - 1, Math.round(approxIndex)),
-      );
-      const target = track.children[nearestIndex] as HTMLElement | undefined;
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      }
-      setActiveIndex(nearestIndex);
-    }
-  };
+  }, [snapToNearest]);
 
   return (
     <section className="relative z-20 -mt-[60px] w-full overflow-hidden bg-transparent pb-16 pt-[100px]">
@@ -267,28 +234,30 @@ export function ServicesSection({
           <span className="block">Services</span>
         </h2>
 
-        {/* Services cards carousel */}
+        {/* Services cards carousel — viewport + transform (no native scroll) so iOS swipe works with document-level touch */}
         <div
-          ref={trackRef}
-          className="no-scrollbar mt-[10px] flex w-screen -ml-[calc((100vw-100%)/2)] -mr-6 pl-6 pr-6 overflow-x-auto pb-2 pt-1 cursor-grab"
-          style={{
-            scrollSnapType: "x mandatory",
-            scrollSnapStop: "always",
-            scrollBehavior: "smooth",
-            touchAction: "pan-y",
-            WebkitOverflowScrolling: "touch",
-            columnGap: "20px", // 20px gap between cards
-          }}
-          onScroll={handleScroll}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={endDrag}
-          onPointerLeave={endDrag}
+          ref={viewportRef}
+          className="mt-[10px] overflow-hidden cursor-grab"
+          style={{ touchAction: "pan-y" }}
         >
+          <div
+            ref={trackRef}
+            className="flex w-screen -ml-[calc((100vw-100%)/2)] -mr-6 pl-6 pr-6 pb-2 pt-1"
+            style={{
+              columnGap: gap,
+              transform: `translateX(-${scrollOffsetPx}px)`,
+              transition: isDragging ? "none" : "transform 0.3s ease-out",
+            }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+            onPointerCancel={endDrag}
+          >
           {services.map((service, index) => (
             <article
               key={service.id}
-              className="group relative my-[20px] flex-shrink-0 snap-center select-none overflow-visible rounded-2xl bg-[#175c5e] p-6 text-left text-white transition-transform hover:-translate-y-1"
+              className="group relative my-[20px] flex-shrink-0 select-none overflow-visible rounded-2xl bg-[#175c5e] p-6 text-left text-white transition-transform hover:-translate-y-1"
               style={{
                 minWidth: "61%",
                 maxWidth: "53%",
@@ -296,7 +265,6 @@ export function ServicesSection({
                 marginLeft: index === 0 ? "20px" : undefined,
               }}
             >
-              {/* Arrow circle: go to our-services page and expand this service */}
               <Link
                 href={`/our-services#service-${service.slug}`}
                 className="absolute right-2 top-2 z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FFDA00] p-0 text-[#1B5B5D] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
@@ -327,7 +295,6 @@ export function ServicesSection({
               </p>
             </article>
           ))}
-          {/* Spacer so last card can be scrolled into view / center */}
           {services.length > 1 && (
             <div
               className="flex-shrink-0"
@@ -335,6 +302,7 @@ export function ServicesSection({
               aria-hidden
             />
           )}
+          </div>
         </div>
 
         {/* Carousel bullets + Learn more link */}
@@ -351,13 +319,12 @@ export function ServicesSection({
                   }`}
                   onClick={() => {
                     const track = trackRef.current;
-                    const target = track?.children[index] as HTMLElement | undefined;
-                    if (target) {
-                      target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "nearest",
-                        inline: "center",
-                      });
+                    const first = track?.children[0] as HTMLElement | undefined;
+                    if (track && first) {
+                      const cardWidth = first.offsetWidth;
+                      const snapped = scrollOffsetForIndex(index, cardWidth);
+                      scrollOffsetRef.current = snapped;
+                      setScrollOffsetPx(snapped);
                     }
                     setActiveIndex(index);
                   }}
