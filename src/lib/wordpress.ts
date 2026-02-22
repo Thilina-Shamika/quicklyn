@@ -465,6 +465,8 @@ export interface WPFooter {
     logo?: WPImage;
     footer_description?: string;
     footer_navigation?: WPFooterNavItem[];
+    contact_email?: string;
+    contact_phone?: string;
     subscription_text?: string;
     download_text?: string;
     copyright_and_branding?: string;

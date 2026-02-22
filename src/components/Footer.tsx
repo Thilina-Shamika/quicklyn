@@ -73,6 +73,8 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const navItems = acf.footer_navigation ?? [];
   const leftNav = navItems.slice(0, 6);
   const rightNav = navItems.slice(6, 12);
+  const contactEmail = acf.contact_email?.trim() || "";
+  const contactPhone = acf.contact_phone?.trim() || "";
   const subscriptionText = acf.subscription_text?.trim() || "Sign Up To Our Newsletter";
   const downloadText = acf.download_text?.trim() || "Download The Quicklyn App Today";
   const copyrightText = acf.copyright_and_branding?.trim() || "Copyright ©2025 Quicklyn | All rights reserved.";
@@ -161,6 +163,56 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
             })}
           </nav>
         </div>
+
+        {/* Contact email & phone (above newsletter) */}
+        {(contactEmail || contactPhone) && (
+          <div className="mb-8 flex flex-col gap-3 text-left">
+            {contactEmail && (
+              <a
+                href={`mailto:${contactEmail}`}
+                className="flex items-center gap-3 text-[13px] text-white/95 transition hover:text-white"
+              >
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <span>{contactEmail}</span>
+              </a>
+            )}
+            {contactPhone && (
+              <a
+                href={`tel:${contactPhone.replace(/\D/g, "")}`}
+                className="flex items-center gap-3 text-[13px] text-white/95 transition hover:text-white"
+              >
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <span>{contactPhone}</span>
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Newsletter */}
         <div className="mb-10 text-left">

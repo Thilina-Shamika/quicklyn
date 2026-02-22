@@ -42,7 +42,6 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
   const dragStartXRef = useRef(0);
   const touchStartXRef = useRef(0);
   const touchStartYRef = useRef(0);
-  const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const goPrev = useCallback(() => {
@@ -83,74 +82,48 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
     isDraggingRef.current = false;
   };
 
-  // iOS: document-level touch (capture) so swipe works when touch starts on middle of card / text. Direction lock: horizontal = carousel, vertical = page scroll.
-  const touchIdRef = useRef<number | null>(null);
+  // iOS: attach touch to carousel element + touch-action: none so Safari gives us the gesture. preventDefault on first touchmove.
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
 
-    const DIRECTION_THRESHOLD = 10;
     const SWIPE_THRESHOLD = 35;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
-      const touch = e.touches[0];
-      if (!el.contains(touch.target as Node)) return;
       isDraggingRef.current = true;
-      touchIdRef.current = touch.identifier;
-      gestureDirectionRef.current = null;
-      touchStartXRef.current = touch.clientX;
-      touchStartYRef.current = touch.clientY;
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || touchIdRef.current === null) return;
-      const touch = Array.from(e.touches).find((t) => t.identifier === touchIdRef.current);
-      if (!touch) return;
-      if (gestureDirectionRef.current === null) {
-        const dx = touch.clientX - touchStartXRef.current;
-        const dy = touch.clientY - touchStartYRef.current;
-        const adx = Math.abs(dx);
-        const ady = Math.abs(dy);
-        if (adx > DIRECTION_THRESHOLD || ady > DIRECTION_THRESHOLD) {
-          gestureDirectionRef.current = adx >= ady ? "horizontal" : "vertical";
-        }
-      }
-      if (gestureDirectionRef.current === "horizontal") {
-        e.preventDefault();
-      }
+      if (!isDraggingRef.current || e.touches.length !== 1) return;
+      e.preventDefault();
     };
 
     const onTouchEnd = (e: TouchEvent) => {
-      const ct = e.changedTouches?.[0];
-      if (!ct || ct.identifier !== touchIdRef.current) return;
-      if (!isDraggingRef.current) {
-        touchIdRef.current = null;
-        gestureDirectionRef.current = null;
+      if (!isDraggingRef.current || !e.changedTouches?.length) {
+        isDraggingRef.current = false;
         return;
       }
-      if (gestureDirectionRef.current === "horizontal") {
-        const deltaX = ct.clientX - touchStartXRef.current;
-        if (deltaX > SWIPE_THRESHOLD) goPrev();
-        else if (deltaX < -SWIPE_THRESHOLD) goNext();
-      }
+      const endX = e.changedTouches[0].clientX;
+      const deltaX = endX - touchStartXRef.current;
+      if (deltaX > SWIPE_THRESHOLD) goPrev();
+      else if (deltaX < -SWIPE_THRESHOLD) goNext();
       isDraggingRef.current = false;
-      touchIdRef.current = null;
-      gestureDirectionRef.current = null;
     };
 
-    const capture = true;
-    const passiveFalse = { capture, passive: false };
-    document.addEventListener("touchstart", onTouchStart, capture);
-    document.addEventListener("touchmove", onTouchMove, passiveFalse);
-    document.addEventListener("touchend", onTouchEnd, capture);
-    document.addEventListener("touchcancel", onTouchEnd, capture);
+    const opts: AddEventListenerOptions = { capture: true, passive: false };
+    el.addEventListener("touchstart", onTouchStart, opts);
+    el.addEventListener("touchmove", onTouchMove, opts);
+    el.addEventListener("touchend", onTouchEnd, opts);
+    el.addEventListener("touchcancel", onTouchEnd, opts);
 
     return () => {
-      document.removeEventListener("touchstart", onTouchStart, capture);
-      document.removeEventListener("touchmove", onTouchMove, passiveFalse);
-      document.removeEventListener("touchend", onTouchEnd, capture);
-      document.removeEventListener("touchcancel", onTouchEnd, capture);
+      el.removeEventListener("touchstart", onTouchStart, opts);
+      el.removeEventListener("touchmove", onTouchMove, opts);
+      el.removeEventListener("touchend", onTouchEnd, opts);
+      el.removeEventListener("touchcancel", onTouchEnd, opts);
     };
   }, [goPrev, goNext]);
 
@@ -173,9 +146,10 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
             style={{
-              touchAction: "pan-y",
+              touchAction: "none",
               WebkitUserSelect: "none",
               userSelect: "none",
+              WebkitTouchCallout: "none",
             }}
           >
           {testimonials.map((item, index) => {
@@ -199,8 +173,6 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
                   transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotate(${rotate}deg)`,
                   opacity,
                   zIndex,
-                  touchAction: "pan-y",
-                  WebkitTouchCallout: "none",
                 }}
               >
                 <QuoteIcon className="absolute left-4 top-4 h-6 w-6 text-white/80" />
