@@ -63,7 +63,10 @@ export function ServicesSection({
   };
 
   const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
   const touchStartScrollLeftRef = useRef(0);
+  const touchIdRef = useRef<number | null>(null);
+  const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
 
   const snapToNearest = useRef(() => {
     const track = trackRef.current;
@@ -111,43 +114,72 @@ export function ServicesSection({
     };
   }, [services.length]);
 
-  // iOS: attach touch to track element + touch-action: none so Safari gives us the gesture. preventDefault and update scrollLeft on touchmove.
+  // iOS: document-level touch + direction lock (same as testimonials). Horizontal = carousel, vertical = page scroll. Works when touch starts on card.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
+    const DIRECTION_THRESHOLD = 8;
+
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      if (!track.contains(touch.target as Node)) return;
       isDraggingRef.current = true;
-      touchStartXRef.current = e.touches[0].clientX;
+      touchIdRef.current = touch.identifier;
+      gestureDirectionRef.current = null;
+      touchStartXRef.current = touch.clientX;
+      touchStartYRef.current = touch.clientY;
       touchStartScrollLeftRef.current = track.scrollLeft;
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      e.preventDefault();
-      const dx = e.touches[0].clientX - touchStartXRef.current;
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      track.scrollLeft = Math.max(0, Math.min(maxScroll, touchStartScrollLeftRef.current - dx));
+      if (!isDraggingRef.current || touchIdRef.current === null) return;
+      const touch = Array.from(e.touches).find((t) => t.identifier === touchIdRef.current);
+      if (!touch) return;
+      const dx = touch.clientX - touchStartXRef.current;
+      const dy = touch.clientY - touchStartYRef.current;
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+
+      if (gestureDirectionRef.current === null && (adx > DIRECTION_THRESHOLD || ady > DIRECTION_THRESHOLD)) {
+        gestureDirectionRef.current = adx >= ady ? "horizontal" : "vertical";
+      }
+      if (gestureDirectionRef.current === "horizontal") {
+        e.preventDefault();
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        track.scrollLeft = Math.max(0, Math.min(maxScroll, touchStartScrollLeftRef.current - dx));
+      }
     };
 
-    const onTouchEnd = () => {
-      if (!isDraggingRef.current) return;
-      snapToNearest.current();
+    const onTouchEnd = (e: TouchEvent) => {
+      const ct = e.changedTouches?.[0];
+      if (!ct || ct.identifier !== touchIdRef.current) {
+        isDraggingRef.current = false;
+        touchIdRef.current = null;
+        gestureDirectionRef.current = null;
+        return;
+      }
+      if (gestureDirectionRef.current === "horizontal") {
+        snapToNearest.current();
+      }
       isDraggingRef.current = false;
+      touchIdRef.current = null;
+      gestureDirectionRef.current = null;
     };
 
-    const opts: AddEventListenerOptions = { capture: true, passive: false };
-    track.addEventListener("touchstart", onTouchStart, opts);
-    track.addEventListener("touchmove", onTouchMove, opts);
-    track.addEventListener("touchend", onTouchEnd, opts);
-    track.addEventListener("touchcancel", onTouchEnd, opts);
+    const capture = true;
+    const passiveFalse: AddEventListenerOptions = { capture, passive: false };
+    document.addEventListener("touchstart", onTouchStart, capture);
+    document.addEventListener("touchmove", onTouchMove, passiveFalse);
+    document.addEventListener("touchend", onTouchEnd, capture);
+    document.addEventListener("touchcancel", onTouchEnd, capture);
 
     return () => {
-      track.removeEventListener("touchstart", onTouchStart, opts);
-      track.removeEventListener("touchmove", onTouchMove, opts);
-      track.removeEventListener("touchend", onTouchEnd, opts);
-      track.removeEventListener("touchcancel", onTouchEnd, opts);
+      document.removeEventListener("touchstart", onTouchStart, capture);
+      document.removeEventListener("touchmove", onTouchMove, passiveFalse);
+      document.removeEventListener("touchend", onTouchEnd, capture);
+      document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
   }, []);
 
@@ -243,7 +275,7 @@ export function ServicesSection({
             scrollSnapType: "x mandatory",
             scrollSnapStop: "always",
             scrollBehavior: "smooth",
-            touchAction: "none",
+            touchAction: "pan-y",
             WebkitOverflowScrolling: "touch",
             columnGap: "20px", // 20px gap between cards
           }}
