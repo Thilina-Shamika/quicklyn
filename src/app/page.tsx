@@ -45,6 +45,7 @@ export default async function HomePage() {
         services={services}
         sectionHeading={page.acf.section_heading}
         whyList={page.acf.why_list}
+        whyIcon={page.acf.why_icon}
       />
       <ServiceAreasSection data={page.acf} />
       <TestimonialsSection testimonials={testimonials} />

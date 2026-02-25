@@ -14,6 +14,7 @@ interface ServicesSectionProps {
   services: WPService[];
   sectionHeading?: string;
   whyList?: WhyListItem[];
+  whyIcon?: WPImage;
 }
 
 export function ServicesSection({
@@ -23,15 +24,16 @@ export function ServicesSection({
   services,
   sectionHeading,
   whyList = [],
+  whyIcon,
 }: ServicesSectionProps) {
   const bgUrl = background?.url;
   const bgDesktopUrl = backgroundDesktop?.url || bgUrl;
+  const whyIconUrl = whyIcon?.url;
   const isSignatureService = (service: WPService) => {
     const normalizedId = String(service.acf?.id || service.slug || "")
       .toLowerCase()
       .replace(/[^a-z0-9]/g, "");
-    const titleText = (service.acf?.service_heading || service.title?.rendered || "").toLowerCase();
-    return normalizedId.includes("signaturepro") || titleText.includes("signature");
+    return normalizedId === "signaturepro";
   };
   const findServiceByKeywords = (keywords: string[]) =>
     services.find((service) => {
@@ -72,6 +74,16 @@ export function ServicesSection({
   const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
   const maxScrollRef = useRef(0);
   const [openWhyIndex, setOpenWhyIndex] = useState<number | null>(null);
+  const whyDesktopSectionRef = useRef<HTMLDivElement | null>(null);
+  const whyDesktopViewportRef = useRef<HTMLDivElement | null>(null);
+  const whyDesktopTrackRef = useRef<HTMLDivElement | null>(null);
+  const [whyDesktopTranslateX, setWhyDesktopTranslateX] = useState(0);
+  const [whyDesktopOuterHeight, setWhyDesktopOuterHeight] = useState<number | null>(null);
+  const whyDesktopProgressRef = useRef(0);
+  const whyDesktopMaxTranslateRef = useRef(0);
+  const whyDesktopTouchYRef = useRef<number | null>(null);
+  const whyDesktopLockActiveRef = useRef(false);
+  const whyDesktopLockedScrollYRef = useRef<number | null>(null);
 
   const gap = 20;
 
@@ -219,8 +231,168 @@ export function ServicesSection({
     };
   }, [snapToNearest]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const setWhyDesktopProgress = (next: number) => {
+      const max = Math.max(0, whyDesktopMaxTranslateRef.current);
+      const clamped = Math.max(0, Math.min(max, next));
+      whyDesktopProgressRef.current = clamped;
+      setWhyDesktopTranslateX(-clamped);
+      return clamped;
+    };
+
+    const updateDesktopWhyMeasurements = () => {
+      if (window.innerWidth < 768) {
+        setBodyLock(false);
+        whyDesktopMaxTranslateRef.current = 0;
+        setWhyDesktopTranslateX(0);
+        setWhyDesktopOuterHeight(null);
+        return;
+      }
+      const viewportEl = whyDesktopViewportRef.current;
+      const trackEl = whyDesktopTrackRef.current;
+      if (!viewportEl || !trackEl) return;
+
+      const maxTranslate = Math.max(0, trackEl.scrollWidth - viewportEl.clientWidth);
+      whyDesktopMaxTranslateRef.current = maxTranslate;
+      const scrollDistance = Math.max(window.innerHeight * 0.9, maxTranslate * 1.2);
+      setWhyDesktopOuterHeight(window.innerHeight + scrollDistance);
+      setWhyDesktopProgress(whyDesktopProgressRef.current);
+    };
+
+    const setBodyLock = (locked: boolean) => {
+      if (whyDesktopLockActiveRef.current === locked) return;
+      whyDesktopLockActiveRef.current = locked;
+      if (locked) {
+        whyDesktopLockedScrollYRef.current = window.scrollY;
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+        document.body.style.overscrollBehavior = "none";
+      } else {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+        document.body.style.overscrollBehavior = "";
+        whyDesktopLockedScrollYRef.current = null;
+      }
+    };
+
+    const getLockState = () => {
+      if (window.innerWidth < 768) {
+        return { canLock: false, rectTop: 0, rectBottom: 0, pinned: false };
+      }
+      const sectionEl = whyDesktopSectionRef.current;
+      if (!sectionEl) {
+        return { canLock: false, rectTop: 0, rectBottom: 0, pinned: false };
+      }
+      const rect = sectionEl.getBoundingClientRect();
+      const pinned = rect.top <= 0 && rect.bottom >= window.innerHeight;
+      // Enter lock a little before pin so we can snap the section to the top and start horizontal motion.
+      const nearEntry =
+        rect.top <= Math.max(120, window.innerHeight * 0.22) &&
+        rect.bottom > window.innerHeight * 0.8;
+      return { canLock: nearEntry, rectTop: rect.top, rectBottom: rect.bottom, pinned };
+    };
+
+    const alignSectionToTop = (rectTop: number) => {
+      if (Math.abs(rectTop) < 1) return;
+      window.scrollTo({ top: window.scrollY + rectTop, behavior: "auto" });
+    };
+
+    const lockSection = (rectTop: number) => {
+      alignSectionToTop(rectTop);
+      setBodyLock(true);
+      // Re-align after lock styles apply to avoid 1-frame drift on some browsers.
+      requestAnimationFrame(() => {
+        const sectionEl = whyDesktopSectionRef.current;
+        if (!sectionEl) return;
+        const rect = sectionEl.getBoundingClientRect();
+        if (Math.abs(rect.top) > 0.5) {
+          window.scrollTo({ top: window.scrollY + rect.top, behavior: "auto" });
+        }
+      });
+    };
+
+    const consumeDelta = (deltaY: number) => {
+      const lockState = getLockState();
+      const max = whyDesktopMaxTranslateRef.current;
+      const current = whyDesktopProgressRef.current;
+      if (max <= 0 || !lockState.canLock) {
+        setBodyLock(false);
+        return false;
+      }
+
+      if (deltaY > 0 && current < max) {
+        if (!whyDesktopLockActiveRef.current) lockSection(lockState.rectTop);
+        setWhyDesktopProgress(current + deltaY * 1.05);
+        return true;
+      }
+      if (deltaY < 0 && current > 0) {
+        if (!whyDesktopLockActiveRef.current) lockSection(lockState.rectTop);
+        setWhyDesktopProgress(current + deltaY * 1.05);
+        return true;
+      }
+
+      setBodyLock(false);
+      return false;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (consumeDelta(e.deltaY)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      whyDesktopTouchYRef.current = e.touches[0].clientY;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const lastY = whyDesktopTouchYRef.current;
+      const currentY = e.touches[0].clientY;
+      if (lastY == null) {
+        whyDesktopTouchYRef.current = currentY;
+        return;
+      }
+      const deltaY = lastY - currentY;
+      if (consumeDelta(deltaY * 1.2)) {
+        e.preventDefault();
+        e.stopPropagation();
+        whyDesktopTouchYRef.current = currentY;
+      } else {
+        whyDesktopTouchYRef.current = currentY;
+      }
+    };
+
+    const onTouchEnd = () => {
+      whyDesktopTouchYRef.current = null;
+    };
+
+    updateDesktopWhyMeasurements();
+
+    window.addEventListener("resize", updateDesktopWhyMeasurements);
+    document.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    document.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
+    document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+    document.addEventListener("touchend", onTouchEnd, { passive: true, capture: true });
+    document.addEventListener("touchcancel", onTouchEnd, { passive: true, capture: true });
+
+    return () => {
+      window.removeEventListener("resize", updateDesktopWhyMeasurements);
+      setBodyLock(false);
+      document.removeEventListener("wheel", onWheel as EventListener, true);
+      document.removeEventListener("touchstart", onTouchStart as EventListener, true);
+      document.removeEventListener("touchmove", onTouchMove as EventListener, true);
+      document.removeEventListener("touchend", onTouchEnd as EventListener, true);
+      document.removeEventListener("touchcancel", onTouchEnd as EventListener, true);
+    };
+  }, [whyList.length]);
+
   return (
-    <section className="relative z-20 -mt-[60px] w-full overflow-hidden bg-transparent pb-16 pt-[100px] md:-mt-[90px] md:pt-[120px]">
+    <section className="relative z-20 -mt-[60px] w-full overflow-x-hidden overflow-y-visible bg-transparent pb-16 pt-[100px] md:-mt-[90px] md:pt-[120px]">
       {/* Background texture for section 2 */}
       {(bgUrl || bgDesktopUrl) && (
         <div className="pointer-events-none absolute inset-0 z-0">
@@ -559,7 +731,8 @@ export function ServicesSection({
 
         {/* Why Quicklyn list (3rd section content) */}
         {(sectionHeading || whyList.length > 0) && (
-          <div className="mt-16 w-full px-6">
+          <>
+          <div className="mt-16 w-full px-6 md:hidden">
             {sectionHeading && (
 <h2 className="mb-8 text-center text-[36px] font-semibold leading-snug text-white">
               {sectionHeading}
@@ -631,6 +804,84 @@ export function ServicesSection({
               })}
             </div>
           </div>
+          <div
+            ref={whyDesktopSectionRef}
+            className="relative mt-16 hidden w-full md:mt-2 md:block"
+            style={whyDesktopOuterHeight ? { height: `${whyDesktopOuterHeight}px` } : undefined}
+          >
+            <div className="sticky top-0 h-screen">
+              <div className="mx-auto flex h-full w-full max-w-[1220px] items-center px-8 lg:px-6">
+                <div className="grid w-full grid-cols-12 items-center gap-6 lg:gap-10">
+                  <div className="col-span-4">
+                    <div className="mx-auto flex max-w-[330px] flex-col items-start">
+                      <div className="mb-6 lg:mb-8">
+                        {whyIconUrl ? (
+                          <Image
+                            src={whyIconUrl}
+                            alt={whyIcon?.alt || "Why Quicklyn icon"}
+                            width={220}
+                            height={220}
+                            className="block h-[150px] w-[150px] object-contain opacity-95 lg:h-[230px] lg:w-[230px]"
+                            unoptimized={
+                              whyIconUrl.includes("quicklyn-headless.local") ||
+                              whyIconUrl.includes("quick.rootholdings")
+                            }
+                          />
+                        ) : (
+                          <svg
+                            viewBox="0 0 128 128"
+                            className="block h-[150px] w-[150px] text-[#0f4a4d]/80 lg:h-[230px] lg:w-[230px]"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden
+                          >
+                            <circle cx="54" cy="54" r="26" />
+                            <path d="M73 73l28 28" />
+                            <path d="M34 76c6-9 14-13 20-13s14 4 20 13" />
+                            <circle cx="54" cy="46" r="6" />
+                            <path d="M22 86v-6c0-7 5-12 12-12h3" />
+                            <path d="M86 68h8c7 0 12 5 12 12v6" />
+                          </svg>
+                        )}
+                      </div>
+                      <h3 className="hero-text-shadow text-left text-[52px] font-semibold leading-[0.95] tracking-[-0.03em] text-white lg:text-[66px]">
+                        <span className="block">Why</span>
+                        <span className="block">{(sectionHeading || "Quicklyn").replace(/^Why\s+/i, "")}?</span>
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="col-span-8">
+                    <div ref={whyDesktopViewportRef} className="ml-auto max-w-[560px] overflow-hidden lg:max-w-[640px]">
+                      <div
+                        ref={whyDesktopTrackRef}
+                        className="flex will-change-transform"
+                        style={{ transform: `translate3d(${whyDesktopTranslateX}px, 0, 0)` }}
+                      >
+                        {whyList.map((item, index) => (
+                          <article
+                            key={`why-desktop-${item.list_heading}-${index}`}
+                            className="flex h-[340px] w-[300px] flex-shrink-0 flex-col justify-start border border-white/25 px-6 py-8 text-left text-white lg:h-[380px] lg:w-[360px] lg:px-10 lg:py-10"
+                          >
+                            <h4 className="text-[22px] font-semibold leading-tight text-white lg:text-[28px]">
+                              {item.list_heading}
+                            </h4>
+                            <p className="mt-auto text-[14px] leading-relaxed text-white/90 lg:text-[16px]">
+                              {item.list_description}
+                            </p>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </>
         )}
       </div>
     </section>

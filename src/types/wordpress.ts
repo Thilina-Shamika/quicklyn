@@ -43,6 +43,7 @@ export interface HomePageACF {
   pop_img_3?: WPImage;
   section2_background?: WPImage;
   section_2_background_desktop?: WPImage;
+  why_icon?: WPImage;
   counter?: CounterItem[];
   section_heading?: string;
   why_list?: WhyListItem[];

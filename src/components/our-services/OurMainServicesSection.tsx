@@ -43,7 +43,12 @@ function ServiceAccordionItem({
   const image = acf.service_image;
   const whatsIncluded = acf.whats_included;
   const supplies = acf.supplies;
-  const timeList = (acf.approximate_time_list ?? []).filter(
+  const rawTimeList = Array.isArray(acf.approximate_time_list)
+    ? acf.approximate_time_list
+    : acf.approximate_time_list && typeof acf.approximate_time_list === "object"
+      ? [acf.approximate_time_list]
+      : [];
+  const timeList = rawTimeList.filter(
     (item) => (item.type?.trim() || item.hours?.trim()) !== ""
   );
   const hourlyRate = acf.hourly_rate;
