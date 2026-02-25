@@ -171,7 +171,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
             Our Community
           </h2>
 
-          <div className="relative mx-auto h-[330px] w-full max-w-[1180px] overflow-visible lg:h-[400px]">
+          <div className="relative mx-auto h-[420px] w-full max-w-[1180px] overflow-visible lg:h-[520px]">
             <div className="pointer-events-none absolute inset-x-0 top-[68px] hidden h-px bg-white/35 lg:top-[78px]" />
             {testimonials.map((item, index) => {
               let offset = (index - currentIndex + count) % count;
@@ -181,46 +181,50 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
 
               const isCenter = offset === 0;
               const translateX =
-                offset === 0 ? 0 : offset === -1 ? -340 : offset === 1 ? 340 : offset === -2 ? -650 : 650;
-              const translateY = isCenter ? 8 : 26;
+                offset === 0 ? 0 : offset === -1 ? -320 : offset === 1 ? 320 : offset === -2 ? -620 : 620;
+              const translateY =
+                offset === 0 ? 8 : offset === -1 || offset === 1 ? 42 : 145;
               const scale = isCenter ? 1 : offset === -1 || offset === 1 ? 0.92 : 0.82;
-              const rotate = isCenter ? 0 : offset < 0 ? -14 : 14;
-              const opacity = isCenter ? 1 : offset === -1 || offset === 1 ? 0.92 : 0.35;
+              const rotate =
+                offset === 0 ? 0 : offset === -1 ? -14 : offset === 1 ? 14 : offset === -2 ? -28 : 28;
+              const opacity = isCenter ? 1 : offset === -1 || offset === 1 ? 0.92 : 0.55;
               const zIndex = isCenter ? 30 : offset === -1 || offset === 1 ? 20 : 10;
               const cardWidthClass = isCenter
-                ? "w-[360px] lg:w-[430px]"
-                : "w-[320px] lg:w-[390px]";
-              const quoteScaleClass = isCenter ? "h-7 w-7" : "h-6 w-6";
-              const contentPadding = isCenter ? "px-10 py-7 lg:px-12 lg:py-8" : "px-8 py-7 lg:px-10 lg:py-8";
+                ? "w-[320px] lg:w-[380px]"
+                : "w-[300px] lg:w-[360px]";
+              const quoteScaleClass = isCenter ? "h-8 w-8" : "h-6 w-6";
+              const contentPadding = isCenter ? "px-10 py-10 lg:px-12 lg:py-12" : "px-8 py-8 lg:px-10 lg:py-10";
               const cardClasses = isCenter
-                ? "border-white/65 bg-[#1b6668]/95"
+                ? "border-white/65 bg-[#185b5d]"
                 : "border-white/50 bg-[#1b6668]/88";
 
               return (
                 <div
                   key={item.id}
-                  className={`absolute left-1/2 top-1/2 select-none rounded-[34px] border shadow-[0_14px_30px_rgba(0,0,0,0.12)] transition-all duration-300 ease-out lg:rounded-[38px] ${cardWidthClass} ${contentPadding} ${cardClasses}`}
+                  className={`absolute left-1/2 top-1/2 flex min-h-[320px] flex-col items-center justify-center rounded-[34px] border shadow-[0_14px_30px_rgba(0,0,0,0.12)] lg:min-h-[380px] lg:rounded-[38px] ${cardWidthClass} ${contentPadding} ${cardClasses}`}
                   style={{
                     transform: `translate(-50%, -50%) translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg)`,
                     opacity,
                     zIndex,
+                    transition: "transform 0.35s ease-out, opacity 0.35s ease-out",
+                    willChange: "transform",
                   }}
                 >
-                  <QuoteIcon className={`absolute left-6 top-5 text-white/90 ${quoteScaleClass}`} />
-                  <QuoteIcon className={`absolute bottom-5 right-6 rotate-180 text-white/90 ${quoteScaleClass}`} />
+                  <QuoteIcon className={`absolute left-6 top-6 text-white/90 ${quoteScaleClass}`} />
+                  <QuoteIcon className={`absolute bottom-6 right-6 rotate-180 text-white/90 ${quoteScaleClass}`} />
 
-                  <div className="relative pt-2 text-center">
+                  <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center text-center">
                     <StarRating count={parseInt(item.acf?.stars || "5", 10)} />
                     <p
-                      className={`mx-auto mb-4 text-white/95 ${
+                      className={`mx-auto mb-4 w-full max-w-full text-white/95 ${
                         isCenter
-                          ? "min-h-[112px] max-w-[250px] text-[12px] leading-[1.55] lg:min-h-[136px] lg:max-w-[286px] lg:text-[14px]"
-                          : "min-h-[100px] max-w-[220px] text-[11px] leading-[1.55] lg:min-h-[124px] lg:max-w-[260px] lg:text-[13px]"
+                          ? "text-[13px] leading-[1.6] lg:text-[15px]"
+                          : "text-[12px] leading-[1.55] lg:text-[14px]"
                       }`}
                     >
                       {item.acf?.testimonial?.trim() || item.title.rendered}
                     </p>
-                    <p className={`${isCenter ? "text-[12px] lg:text-[13px]" : "text-[11px] lg:text-[12px]"} font-medium text-white/90`}>
+                    <p className={`shrink-0 font-medium text-white/90 ${isCenter ? "text-[13px] lg:text-[14px]" : "text-[12px] lg:text-[13px]"}`}>
                       {item.acf?.name?.trim() || item.title.rendered}
                     </p>
                   </div>
