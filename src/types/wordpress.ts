@@ -120,6 +120,7 @@ export interface CareersACF {
   image_1?: WPImage;
   image_2?: WPImage;
   image_3?: WPImage;
+  desktop_background?: WPImage;
 }
 
 export interface CareersPage {

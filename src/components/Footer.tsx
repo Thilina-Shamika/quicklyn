@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { WPFooter, WPAppLink, WPSocialLink } from "@/lib/wordpress";
 import { mapWordPressUrlToNextPath } from "@/lib/wordpress";
 
@@ -67,6 +68,9 @@ function SocialIcon({ slug, className }: { slug: string; className?: string }) {
 export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   if (!data?.acf) return null;
 
+  const pathname = usePathname();
+  const isCareersPage = pathname === "/careers";
+
   const acf = data.acf;
   const logo = acf.logo?.url;
   const description = acf.footer_description?.trim() || "";
@@ -103,7 +107,11 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
         footerBgDesktopUrl.includes("quick.rootholdings")));
 
   return (
-    <footer className="relative w-full overflow-hidden text-white">
+    <footer
+      className={`relative w-full overflow-hidden text-white ${
+        isCareersPage ? "z-20 md:-mt-[320px] lg:-mt-[420px]" : ""
+      }`}
+    >
       <div className="pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden />
       {footerBgUrl && (
         <div className="pointer-events-none absolute inset-0 z-0 md:hidden" aria-hidden>
