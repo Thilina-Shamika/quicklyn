@@ -66,11 +66,11 @@ function SocialIcon({ slug, className }: { slug: string; className?: string }) {
 }
 
 export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
-  if (!data?.acf) return null;
-
   const pathname = usePathname();
   const isCareersPage = pathname === "/careers";
   const isContactUsPage = pathname === "/contact-us";
+
+  if (!data?.acf) return null;
 
   const acf = data.acf;
   const logo = acf.logo?.url;
