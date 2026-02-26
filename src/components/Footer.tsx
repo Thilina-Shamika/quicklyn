@@ -103,11 +103,8 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
         footerBgDesktopUrl.includes("quick.rootholdings")));
 
   return (
-    <footer
-      className="relative w-full overflow-hidden text-white"
-      style={{ backgroundColor: "#2a7a7c" }}
-    >
-      <div className="pointer-events-none absolute inset-0 z-0 hidden bg-[#2a7a7c] md:block" aria-hidden />
+    <footer className="relative w-full overflow-hidden text-white">
+      <div className="pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden />
       {footerBgUrl && (
         <div className="pointer-events-none absolute inset-0 z-0 md:hidden" aria-hidden>
           <Image

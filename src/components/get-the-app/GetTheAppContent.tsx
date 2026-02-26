@@ -39,6 +39,8 @@ export function GetTheAppContent({
 }: GetTheAppContentProps) {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [sentinelOutOfView, setSentinelOutOfView] = useState(false);
+  const [isCopyHovered, setIsCopyHovered] = useState(false);
+  const [copyTooltipLabel, setCopyTooltipLabel] = useState("Copy");
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const active = hasScrolled && sentinelOutOfView;
@@ -60,11 +62,73 @@ export function GetTheAppContent({
     return () => observer.disconnect();
   }, []);
 
-  const renderSubHeading = () => {
+  const codeOnly = discountCodeLabel?.trim() || "";
+
+  const escapeRegExp = (value: string) =>
+    value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const handleCopyCode = async () => {
+    if (!codeOnly) return;
+    try {
+      await navigator.clipboard.writeText(codeOnly);
+      setCopyTooltipLabel("Copied");
+    } catch {
+      setCopyTooltipLabel("Copy");
+    }
+    window.setTimeout(() => {
+      setCopyTooltipLabel("Copy");
+    }, 1200);
+  };
+
+  const renderDesktopUseCodeLine = () => {
+    if (!codeOnly) return null;
+
+    const codeRegex = new RegExp(escapeRegExp(codeOnly), "i");
+    const text = `use code ${codeOnly} to save 15% instantly.`;
+    const parts = text.split(new RegExp(`(${escapeRegExp(codeOnly)})`, "i"));
+
+    return (
+      <p className="mt-7 text-[24px] leading-[36px] text-white">
+        {parts.map((part, i) => {
+          if (!codeRegex.test(part)) {
+            return <span key={i}>{part}</span>;
+          }
+
+          return (
+            <button
+              key={i}
+              type="button"
+              onMouseEnter={() => setIsCopyHovered(true)}
+              onMouseLeave={() => {
+                setIsCopyHovered(false);
+                setCopyTooltipLabel("Copy");
+              }}
+              onClick={handleCopyCode}
+              className="relative mx-1 inline-flex items-center px-1.5 py-0.5 align-baseline font-semibold text-[#ffda00] focus:outline-none"
+            >
+              <span
+                className="pointer-events-none absolute inset-0 -z-10 rounded-[999px] border border-dashed border-white/55 opacity-90"
+                style={{ transform: "rotate(-8deg) scale(1.18, 1.35)" }}
+                aria-hidden
+              />
+              {part}
+              {isCopyHovered && (
+                <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-md border border-white/20 bg-[#114b4d] px-2.5 py-1 text-[12px] font-medium leading-none text-white shadow-md">
+                  {copyTooltipLabel}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </p>
+    );
+  };
+
+  const renderSubHeading = (className?: string) => {
     if (!subHeading) return null;
     const parts = subHeading.split(/(\d+%\s*off?|\d+%)/i);
     return (
-      <p className="mt-3 text-sm text-white md:text-base">
+      <p className={className ?? "mt-3 text-sm text-white md:text-base"}>
         {parts.map((part, i) =>
           /\d+%/.test(part) ? (
             <span key={i} className="font-bold text-[#ffda00]">
@@ -79,10 +143,10 @@ export function GetTheAppContent({
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#2a7a7c] text-white">
+    <main className="relative min-h-screen md:min-h-[45vh] lg:min-h-[50vh] bg-[#2a7a7c] text-white">
       {backImageUrl ? (
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-85"
+          className="absolute inset-0 z-0 bg-cover bg-top bg-no-repeat"
           style={{ backgroundImage: `url(${encodeURI(backImageUrl)})` }}
           aria-hidden
         />
@@ -95,7 +159,9 @@ export function GetTheAppContent({
         className="absolute left-0 right-0 top-20 h-px w-full pointer-events-none"
         aria-hidden
       />
-      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[20%] pb-12 md:pt-[22%] md:pb-16">
+
+      {/* Mobile layout (unchanged) */}
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[20%] pb-12 md:hidden">
         {phoneImageUrl && (
           <div
             className={`relative h-[320px] w-[230px] shrink-0 -mb-8 mt-32 transition-all duration-500 ease-out md:-mb-12 md:mt-40 md:h-[420px] md:w-[300px] ${
@@ -210,6 +276,89 @@ export function GetTheAppContent({
             )}
           </div>
         )}
+      </div>
+
+      {/* Desktop / tablet layout */}
+      <div className="relative hidden items-start px-10 pb-0 pt-28 md:flex lg:px-20">
+        <div className="relative mx-auto flex h-full w-full max-w-[1320px] items-center justify-center">
+          {/* Left phone */}
+          {phoneImageUrl && (
+            <div className="pointer-events-none absolute -left-10 -bottom-40 hidden h-[360px] w-[230px] -rotate-[12deg] drop-shadow-2xl lg:-left-6 lg:block lg:h-[440px] lg:w-[280px]">
+              <Image
+                src={phoneImageUrl}
+                alt=""
+                fill
+                className="object-contain object-bottom [transform:scaleX(-1)]"
+                sizes="280px"
+                unoptimized={phoneImageUrl.includes("quicklyn-headless.local")}
+              />
+            </div>
+          )}
+
+          {/* Right phone */}
+          {phoneImageUrl && (
+            <div className="pointer-events-none absolute -right-10 -bottom-[300px] hidden h-[580px] w-[380px] rotate-[12deg] drop-shadow-2xl lg:-right-2 lg:block lg:h-[700px] lg:w-[460px]">
+              <Image
+                src={phoneImageUrl}
+                alt=""
+                fill
+                className="object-contain object-bottom"
+                sizes="360px"
+                unoptimized={phoneImageUrl.includes("quicklyn-headless.local")}
+              />
+            </div>
+          )}
+
+          {/* Center content */}
+          <div className="relative z-10 mt-20 max-w-[880px] text-center lg:mt-24">
+            <h1 className="text-[68px] font-semibold leading-[80px] text-white lg:text-[80px] lg:leading-[92px]">
+              {headingDisplay}
+            </h1>
+
+            {renderSubHeading("mt-6 text-[22px] leading-[34px] text-white/90")}
+
+            {renderDesktopUseCodeLine()}
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-5">
+              {googlePlayUrl && (
+                <Link
+                  href={link01}
+                  target={link01Target}
+                  rel="noopener noreferrer"
+                  className="rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50"
+                >
+                  <Image
+                    src={googlePlayUrl}
+                    alt="Get it on Google Play"
+                    width={210}
+                    height={68}
+                    className="h-14 w-auto object-contain"
+                    sizes="210px"
+                    unoptimized={googlePlayUrl.includes("quicklyn-headless.local")}
+                  />
+                </Link>
+              )}
+              {appStoreUrl && (
+                <Link
+                  href={link02}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50"
+                >
+                  <Image
+                    src={appStoreUrl}
+                    alt="Download on the App Store"
+                    width={210}
+                    height={68}
+                    className="h-14 w-auto object-contain"
+                    sizes="210px"
+                    unoptimized={appStoreUrl.includes("quicklyn-headless.local")}
+                  />
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

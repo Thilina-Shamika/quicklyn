@@ -37,7 +37,8 @@ export default async function GetTheAppPage() {
   const bookingText = acf.booking_text?.trim() ?? "Book A Cleaning Now";
   const description = acf.description?.trim() ?? "";
   const phoneImageUrl = acf.background_image?.url;
-  const backImageUrl = acf.back_image?.url;
+  const backImageUrl =
+    (acf.back_image_desktop ?? acf.back_image ?? acf.background_image)?.url;
 
   return (
     <GetTheAppContent

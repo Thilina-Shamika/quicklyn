@@ -436,6 +436,8 @@ export interface WPAppLink {
     description?: string;
     background_image?: WPImage;
     back_image?: WPImage;
+    /** Optional desktop-only background image for Get The App page */
+    back_image_desktop?: WPImage;
   };
 }
 
