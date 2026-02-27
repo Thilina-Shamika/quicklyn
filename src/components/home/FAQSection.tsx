@@ -2,22 +2,39 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import type { WPFAQ } from "@/lib/wordpress";
+import type { WPFAQ, WPAppLink } from "@/lib/wordpress";
+import type { WPImage } from "@/types/wordpress";
+import { HomeAppDownloadSection } from "./HomeAppDownloadSection";
 
 interface FAQSectionProps {
   faqs: WPFAQ[];
+  backgroundDesktop?: WPImage;
+  downloadData?: WPAppLink | null;
 }
 
-export function FAQSection({ faqs }: FAQSectionProps) {
+export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const bgDesktopUrl = backgroundDesktop?.url;
 
   if (!faqs.length) return null;
 
   return (
-    <section className="relative z-0 w-full overflow-hidden bg-[#226d71] pb-16 pt-8">
-      <div className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden>
-        <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(120deg,transparent_0%,transparent_36%,rgba(255,255,255,0.05)_36%,rgba(255,255,255,0.05)_48%,transparent_48%,transparent_64%,rgba(255,255,255,0.04)_64%,rgba(255,255,255,0.04)_76%,transparent_76%)]" />
-      </div>
+    <section className="relative z-0 w-full overflow-hidden bg-[#226d71] pb-16 pt-16">
+      <div
+        className="pointer-events-none absolute inset-0 hidden md:block"
+        aria-hidden
+        style={
+          bgDesktopUrl
+            ? {
+                backgroundImage: `url(${bgDesktopUrl})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center top",
+              }
+            : undefined
+        }
+      />
       <div className="relative z-10 mx-auto w-full max-w-2xl px-6 md:max-w-[1320px] md:px-10 lg:px-14">
         <div className="hidden items-stretch md:grid md:grid-cols-[180px_minmax(0,1fr)] md:gap-10 md:py-4 lg:grid-cols-[210px_minmax(0,1fr)] lg:gap-14">
           <div className="flex h-full flex-col justify-between py-2">
@@ -283,6 +300,12 @@ export function FAQSection({ faqs }: FAQSectionProps) {
           </div>
         </div>
       </div>
+
+      {/* Download section nested visually inside FAQ, sharing background */}
+      <HomeAppDownloadSection
+        data={downloadData ?? null}
+        transparentBackground
+      />
     </section>
   );
 }

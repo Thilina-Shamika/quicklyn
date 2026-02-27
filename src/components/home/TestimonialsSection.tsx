@@ -12,7 +12,7 @@ interface TestimonialsSectionProps {
 
 function StarRating({ count = 5 }: { count?: number }) {
   return (
-    <div className="mb-3 flex justify-center gap-0.5" aria-hidden>
+    <div className="mb-3 flex justify-center gap-1 text-[18px] md:text-[20px]" aria-hidden>
       {Array.from({ length: Math.min(5, Math.max(0, count)) }).map((_, i) => (
         <span key={i} className="text-[#FFDA00]" aria-hidden>
           ★
@@ -157,7 +157,11 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
   if (!count) return null;
 
   return (
-    <section className={`relative w-full overflow-hidden pb-8 pt-16 ${transparentBackground ? "" : "bg-[#226d71]"}`}>
+    <section
+      className={`relative w-full overflow-hidden pb-8 pt-16 ${
+        transparentBackground ? "" : "bg-[#2a7a7c]"
+      }`}
+    >
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
         <h2 className="mb-10 ml-[23px] text-left text-[31px] font-semibold leading-tight text-white md:hidden">
           Trusted by Our Community
@@ -171,7 +175,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
             Our Community
           </h2>
 
-          <div className="relative mx-auto h-[420px] w-full max-w-[1180px] overflow-visible lg:h-[520px]">
+          <div className="relative mx-auto h-[460px] w-full max-w-[1180px] overflow-visible lg:h-[560px]">
             <div className="pointer-events-none absolute inset-x-0 top-[68px] hidden h-px bg-white/35 lg:top-[78px]" />
             {testimonials.map((item, index) => {
               let offset = (index - currentIndex + count) % count;
@@ -190,8 +194,8 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
               const opacity = isCenter ? 1 : offset === -1 || offset === 1 ? 0.92 : 0.55;
               const zIndex = isCenter ? 30 : offset === -1 || offset === 1 ? 20 : 10;
               const cardWidthClass = isCenter
-                ? "w-[320px] lg:w-[380px]"
-                : "w-[300px] lg:w-[360px]";
+                ? "w-[340px] lg:w-[400px]"
+                : "w-[320px] lg:w-[380px]";
               const quoteScaleClass = isCenter ? "h-8 w-8" : "h-6 w-6";
               const contentPadding = isCenter ? "px-10 py-10 lg:px-12 lg:py-12" : "px-8 py-8 lg:px-10 lg:py-10";
               const cardClasses = isCenter
@@ -201,7 +205,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
               return (
                 <div
                   key={item.id}
-                  className={`absolute left-1/2 top-1/2 flex min-h-[320px] flex-col items-center justify-center rounded-[34px] border shadow-[0_14px_30px_rgba(0,0,0,0.12)] lg:min-h-[380px] lg:rounded-[38px] ${cardWidthClass} ${contentPadding} ${cardClasses}`}
+                  className={`absolute left-1/2 top-1/2 flex min-h-[340px] flex-col items-center justify-center rounded-[34px] border shadow-[0_14px_30px_rgba(0,0,0,0.12)] lg:min-h-[400px] lg:rounded-[38px] ${cardWidthClass} ${contentPadding} ${cardClasses}`}
                   style={{
                     transform: `translate(-50%, -50%) translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg)`,
                     opacity,
@@ -216,11 +220,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
                   <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center text-center">
                     <StarRating count={parseInt(item.acf?.stars || "5", 10)} />
                     <p
-                      className={`mx-auto mb-4 w-full max-w-full text-white/95 ${
-                        isCenter
-                          ? "text-[13px] leading-[1.6] lg:text-[15px]"
-                          : "text-[12px] leading-[1.55] lg:text-[14px]"
-                      }`}
+                      className="mx-auto mb-4 w-full max-w-full text-[19px] leading-[32px] text-white/95"
                     >
                       {item.acf?.testimonial?.trim() || item.title.rendered}
                     </p>

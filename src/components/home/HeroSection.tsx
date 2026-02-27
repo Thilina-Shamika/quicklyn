@@ -363,9 +363,17 @@ export function HeroSection({ data, header }: HeroSectionProps) {
                 </div>
               </div>
 
-              <div className="relative col-span-5 h-[440px] lg:col-span-5 lg:h-[520px]">
+              <div
+                className="relative col-span-5 h-[440px] lg:col-span-5 lg:h-[520px]"
+                style={{
+                  transform: desktopIntroDone ? "scale(1)" : "scale(0.7)",
+                  opacity: desktopIntroDone ? 1 : 0,
+                  transition: "transform 0.5s ease-out, opacity 0.5s ease-out",
+                  transformOrigin: "center center",
+                }}
+              >
                 {popImg2 && (
-                  <div className="absolute right-[16%] top-[18%] z-20 rotate-[6deg] lg:right-[15%] lg:top-[17%]">
+                  <div className="absolute right-[16%] top-[18%] z-20 rotate-[6deg] transition-transform duration-300 hover:scale-105 lg:right-[15%] lg:top-[17%]">
                     <Image
                       src={popImg2}
                       alt=""
@@ -378,7 +386,7 @@ export function HeroSection({ data, header }: HeroSectionProps) {
                 )}
 
                 {popImg1 && (
-                  <div className="absolute left-[10%] top-[38%] z-20 -rotate-[11deg] lg:left-[9%] lg:top-[35%]">
+                  <div className="absolute left-[10%] top-[38%] z-20 -rotate-[11deg] transition-transform duration-300 hover:scale-105 lg:left-[9%] lg:top-[35%]">
                     <Image
                       src={popImg1}
                       alt=""
@@ -391,7 +399,7 @@ export function HeroSection({ data, header }: HeroSectionProps) {
                 )}
 
                 {popImg3 && (
-                  <div className="absolute right-[8%] top-[56%] z-20 rotate-[8deg] lg:right-[8%] lg:top-[54%]">
+                  <div className="absolute right-[8%] top-[56%] z-20 rotate-[8deg] transition-transform duration-300 hover:scale-105 lg:right-[8%] lg:top-[54%]">
                     <Image
                       src={popImg3}
                       alt=""

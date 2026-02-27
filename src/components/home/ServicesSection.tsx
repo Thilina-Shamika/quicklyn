@@ -92,6 +92,25 @@ export function ServicesSection({
   const dragStartScrollRef = useRef(0);
   const pointerDownRef = useRef(false);
 
+  // Desktop services cards hover offset (parallax-style movement)
+  const [servicesHoverOffset, setServicesHoverOffset] = useState({ x: 0, y: 0 });
+
+  const handleServicesMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const normX = ((event.clientX - rect.left) / rect.width - 0.5) * 2; // -1 to 1
+    const normY = ((event.clientY - rect.top) / rect.height - 0.5) * 2; // -1 to 1
+    setServicesHoverOffset({
+      x: Math.max(-1, Math.min(1, normX)),
+      y: Math.max(-1, Math.min(1, normY)),
+    });
+  };
+
+  const handleServicesMouseLeave = () => {
+    setServicesHoverOffset({ x: 0, y: 0 });
+  };
+
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const track = trackRef.current;
     const viewport = viewportRef.current;
@@ -415,7 +434,7 @@ export function ServicesSection({
             <div
               className="absolute inset-0 hidden md:block"
               style={{
-                backgroundImage: `url(${bgDesktopUrl})`,
+                backgroundImage: `linear-gradient(to bottom, rgba(41,122,124,0) 0%, #297a7c 100%), url(${bgDesktopUrl})`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center top",
                 backgroundSize: "cover",
@@ -464,7 +483,7 @@ export function ServicesSection({
             const right = items.slice(mid);
             const columns = [left, right];
             return (
-              <div className="mb-10 hidden w-full max-w-[820px] md:block lg:mb-12">
+              <div className="mb-8 hidden w-full max-w-[820px] md:-mt-4 md:block lg:mb-14">
                 <div className="px-4 py-4 lg:px-6 lg:py-5">
                   <div className="flex flex-col gap-6 md:flex-row">
                     {columns.map((colItems, colIndex) => (
@@ -515,7 +534,11 @@ export function ServicesSection({
         </h2>
 
         {/* Desktop / tablet services layout */}
-        <div className="relative hidden w-full max-w-[1100px] md:block">
+        <div
+          className="relative hidden w-full max-w-[1100px] md:mt-10 md:block"
+          onMouseMove={handleServicesMouseMove}
+          onMouseLeave={handleServicesMouseLeave}
+        >
           <div className="relative mx-auto h-[420px] w-full lg:h-[520px]">
             <div className="pointer-events-none absolute inset-0 z-0 flex flex-col items-center justify-center">
               <span className="hero-text-shadow block text-center text-[120px] font-medium leading-[0.82] tracking-[-0.05em] text-white/90 lg:text-[180px]">
@@ -535,63 +558,74 @@ export function ServicesSection({
                 slot === "leftTop"
                   ? "left-[2%] top-[14%] w-[22%] min-w-[170px] max-w-[240px] lg:left-[4%] lg:top-[13%] lg:max-w-[260px]"
                   : slot === "topCenter"
-                    ? "left-1/2 top-[7%] w-[38%] min-w-[260px] max-w-[420px] -translate-x-1/2 lg:top-[6%] lg:max-w-[440px]"
+                    ? "left-[32%] -top-[5%] w-[38%] min-w-[260px] max-w-[420px] -translate-x-1/2 lg:left-[31%] lg:-top-[5%] lg:max-w-[440px]"
                     : slot === "rightTop"
-                      ? "right-[2%] top-[21%] w-[28%] min-w-[220px] max-w-[320px] lg:right-[5%] lg:top-[20%] lg:max-w-[340px]"
+                      ? "right-[0%] top-[18%] w-[28%] min-w-[220px] max-w-[320px] lg:right-[2%] lg:top-[17%] lg:max-w-[340px]"
                       : slot === "leftBottom"
-                        ? "left-[6%] top-[62%] w-[32%] min-w-[240px] max-w-[360px] lg:left-[8%] lg:top-[62%] lg:max-w-[380px]"
-                        : "right-[14%] top-[72%] w-[28%] min-w-[220px] max-w-[300px] lg:right-[12%] lg:top-[72%] lg:max-w-[320px]";
+                        ? "left-[6%] top-[78%] w-[32%] min-w-[240px] max-w-[360px] lg:left-[8%] lg:top-[78%] lg:max-w-[380px]"
+                        : "right-[14%] top-[78%] w-[28%] min-w-[220px] max-w-[300px] lg:right-[12%] lg:top-[78%] lg:max-w-[320px]";
 
               return (
                 <article
                   key={`desktop-card-${service.id}`}
-                  className={`absolute z-10 rounded-[22px] bg-[#175c5e]/95 px-5 py-4 text-left shadow-[0_8px_18px_rgba(0,0,0,0.18)] backdrop-blur-[2px] lg:rounded-[26px] lg:px-7 lg:py-5 ${cardPos}`}
+                  className={`group absolute z-10 rounded-[22px] bg-[#175c5e]/95 px-5 py-4 text-left shadow-[0_8px_18px_rgba(0,0,0,0.18)] backdrop-blur-[2px] lg:rounded-[26px] lg:px-7 lg:py-5 ${cardPos}`}
+                  style={{
+                    transform: `translate3d(${servicesHoverOffset.x * 10}px, ${
+                      servicesHoverOffset.y * 8
+                    }px, 0)`,
+                    transition: "transform 0.18s ease-out",
+                  }}
                 >
                   <Link
                     href={`/our-services#service-${service.slug}`}
-                    className={`absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-[#1B5B5D] transition hover:opacity-95 lg:h-7 lg:w-7 ${
+                    className={`absolute right-3 top-3 flex h-6 w-6 items-center justify-center gap-1 overflow-hidden rounded-full text-[#1B5B5D] transition-all duration-200 ease-out hover:opacity-95 lg:h-7 lg:w-7 ${
                       isSignature ? "bg-[#FFDA00]" : "bg-white/90"
-                    }`}
+                    } group-hover:md:w-[116px] group-hover:md:pl-3 group-hover:md:pr-4`}
                     aria-label={`Open ${title}`}
                   >
+                    <span className="hidden whitespace-nowrap text-[12px] font-semibold text-[#1B5B5D] group-hover:md:inline lg:text-[13px]">
+                      Learn More
+                    </span>
                     <svg
                       aria-hidden
                       viewBox="0 0 24 24"
-                      className="h-4 w-4 lg:h-4 lg:w-4"
+                      className="h-4 w-4 flex-shrink-0 lg:h-4 lg:w-4"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="2.4"
+                      strokeWidth="2.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M8 16L16 8" />
-                      <path d="M9 8H16V15" />
+                      <path d="M4 20L20 4" />
+                      <path d="M4 4H20V20" />
                     </svg>
                   </Link>
 
-                  <h3
-                    className={`pr-8 text-[20px] font-medium leading-[1.05] tracking-[-0.02em] text-white lg:text-[28px] ${
-                      isSignature ? "text-[#FFDA00]" : ""
-                    }`}
-                  >
-                    <span>{title}</span>
-                    {isSignature && (
-                      <span className="ml-1 inline-flex align-middle text-[#FFDA00]" aria-hidden>
-                        <svg
-                          viewBox="0 0 24 24"
-                          className="h-4 w-4 lg:h-5 lg:w-5"
-                          fill="currentColor"
-                        >
-                          <path d="M12 1l1.8 5.2L19 8l-5.2 1.8L12 15l-1.8-5.2L5 8l5.2-1.8L12 1z" />
-                          <path d="M19 13l.9 2.6 2.6.9-2.6.9L19 20l-.9-2.6-2.6-.9 2.6-.9L19 13z" />
-                        </svg>
-                      </span>
-                    )}
-                  </h3>
+                  <div className="transition-all duration-200 group-hover:md:pt-5">
+                    <h3
+                      className={`pr-8 text-[20px] font-medium leading-[1.05] tracking-[-0.02em] text-white lg:text-[28px] ${
+                        isSignature ? "text-[#FFDA00]" : ""
+                      }`}
+                    >
+                      <span>{title}</span>
+                      {isSignature && (
+                        <span className="ml-1 inline-flex align-middle text-[#FFDA00]" aria-hidden>
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4 lg:h-5 lg:w-5"
+                            fill="currentColor"
+                          >
+                            <path d="M12 1l1.8 5.2L19 8l-5.2 1.8L12 15l-1.8-5.2L5 8l5.2-1.8L12 1z" />
+                            <path d="M19 13l.9 2.6 2.6.9-2.6.9L19 20l-.9-2.6-2.6-.9 2.6-.9L19 13z" />
+                          </svg>
+                        </span>
+                      )}
+                    </h3>
 
-                  <p className="mt-3 line-clamp-3 text-[12px] leading-relaxed text-white/90 lg:mt-4 lg:text-[14px]">
-                    {desc}
-                  </p>
+                    <p className="mt-3 line-clamp-3 text-[12px] leading-relaxed text-white/90 lg:mt-4 lg:text-[14px]">
+                      {desc}
+                    </p>
+                  </div>
                 </article>
               );
             })}
@@ -830,64 +864,70 @@ export function ServicesSection({
           </div>
           <div
             ref={whyDesktopSectionRef}
-            className="relative mt-16 hidden w-full md:mt-0 md:block"
-            style={whyDesktopOuterHeight ? { height: `${whyDesktopOuterHeight}px` } : undefined}
+            className="relative mt-16 hidden w-full pt-[120px] pb-12 md:mt-0 md:block"
           >
-            <div className="sticky top-0 h-screen">
-              <div className="mx-auto h-full w-full max-w-[1280px] px-8 lg:px-6">
+            <div className="sticky top-0 h-[80vh]">
+              <div className="mx-auto h-full w-screen max-w-none px-0">
                 <div className="relative h-full">
-                  <div className="absolute inset-y-0 left-0 z-20 w-[42%] min-w-[300px] max-w-[470px]">
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background:
-                          "linear-gradient(90deg, rgba(42,122,124,0.98) 76%, rgba(42,122,124,0.75) 86%, rgba(42,122,124,0.18) 96%, rgba(42,122,124,0) 100%)",
-                      }}
-                      aria-hidden
-                    />
-                    <div className="relative flex h-full flex-col justify-center pl-4 pr-10 lg:pl-6 lg:pr-16">
-                      <div className="mb-6 lg:mb-8">
-                        {whyIconUrl ? (
-                          <Image
-                            src={whyIconUrl}
-                            alt={whyIcon?.alt || "Why Quicklyn icon"}
-                            width={220}
-                            height={220}
-                            className="block h-[150px] w-[150px] object-contain opacity-95 lg:h-[230px] lg:w-[230px]"
-                            unoptimized={
-                              whyIconUrl.includes("quicklyn-headless.local") ||
-                              whyIconUrl.includes("quick.rootholdings")
-                            }
-                          />
-                        ) : (
-                          <svg
-                            viewBox="0 0 128 128"
-                            className="block h-[150px] w-[150px] text-[#0f4a4d]/80 lg:h-[230px] lg:w-[230px]"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden
-                          >
-                            <circle cx="54" cy="54" r="26" />
-                            <path d="M73 73l28 28" />
-                            <path d="M34 76c6-9 14-13 20-13s14 4 20 13" />
-                            <circle cx="54" cy="46" r="6" />
-                            <path d="M22 86v-6c0-7 5-12 12-12h3" />
-                            <path d="M86 68h8c7 0 12 5 12 12v6" />
-                          </svg>
-                        )}
+                  {/* Centered wrapper to align left content with nav width */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="mx-auto flex h-full w-full max-w-[1280px] px-8 lg:px-6">
+                      <div className="relative h-full w-[42%] min-w-[300px] max-w-[470px]">
+                        <div className="pointer-events-auto absolute top-1/2 left-0 z-20 w-full -translate-y-1/2">
+                          <div className="relative flex flex-col justify-center pl-4 pr-10 lg:pl-6 lg:pr-16">
+                            <div className="mb-6 lg:mb-8">
+                              {whyIconUrl ? (
+                                <Image
+                                  src={whyIconUrl}
+                                  alt={whyIcon?.alt || "Why Quicklyn icon"}
+                                  width={320}
+                                  height={320}
+                                  className="block h-[260px] w-[260px] object-contain opacity-95 lg:h-[340px] lg:w-[340px]"
+                                  unoptimized={
+                                    whyIconUrl.includes("quicklyn-headless.local") ||
+                                    whyIconUrl.includes("quick.rootholdings")
+                                  }
+                                />
+                              ) : (
+                                <svg
+                                  viewBox="0 0 128 128"
+                                  className="block h-[260px] w-[260px] text-[#0f4a4d]/80 lg:h-[340px] lg:w-[340px]"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="6"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  aria-hidden
+                                >
+                                  <circle cx="54" cy="54" r="26" />
+                                  <path d="M73 73l28 28" />
+                                  <path d="M34 76c6-9 14-13 20-13s14 4 20 13" />
+                                  <circle cx="54" cy="46" r="6" />
+                                  <path d="M22 86v-6c0-7 5-12 12-12h3" />
+                                  <path d="M86 68h8c7 0 12 5 12 12v6" />
+                                </svg>
+                              )}
+                            </div>
+                            <div className="inline-block rounded-[40px] -mt-8">
+                              <h3 className="hero-text-shadow text-left text-[52px] font-semibold leading-[0.95] tracking-[-0.03em] text-white lg:text-[76px]">
+                                <span className="block">Why</span>
+                                <span className="block">
+                                  {(sectionHeading || "Quicklyn").replace(/^Why\s+/i, "")}?
+                                </span>
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="hero-text-shadow text-left text-[52px] font-semibold leading-[0.95] tracking-[-0.03em] text-white lg:text-[66px]">
-                        <span className="block">Why</span>
-                        <span className="block">{(sectionHeading || "Quicklyn").replace(/^Why\s+/i, "")}?</span>
-                      </h3>
                     </div>
                   </div>
 
+                  {/* Full-width cards on the right */}
                   <div className="relative z-10 flex h-full items-center">
-                    <div ref={whyDesktopViewportRef} className="w-full overflow-hidden">
+                    <div
+                      ref={whyDesktopViewportRef}
+                      className="relative ml-[34%] w-[66%] overflow-hidden"
+                    >
                       <div
                         ref={whyDesktopTrackRef}
                         className="flex will-change-transform pl-[34%] lg:pl-[38%]"
@@ -896,7 +936,7 @@ export function ServicesSection({
                         {whyList.map((item, index) => (
                           <article
                             key={`why-desktop-${item.list_heading}-${index}`}
-                            className="flex h-[340px] w-[320px] flex-shrink-0 flex-col justify-start border border-white/25 px-6 py-8 text-left text-white lg:h-[380px] lg:w-[380px] lg:px-10 lg:py-10"
+                            className="flex h-[420px] w-[320px] flex-shrink-0 flex-col justify-start border border-white/25 px-6 py-8 text-left text-white lg:h-[500px] lg:w-[380px] lg:px-10 lg:py-10"
                           >
                             <h4 className="text-[22px] font-semibold leading-tight text-white lg:text-[28px]">
                               {item.list_heading}
@@ -906,7 +946,7 @@ export function ServicesSection({
                             </p>
                           </article>
                         ))}
-                        <div className="h-[340px] w-[220px] flex-shrink-0 border-y border-transparent lg:h-[380px] lg:w-[260px]" aria-hidden />
+                        <div className="h-[420px] w-[220px] flex-shrink-0 border-y border-transparent lg:h-[500px] lg:w-[260px]" aria-hidden />
                       </div>
                     </div>
                   </div>

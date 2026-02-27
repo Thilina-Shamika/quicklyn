@@ -49,8 +49,11 @@ export default async function HomePage() {
       />
       <ServiceAreasSection data={page.acf} />
       <TestimonialsSection testimonials={testimonials} />
-      <FAQSection faqs={faqs} />
-      <HomeAppDownloadSection data={appLink} />
+      <FAQSection
+        faqs={faqs}
+        backgroundDesktop={page.acf.faq_background_desktop}
+        downloadData={appLink}
+      />
       {/* Global floating CTA button above all sections */}
       <Link
         href="/book-a-cleaning"
