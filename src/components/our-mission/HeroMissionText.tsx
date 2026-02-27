@@ -16,12 +16,8 @@ export function HeroMissionText({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 40);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const t = setTimeout(() => setVisible(true), 150);
+    return () => clearTimeout(t);
   }, []);
 
   const show = visible;

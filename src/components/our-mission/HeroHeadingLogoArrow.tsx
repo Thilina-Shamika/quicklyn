@@ -36,10 +36,8 @@ export function HeroHeadingLogoArrow({
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const t = setTimeout(() => setScrolled(true), 150);
+    return () => clearTimeout(t);
   }, []);
 
   const transition = `transform ${TRANSITION_DURATION_MS}ms ease-out, opacity ${TRANSITION_DURATION_MS}ms ease-out, margin-top ${TRANSITION_DURATION_MS}ms ease-out`;

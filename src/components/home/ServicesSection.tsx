@@ -799,7 +799,7 @@ export function ServicesSection({
             </h2>
             )}
 
-            <div className="mx-auto w-full max-w-sm space-y-3">
+            <div className="mx-auto w-full max-w-sm space-y-3 pt-5 pb-5 pr-[20px]">
               {whyList.map((item, index) => {
                 const isLast = index === whyList.length - 1;
                 const isOpen = openWhyIndex === index;
@@ -834,7 +834,7 @@ export function ServicesSection({
 
                     {/* Text */}
                     <div className="flex-1 text-left">
-                      <p className="text-[21px] font-normal leading-snug text-white">
+                      <p className="text-[20px] font-normal leading-[25px] text-white">
                         {item.list_heading}
                       </p>
                       <button

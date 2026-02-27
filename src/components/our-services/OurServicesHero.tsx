@@ -27,17 +27,10 @@ export function OurServicesHero({
   const [isActive, setIsActive] = useState(false);
   const [desktopIntroDone, setDesktopIntroDone] = useState(false);
 
+  // Mobile: run hero animation on page load (no scroll trigger)
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const handleScroll = () => {
-      const y = window.scrollY || window.pageYOffset || 0;
-      setIsActive(y > 40);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const t = setTimeout(() => setIsActive(true), 150);
+    return () => clearTimeout(t);
   }, []);
 
   // Desktop intro animation: mark as done after first render
