@@ -63,8 +63,16 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
       desktopMapWithPinUrl.includes("quick.rootholdings"));
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-16 pt-14">
-      {/* Mobile layout (unchanged) */}
+    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-0 pt-0">
+      {/* Linear overlay: 100% #226e71 → 0% transparent */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1]"
+        style={{
+          background: "linear-gradient(to bottom, #226e71 0%, transparent 100%)",
+        }}
+        aria-hidden
+      />
+      {/* Mobile layout */}
       <div className="md:hidden">
         {/* Map image as right-aligned background */}
         {mapUrl && (

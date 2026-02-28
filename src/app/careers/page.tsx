@@ -20,7 +20,9 @@ export default async function CareersPage() {
   const image1Url = page.acf.image_1?.url;
   const image2Url = page.acf.image_2?.url;
   const image3Url = page.acf.image_3?.url;
-  const desktopBackgroundUrl = page.acf.desktop_background?.url;
+  const desktopBackgroundUrl =
+    page.acf.desktop_background?.url ??
+    page.acf.desktop_background_image?.url;
 
   return (
     <CareersContent

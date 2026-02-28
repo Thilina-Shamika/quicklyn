@@ -261,14 +261,14 @@ export function OurMainServicesSection({ services }: OurMainServicesSectionProps
 
   return (
     <section
-      className="bg-[#2a7a7c] -mt-8 pt-0 pb-12 md:pb-16"
+      className="bg-[#2a7a7c] -mt-20 pt-0 pb-12 md:pb-16"
       aria-labelledby="main-services-heading"
     >
       {/* Heading aligned with main content width */}
       <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
         <h2
           id="main-services-heading"
-          className="mb-14 text-left text-white"
+          className="mt-0 pt-0 mb-14 text-left text-white"
         >
           <span className="block text-[48px] font-semibold leading-[1.05] md:text-[110px] md:leading-[1]">
             Our Main Services

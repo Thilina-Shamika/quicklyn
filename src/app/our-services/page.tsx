@@ -63,7 +63,7 @@ export default async function OurServicesPage() {
       {/* Desktop / tablet intro text section (service sub heading + description) */}
       {(service_sub_heading || descriptionParagraphs.length > 0) && (
         <section className="hidden bg-[#2a7a7c] text-white md:block">
-          <div className="mx-auto flex w-full max-w-[1180px] items-start gap-10 px-6 py-20 lg:px-6 lg:py-24">
+          <div className="mx-auto flex w-full max-w-[1180px] items-start gap-10 px-6 pt-20 pb-6 lg:px-6 lg:pt-24 lg:pb-8">
             <div className="w-[40%] max-w-[420px] py-6">
               {service_sub_heading && (
                 <h2 className="text-[40px] leading-[1.1] font-normal text-white">

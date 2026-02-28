@@ -30,6 +30,19 @@ export function CareersContent({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#2a7a7c] text-white">
+      {/* Mobile only: background image extends full page height (no cover, no fixed) */}
+      {desktopBackgroundUrl && (
+        <div
+          className="pointer-events-none absolute inset-0 z-0 min-h-full md:hidden"
+          aria-hidden
+          style={{
+            backgroundImage: `url(${encodeURI(desktopBackgroundUrl)})`,
+            backgroundSize: "auto",
+            backgroundPosition: "top center",
+            backgroundRepeat: "repeat",
+          }}
+        />
+      )}
       {/* Subtle wave texture from bottom-left */}
       <div
         className="absolute inset-0 z-0 opacity-[0.06]"

@@ -142,7 +142,7 @@ export function GetTheAppContent({
       <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[20%] pb-12 md:hidden">
         {phoneImageUrl && (
           <div
-            className={`relative h-[320px] w-[230px] shrink-0 -mb-8 mt-32 transition-all duration-500 ease-out md:-mb-12 md:mt-40 md:h-[420px] md:w-[300px] ${
+            className={`relative h-[320px] w-[230px] shrink-0 -mb-8 mt-20 transition-all duration-500 ease-out md:-mb-12 md:mt-32 md:h-[420px] md:w-[300px] ${
               active ? "-translate-y-[50px] opacity-100" : "translate-y-0 opacity-40"
             }`}
           >
@@ -158,7 +158,7 @@ export function GetTheAppContent({
         )}
 
         <h1
-          className={`max-w-md text-center font-bold text-white transition-all duration-200 ease-out ${
+          className={`mt-6 max-w-md text-center font-semibold text-white transition-all duration-200 ease-out ${
             active ? "-translate-y-[50px] opacity-100" : "translate-y-0 opacity-45"
           }`}
           style={{ fontSize: "30px", lineHeight: "37px" }}

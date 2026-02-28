@@ -74,7 +74,7 @@ export default async function BookACleaningPage() {
       )}
 
       <ContactPageContent>
-      <main className="relative z-10 pt-24 pb-8">
+      <main className="relative z-10 pt-40 pb-8 md:pt-[180px]">
         {/* Header */}
         <header className="px-6 pb-6 text-center">
           <h1

@@ -56,7 +56,10 @@ export function CareersForm() {
       onSubmit={handleSubmit}
       className="w-full max-w-lg rounded-2xl border border-white/10 bg-white/5 px-8 py-10 shadow-inner backdrop-blur-sm md:px-10 md:py-12"
     >
-      <h2 className="text-left text-2xl font-bold tracking-tight text-white md:text-3xl">
+      <h2
+        className="text-left font-semibold tracking-tight text-white"
+        style={{ fontSize: "33px", lineHeight: "31px" }}
+      >
         READY TO JOIN?
       </h2>
       <p className="mt-2 text-left text-sm text-white/90 md:text-base">

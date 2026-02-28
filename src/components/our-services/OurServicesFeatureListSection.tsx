@@ -40,7 +40,7 @@ export function OurServicesFeatureListSection({
   return (
     <>
       {/* Mobile: unchanged design */}
-      <section className="relative bg-[#2a7a7c] pb-16 pt-4 text-white px-8 md:hidden">
+      <section className="relative bg-[#2a7a7c] -mt-8 pb-16 pt-4 text-white px-8 md:hidden">
         {backgroundImage?.url && (
           <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
             <Image
@@ -122,7 +122,7 @@ export function OurServicesFeatureListSection({
       </section>
 
       {/* Desktop / tablet: 4-column layout with icons above text and dashed dividers */}
-      <section className="relative hidden bg-[#2a7a7c] pb-20 pt-16 text-white md:block">
+      <section className="relative hidden bg-[#2a7a7c] -mt-8 pb-20 pt-16 text-white md:block">
         <div className="relative z-10 mx-auto max-w-[1180px] px-6">
           <div className="grid grid-cols-2 gap-0 lg:grid-cols-4">
             {validFeatures.map((item, index) => {

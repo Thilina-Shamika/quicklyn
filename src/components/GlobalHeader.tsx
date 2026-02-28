@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mapWordPressUrlToNextPath, type WPHeader } from "@/lib/wordpress";
 import { MobileFlyoverMenu } from "@/components/MobileFlyoverMenu";
+
+const SCROLL_THRESHOLD = 80;
 
 function LeafIcon({ className }: { className?: string }) {
   return (
@@ -52,6 +54,16 @@ interface GlobalHeaderProps {
 
 export function GlobalHeader({ header }: GlobalHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () =>
+      setScrolledPastHero(typeof window !== "undefined" && window.scrollY > SCROLL_THRESHOLD);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const headerLogoUrl = header?.acf?.header_logo?.url;
   const isLocalLogo =
     headerLogoUrl?.includes("quicklyn-headless.local") ||
@@ -108,7 +120,12 @@ export function GlobalHeader({ header }: GlobalHeaderProps) {
         </div>
 
         {/* Mobile header */}
-        <header className="flex shrink-0 items-center justify-between bg-transparent px-6 py-3 md:hidden">
+        <header
+          className="flex shrink-0 items-center justify-between px-6 py-3 transition-colors duration-300 md:hidden"
+          style={{
+            backgroundColor: scrolledPastHero ? "#2a7a7c" : "transparent",
+          }}
+        >
           <div className="flex items-center gap-2">
             {headerLogoUrl ? (
               <Link href="/" className="block">

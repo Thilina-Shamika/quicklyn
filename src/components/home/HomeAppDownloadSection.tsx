@@ -299,7 +299,7 @@ export function HomeAppDownloadSection({
 
   return (
     <section
-      className={`relative isolate z-[100] mt-0 w-full overflow-x-hidden overflow-y-visible md:pt-[7.5rem] lg:pt-[9rem] ${tightBottom ? "pb-0 pt-16" : "py-16"}`}
+      className={`relative isolate z-[100] mt-0 w-full overflow-x-hidden overflow-y-visible pt-48 md:pt-[7.5rem] lg:pt-[9rem] ${tightBottom ? "pb-0" : "pb-16"}`}
       style={
         transparentBackground
           ? undefined

@@ -124,6 +124,8 @@ export interface CareersACF {
   image_2?: WPImage;
   image_3?: WPImage;
   desktop_background?: WPImage;
+  /** Alternative ACF field name for background image */
+  desktop_background_image?: WPImage;
 }
 
 export interface CareersPage {

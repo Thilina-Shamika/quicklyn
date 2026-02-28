@@ -45,7 +45,7 @@ export function OurTeamSection({
   if (!hasTeam && !hasBackgroundCheck) return null;
 
   return (
-    <section className="relative z-10 px-6 pb-24 pt-0 md:pb-32">
+    <section className="relative z-10 -mt-20 pl-8 pr-6 pb-24 pt-0 md:px-6 md:-mt-24 md:pb-32">
       <div className="mx-auto max-w-5xl">
         {/* Our Team heading + line */}
         <div className="flex items-center gap-4">

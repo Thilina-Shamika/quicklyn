@@ -169,7 +169,7 @@ export default async function OurMissionPage() {
 
       {/* Our mission section: commitment — mobile (unchanged) */}
       <section className="relative z-10 min-h-[60vh] overflow-hidden md:hidden">
-        <div className="mx-auto max-w-3xl px-6 pb-0 pt-16 md:pt-20">
+        <div className="mx-auto max-w-3xl px-6 pb-0 pt-0 md:pt-2">
           <h2
             className="text-center font-semibold"
             style={{
@@ -216,7 +216,7 @@ export default async function OurMissionPage() {
           }}
           aria-hidden
         />
-        <div className="relative z-10 flex min-h-[60vh] items-center justify-center px-6 py-16 lg:py-20">
+        <div className="relative z-10 flex min-h-[60vh] items-center justify-center px-6 pt-0 pb-16 lg:pt-2 lg:pb-20">
           <div className="w-full max-w-xl text-center lg:max-w-2xl">
             <h2
               className="text-center font-semibold text-white"
@@ -274,8 +274,10 @@ export default async function OurMissionPage() {
         />
       </div>
 
-      {/* Testimonials - same as home page */}
-      <TestimonialsSection testimonials={testimonials} transparentBackground />
+      {/* Testimonials - same as home page; mobile: pull up to reduce gap from Our Team */}
+      <div className="-mt-20 md:mt-0">
+        <TestimonialsSection testimonials={testimonials} transparentBackground />
+      </div>
 
       {/* Download the app - same as home page, no section background, no duplicate text */}
       <HomeAppDownloadSection data={appLink} transparentBackground />

@@ -20,7 +20,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
   if (!faqs.length) return null;
 
   return (
-    <section className="relative z-0 w-full overflow-hidden bg-[#226d71] pb-16 pt-16">
+    <section className="relative z-0 w-full overflow-hidden bg-[#2a7a7c] pb-16 pt-0">
       <div
         className="pointer-events-none absolute inset-0 hidden md:block"
         aria-hidden
@@ -36,8 +36,8 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
         }
       />
       <div className="relative z-10 mx-auto w-full max-w-2xl px-6 md:max-w-[1320px] md:px-10 lg:px-14">
-        <div className="hidden items-stretch md:grid md:grid-cols-[180px_minmax(0,1fr)] md:gap-10 md:py-4 lg:grid-cols-[210px_minmax(0,1fr)] lg:gap-14">
-          <div className="flex h-full flex-col justify-between py-2">
+        <div className="hidden items-stretch md:grid md:grid-cols-[180px_minmax(0,1fr)] md:gap-10 md:pt-0 md:pb-4 lg:grid-cols-[210px_minmax(0,1fr)] lg:gap-14">
+          <div className="flex h-full flex-col justify-between pt-0 pb-2">
             <h2 className="text-left text-[68px] font-medium uppercase leading-none tracking-wide text-white lg:text-[78px]">
               FAQ
             </h2>
@@ -185,7 +185,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
               return (
                 <div
                   key={item.id}
-                  className="overflow-hidden rounded-xl bg-[#1a5d5f] transition-colors"
+                  className="overflow-hidden rounded-xl bg-[#378284] transition-colors"
                 >
                   <button
                     type="button"

@@ -794,12 +794,12 @@ export function ServicesSection({
           <>
           <div className="mt-16 w-full px-6 md:hidden">
             {sectionHeading && (
-<h2 className="mb-8 text-center text-[36px] font-semibold leading-snug text-white">
+<h2 className="mb-4 text-center text-[36px] font-semibold leading-snug text-white">
               {sectionHeading}
             </h2>
             )}
 
-            <div className="mx-auto w-full max-w-sm space-y-3 pt-5 pb-5 pr-[20px]">
+            <div className="mx-auto w-full max-w-sm space-y-3 pt-5 pb-0 pr-[20px]">
               {whyList.map((item, index) => {
                 const isLast = index === whyList.length - 1;
                 const isOpen = openWhyIndex === index;
