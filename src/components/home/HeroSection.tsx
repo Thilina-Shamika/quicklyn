@@ -301,7 +301,7 @@ export function HeroSection({ data, header }: HeroSectionProps) {
           <div className="relative z-10 mx-auto flex min-h-[900px] w-full max-w-[1320px] items-center px-8 pb-24 pt-[95px] lg:min-h-[980px] lg:px-8 lg:pt-[112px]">
             <div className="grid w-full grid-cols-12 items-center gap-6 lg:gap-8">
               <div className="col-span-6 pr-2 md:-translate-y-6 lg:col-span-6 lg:-translate-y-8">
-                <h1 className="hero-text-shadow max-w-[560px] text-[45px] font-semibold leading-[0.98] tracking-[-0.03em] text-white lg:max-w-[560px] lg:text-[45px] lg:leading-[0.95]">
+                <h1 className="hero-text-shadow max-w-[560px] font-semibold tracking-[-0.03em] text-white lg:max-w-[560px]" style={{ fontSize: "60px", lineHeight: "59px" }}>
                   {desktopHeadingParts.length > 0 ? (
                     desktopHeadingParts.map((part, index) => (
                       <span key={`${part}-${index}`} className="block">

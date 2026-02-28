@@ -169,13 +169,13 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
 
         {/* Desktop / Tablet testimonials */}
         <div className="hidden md:block">
-          <h2 className="mx-auto mb-8 max-w-md text-center text-[32px] font-semibold leading-[1.05] text-white lg:mb-10 lg:text-[44px]">
+          <h2 className="mx-auto mb-0 max-w-md text-center text-[32px] font-semibold leading-[1.05] text-white lg:text-[44px]">
             Trusted by
             <br />
             Our Community
           </h2>
 
-          <div className="relative mx-auto h-[460px] w-full max-w-[1180px] overflow-visible lg:h-[560px]">
+          <div className="relative mx-auto -mt-6 h-[460px] w-full max-w-[1180px] overflow-visible lg:-mt-8 lg:h-[560px]">
             <div className="pointer-events-none absolute inset-x-0 top-[68px] hidden h-px bg-white/35 lg:top-[78px]" />
             {testimonials.map((item, index) => {
               let offset = (index - currentIndex + count) % count;

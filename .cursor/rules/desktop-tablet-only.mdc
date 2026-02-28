@@ -12,3 +12,5 @@ When making design, layout, or styling changes in this project:
 - If a component has separate mobile vs desktop blocks, edit only the desktop (and tablet) block; leave the mobile block untouched.
 
 This applies to CSS/Tailwind, component structure, and any UI that has distinct mobile vs desktop implementations.
+
+**Exception:** Only apply changes to mobile when the user explicitly asks for a mobile-only change (e.g. "on mobile only", "mobile should..."). Otherwise assume desktop/tablet only.

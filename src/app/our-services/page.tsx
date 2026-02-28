@@ -80,7 +80,7 @@ export default async function OurServicesPage() {
         </section>
       )}
 
-      <OurMainServicesSection services={services} />
+      <OurMainServicesSection services={services} appLink={appLink} />
 
       <OurServicesExtrasSection extras={page.acf.extras_list ?? []} />
 

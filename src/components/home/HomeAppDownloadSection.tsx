@@ -273,10 +273,17 @@ export function HomeAppDownloadSection({
         bgImage.includes("quick.rootholdings")));
 
   const renderHighlightedText = (value: string, className?: string) => {
-    const parts = value.split(/(\d+%|[A-Z0-9]{4,})/);
+    const parts = value.split(/(\d+%\s*off\b|\d+%|[A-Z0-9]{4,})/i);
     return (
       <span className={className}>
         {parts.map((part, i) => {
+          if (/^\d+%\s*off$/i.test(part)) {
+            return (
+              <span key={i} className="font-semibold text-[#ffda00]">
+                {part}
+              </span>
+            );
+          }
           if (/^\d+%$/.test(part)) {
             return (
               <span key={i} className="font-semibold text-[#ffda00]">
@@ -334,8 +341,15 @@ export function HomeAppDownloadSection({
       <div className="relative z-10 hidden md:block">
         <div className="mx-auto w-full max-w-[1320px] px-10 lg:px-14">
           <div className="relative min-h-[430px] overflow-visible pt-[78px] lg:min-h-[520px] lg:pt-[96px]">
-            <div className="relative z-10 rounded-[34px] bg-[#1a5d5f]/95 px-14 py-12 shadow-[0_16px_40px_rgba(0,0,0,0.12)] lg:rounded-[38px] lg:px-16 lg:py-14">
-              <div className="absolute inset-y-0 right-[255px] z-0 hidden w-[170px] bg-gradient-to-r from-[#1a5d5f] via-[#1a5d5f]/90 to-transparent lg:right-[340px] lg:block" />
+            <div className="relative z-10 rounded-[34px] bg-[#1a5d5f]/95 px-14 py-12 shadow-[0_16px_40px_rgba(0,0,0,0.12)] md:-mt-8 md:bg-transparent md:p-[120px] md:shadow-none lg:-mt-10 lg:rounded-[38px]">
+              <div
+                className="pointer-events-none absolute inset-0 z-0 hidden rounded-[34px] lg:rounded-[38px] md:block"
+                style={{
+                  background: "linear-gradient(to right, #185b5d 0%, #185b5d 50%, transparent 100%)",
+                }}
+                aria-hidden
+              />
+              <div className="absolute inset-y-0 right-[255px] z-0 hidden w-[170px] bg-gradient-to-r from-[#1a5d5f] via-[#1a5d5f]/90 to-transparent lg:right-[340px] lg:block md:opacity-0" aria-hidden />
 
               {bgImage && (
                 <div className="pointer-events-none absolute bottom-0 right-0 z-20 h-[420px] w-[330px] lg:-right-2 lg:h-[560px] lg:w-[430px]">
@@ -351,11 +365,11 @@ export function HomeAppDownloadSection({
               )}
 
               <div className="relative z-30 max-w-[900px] pr-[145px] lg:max-w-[980px] lg:pr-[220px]">
-                <h2 className="text-[52px] font-semibold leading-[62px] text-white">
+                <h2 className="font-normal text-white" style={{ fontSize: "41px", lineHeight: "50px" }}>
                   {renderHighlightedText(heading)}
                 </h2>
                 {subHeading && (
-                  <p className="mt-2 text-[32px] font-semibold leading-[1.2] text-white/95">
+                  <p className="mt-2 font-semibold text-white/95" style={{ fontSize: "41px", lineHeight: "50px" }}>
                     {renderHighlightedText(subHeading)}
                   </p>
                 )}

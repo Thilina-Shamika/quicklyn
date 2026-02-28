@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import type { WPService } from "@/lib/wordpress";
+import type { WPService, WPAppLink } from "@/lib/wordpress";
+import { AppDownloadBanner } from "./AppDownloadBanner";
 
 function getFirstParagraph(text: string): string {
   if (!text?.trim()) return "";
@@ -24,16 +25,19 @@ function hasContent(value: string | undefined): boolean {
 
 interface OurMainServicesSectionProps {
   services: WPService[];
+  appLink?: WPAppLink | null;
 }
 
 function ServiceAccordionItem({
   service,
   isOpen,
   onToggle,
+  appLink,
 }: {
   service: WPService;
   isOpen: boolean;
   onToggle: () => void;
+  appLink?: WPAppLink | null;
 }) {
   const acf = service.acf;
   const heading = acf.service_heading ?? service.title.rendered;
@@ -130,97 +134,173 @@ function ServiceAccordionItem({
       >
         <div className="min-h-0 overflow-hidden">
           <div className="space-y-0 px-5 pb-5 pt-2">
-          {hasContent(fullDescription) ? (
-            <div
-              className="mb-4 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0"
-              dangerouslySetInnerHTML={{ __html: fullDescription }}
-            />
-          ) : null}
-          {image?.url ? (
-            <div className="mb-5 overflow-hidden rounded-xl">
-              <Image
-                src={image.url}
-                alt={image.alt || heading}
-                width={768}
-                height={143}
-                className="h-auto w-full object-cover"
-                unoptimized={image.url.includes("quick.rootholdings.com.mv")}
-              />
-            </div>
-          ) : null}
-
-          {(hasContent(whatsIncluded) || hasContent(supplies)) ? (
-            <>
-              <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 py-4 items-start">
-                {hasContent(whatsIncluded) ? (
-                  <>
-                    <span className="shrink-0 font-semibold text-white leading-tight">
-                      What&apos;s
+            {/* Mobile: description → image → whats included/supplies → time → rate → note */}
+            <div className="md:hidden">
+              {hasContent(fullDescription) ? (
+                <div
+                  className="mb-4 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0"
+                  dangerouslySetInnerHTML={{ __html: fullDescription }}
+                />
+              ) : null}
+              {image?.url ? (
+                <div className="mb-5 overflow-hidden rounded-xl">
+                  <Image
+                    src={image.url}
+                    alt={image.alt || heading}
+                    width={768}
+                    height={143}
+                    className="h-auto w-full object-cover"
+                    unoptimized={image.url.includes("quick.rootholdings.com.mv")}
+                  />
+                </div>
+              ) : null}
+              {(hasContent(whatsIncluded) || hasContent(supplies)) ? (
+                <>
+                  <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 py-4 items-start">
+                    {hasContent(whatsIncluded) ? (
+                      <>
+                        <span className="shrink-0 font-semibold text-white leading-tight">
+                          What&apos;s
+                          <br />
+                          Included:
+                        </span>
+                        <span className="min-w-0 text-sm text-white/90 leading-snug">
+                          {whatsIncluded}
+                        </span>
+                      </>
+                    ) : null}
+                    {hasContent(supplies) ? (
+                      <>
+                        <span className="shrink-0 font-semibold text-white leading-tight">
+                          Supplies:
+                        </span>
+                        <div
+                          className="min-w-0 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0 prose-p:leading-snug whitespace-pre-line [&_p]:whitespace-pre-line"
+                          dangerouslySetInnerHTML={{ __html: supplies! }}
+                        />
+                      </>
+                    ) : null}
+                  </div>
+                  <hr className="border-white/20" />
+                </>
+              ) : null}
+              {timeList.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-[auto_1fr] gap-x-4 py-4 items-start">
+                    <span className="shrink-0 font-semibold text-white leading-tight pt-0.5">
+                      Approximate
                       <br />
-                      Included:
+                      Time:
                     </span>
-                    <span className="min-w-0 text-sm text-white/90 leading-snug">
-                      {whatsIncluded}
-                    </span>
-                  </>
-                ) : null}
-                {hasContent(supplies) ? (
-                  <>
-                    <span className="shrink-0 font-semibold text-white leading-tight">
-                      Supplies:
-                    </span>
-                    <div
-                      className="min-w-0 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0 prose-p:leading-snug whitespace-pre-line [&_p]:whitespace-pre-line"
-                      dangerouslySetInnerHTML={{ __html: supplies! }}
-                    />
-                  </>
-                ) : null}
-              </div>
-              <hr className="border-white/20" />
-            </>
-          ) : null}
-
-          {timeList.length > 0 ? (
-            <>
-              <div className="grid grid-cols-[auto_1fr] gap-x-4 py-4 items-start">
-                <span className="shrink-0 font-semibold text-white leading-tight pt-0.5">
-                  Approximate
-                  <br />
-                  Time:
-                </span>
-                <ul className="min-w-0 space-y-0 text-sm text-white/90">
-                  {timeList.map((item, i) => (
-                    <li
-                      key={i}
-                      className="flex border-b border-dashed border-white/40 py-2 first:pt-0 last:border-b-0 last:pb-0"
-                    >
-                      <span className="flex-[8] capitalize">
-                        {item.type}
-                      </span>
-                      <span className="flex-[4] text-right uppercase">
-                        {item.hours}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <hr className="border-white/20" />
-            </>
-          ) : null}
-
-          {hasContent(hourlyRate) ? (
-            <div className="bg-[#1a585c] px-4 py-3 -mx-5 my-4 rounded-none">
-              <p className="text-center font-semibold text-white">
-                {hourlyRate}
-              </p>
+                    <ul className="min-w-0 space-y-0 text-sm text-white/90">
+                      {timeList.map((item, i) => (
+                        <li
+                          key={i}
+                          className="flex border-b border-dashed border-white/40 py-2 first:pt-0 last:border-b-0 last:pb-0"
+                        >
+                          <span className="flex-[8] capitalize">
+                            {item.type}
+                          </span>
+                          <span className="flex-[4] text-right uppercase">
+                            {item.hours}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <hr className="border-white/20" />
+                </>
+              ) : null}
+              {hasContent(hourlyRate) ? (
+                <div className="bg-[#1a585c] px-4 py-3 -mx-5 my-4 rounded-none">
+                  <p className="text-center font-semibold text-white">
+                    {hourlyRate}
+                  </p>
+                </div>
+              ) : null}
+              {hasContent(note) ? (
+                <p className="mb-12 px-4 py-3 text-center text-xs text-white/80 md:text-sm">
+                  {note}
+                </p>
+              ) : null}
             </div>
-          ) : null}
 
-          {hasContent(note) ? (
-            <p className="px-4 py-3 text-center text-xs text-white/80 md:text-sm">
-              {note}
-            </p>
-          ) : null}
+            {/* Desktop/tablet: image on top → two-column dark teal (Approximate Time | What's Included + Supplies) → rate → note → download block */}
+            <div className="hidden md:block md:px-0 md:pb-0">
+              {image?.url ? (
+                <div className="mb-0 overflow-hidden rounded-xl">
+                  <Image
+                    src={image.url}
+                    alt={image.alt || heading}
+                    width={768}
+                    height={143}
+                    className="h-auto w-full object-cover"
+                    unoptimized={image.url.includes("quick.rootholdings.com.mv")}
+                  />
+                </div>
+              ) : null}
+              <div className="bg-[#1a585c] mt-0 px-6 py-6">
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Left column: Approximate Time */}
+                  {timeList.length > 0 ? (
+                    <div>
+                      <p className="font-semibold text-white mb-3">
+                        Approximate Time:
+                      </p>
+                      <ul className="space-y-0 text-sm text-white/90">
+                        {timeList.map((item, i) => (
+                          <li
+                            key={i}
+                            className="flex justify-between border-b border-white/30 py-2 first:pt-0 last:border-b-0 last:pb-0"
+                          >
+                            <span className="capitalize">{item.type}</span>
+                            <span className="uppercase text-white">
+                              {item.hours}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {/* Right column: What's Included + Supplies */}
+                  <div className="space-y-4">
+                    {hasContent(whatsIncluded) ? (
+                      <div>
+                        <p className="font-semibold text-white mb-2">
+                          What&apos;s Included:
+                        </p>
+                        <p className="text-sm text-white/90 leading-snug">
+                          {whatsIncluded}
+                        </p>
+                      </div>
+                    ) : null}
+                    {hasContent(supplies) ? (
+                      <div>
+                        <p className="font-semibold text-white mb-2">
+                          Supplies:
+                        </p>
+                        <div
+                          className="text-sm text-white/90 prose prose-sm max-w-none prose-p:my-1 prose-p:first:mt-0 prose-p:last:mb-0 prose-p:leading-snug whitespace-pre-line [&_p]:whitespace-pre-line"
+                          dangerouslySetInnerHTML={{ __html: supplies! }}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                {/* Full width: hourly rate then disclaimer */}
+                {hasContent(hourlyRate) ? (
+                  <p className="mt-6 pt-4 border-t border-white/20 text-center font-semibold text-white">
+                    {hourlyRate}
+                  </p>
+                ) : null}
+                {hasContent(note) ? (
+                  <p className="mt-3 mb-12 text-center text-sm text-white/80">
+                    {note}
+                  </p>
+                ) : null}
+              </div>
+              <AppDownloadBanner data={appLink ?? null} />
+            </div>
           </div>
         </div>
       </div>
@@ -228,13 +308,34 @@ function ServiceAccordionItem({
   );
 }
 
-export function OurMainServicesSection({ services }: OurMainServicesSectionProps) {
+function findServiceByKeywords(services: WPService[], keywords: string[]): WPService | undefined {
+  return services.find((service) => {
+    const text = `${service.acf?.service_heading ?? ""} ${service.title?.rendered ?? ""} ${service.slug ?? ""}`.toLowerCase();
+    return keywords.every((kw) => text.includes(kw));
+  });
+}
+
+const PREFERRED_ORDER = [
+  ["deep"],
+  ["apartment"],
+  ["move"],
+  ["airbnb"],
+  ["signature"],
+] as const;
+
+export function OurMainServicesSection({ services, appLink }: OurMainServicesSectionProps) {
   const sortedServices = useMemo(() => {
-    const list = [...services];
-    const idx = list.findIndex((s) => isSignaturePro(s));
-    if (idx === -1) return list;
-    const [sig] = list.splice(idx, 1);
-    return [...list, sig];
+    const used = new Set<number>();
+    const ordered: WPService[] = [];
+    for (const keywords of PREFERRED_ORDER) {
+      const match = findServiceByKeywords(services, [...keywords]);
+      if (match && !used.has(match.id)) {
+        used.add(match.id);
+        ordered.push(match);
+      }
+    }
+    const rest = services.filter((s) => !used.has(s.id));
+    return [...ordered, ...rest];
   }, [services]);
 
   const [openId, setOpenId] = useState<number | null>(null);
@@ -261,7 +362,7 @@ export function OurMainServicesSection({ services }: OurMainServicesSectionProps
 
   return (
     <section
-      className="bg-[#2a7a7c] -mt-20 pt-0 pb-12 md:pb-16"
+      className="bg-[#2a7a7c] -mt-20 pt-0 pb-12 md:mt-12 md:pb-16"
       aria-labelledby="main-services-heading"
     >
       {/* Heading aligned with main content width */}
@@ -287,17 +388,18 @@ export function OurMainServicesSection({ services }: OurMainServicesSectionProps
               onToggle={() =>
                 setOpenId((prev) => (prev === service.id ? null : service.id))
               }
+              appLink={appLink}
             />
           ))}
         </div>
       </div>
 
-      {/* Desktop / tablet accordion: full-width hover strip with centered content */}
+      {/* Desktop / tablet accordion: full-width strip; open = #1a585c, closed = hover */}
       <div className="hidden md:block">
         {sortedServices.map((service) => (
           <div
             key={service.id}
-            className="group transition-colors duration-500 ease-out hover:bg-[rgba(0,0,0,0.14)]"
+            className={`group transition-colors duration-500 ease-out ${openId === service.id ? "bg-[#1a585c]" : "hover:bg-[rgba(0,0,0,0.14)]"}`}
           >
             <div className="mx-auto w-full max-w-[1180px] px-6">
               <ServiceAccordionItem
@@ -308,6 +410,7 @@ export function OurMainServicesSection({ services }: OurMainServicesSectionProps
                     prev === service.id ? null : service.id,
                   )
                 }
+                appLink={appLink}
               />
             </div>
           </div>

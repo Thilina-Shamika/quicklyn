@@ -558,19 +558,19 @@ export function ServicesSection({
               const isSignature = isSignatureService(service);
               const cardPos =
                 slot === "leftTop"
-                  ? "left-[2%] top-[14%] w-[22%] min-w-[170px] max-w-[240px] lg:left-[4%] lg:top-[13%] lg:max-w-[260px]"
+                  ? "left-[-6%] top-[-4%] w-[26%] min-w-[200px] max-w-[290px] lg:left-[-5%] lg:top-[-3%] lg:max-w-[310px]"
                   : slot === "topCenter"
-                    ? "left-[32%] -top-[5%] w-[38%] min-w-[260px] max-w-[420px] -translate-x-1/2 lg:left-[31%] lg:-top-[5%] lg:max-w-[440px]"
+                    ? "left-[32%] -top-[18%] w-[42%] min-w-[300px] max-w-[480px] -translate-x-1/2 lg:left-[31%] lg:-top-[16%] lg:max-w-[500px]"
                     : slot === "rightTop"
-                      ? "right-[0%] top-[18%] w-[28%] min-w-[220px] max-w-[320px] lg:right-[2%] lg:top-[17%] lg:max-w-[340px]"
+                      ? "right-[-10%] top-[2%] w-[32%] min-w-[260px] max-w-[380px] lg:right-[-8%] lg:top-[1%] lg:max-w-[400px]"
                       : slot === "leftBottom"
-                        ? "left-[6%] top-[78%] w-[32%] min-w-[240px] max-w-[360px] lg:left-[8%] lg:top-[78%] lg:max-w-[380px]"
-                        : "right-[14%] top-[78%] w-[28%] min-w-[220px] max-w-[300px] lg:right-[12%] lg:top-[78%] lg:max-w-[320px]";
+                        ? "left-[-2%] top-[85%] w-[36%] min-w-[280px] max-w-[420px] lg:left-[-1%] lg:top-[85%] lg:max-w-[440px]"
+                        : "right-[2%] top-[82%] w-[32%] min-w-[260px] max-w-[360px] lg:right-0 lg:top-[82%] lg:max-w-[380px]";
 
               return (
                 <article
                   key={`desktop-card-${service.id}`}
-                  className={`group absolute z-10 rounded-[22px] bg-[#175c5e]/95 px-5 py-4 text-left shadow-[0_8px_18px_rgba(0,0,0,0.18)] backdrop-blur-[2px] lg:rounded-[26px] lg:px-7 lg:py-5 ${cardPos}`}
+                  className={`group absolute z-10 rounded-[22px] bg-[#175c5e]/95 p-[35px] text-left shadow-[0_8px_18px_rgba(0,0,0,0.18)] backdrop-blur-[2px] lg:rounded-[26px] ${cardPos}`}
                   style={{
                     transform: `translate3d(${servicesHoverOffset.x * 10}px, ${
                       servicesHoverOffset.y * 8
@@ -605,9 +605,16 @@ export function ServicesSection({
 
                   <div className="transition-all duration-200 group-hover:md:pt-5">
                     <h3
-                      className={`pr-8 text-[20px] font-medium leading-[1.05] tracking-[-0.02em] text-white lg:text-[28px] ${
-                        isSignature ? "text-[#FFDA00]" : ""
+                      className={`pr-8 tracking-[-0.02em] ${
+                        isSignature
+                          ? "font-semibold text-[#FFDA00]"
+                          : "font-normal text-white"
                       }`}
+                      style={{
+                        fontSize: isSignature ? "27px" : "33px",
+                        lineHeight: isSignature ? "32px" : "38px",
+                        ...(isSignature ? { color: "#FFDA00" } : {}),
+                      }}
                     >
                       <span>{title}</span>
                       {isSignature && (
@@ -624,7 +631,7 @@ export function ServicesSection({
                       )}
                     </h3>
 
-                    <p className="mt-3 line-clamp-3 text-[12px] leading-relaxed text-white/90 lg:mt-4 lg:text-[14px]">
+                    <p className="mt-3 line-clamp-3 font-normal text-white/90 lg:mt-4" style={{ fontSize: "16px", lineHeight: "27px" }}>
                       {desc}
                     </p>
                   </div>
