@@ -288,8 +288,8 @@ export function GetTheAppContent({
           )}
 
           {/* Center content */}
-          <div className="relative z-10 mt-20 max-w-[880px] text-center lg:mt-24">
-            <h1 className="text-[68px] font-semibold leading-[80px] text-white lg:text-[80px] lg:leading-[92px]">
+          <div className="relative z-10 mt-20 max-w-[1100px] text-center lg:mt-24">
+            <h1 className="text-[87px] font-normal leading-[89px] text-white">
               {headingDisplay}
             </h1>
 

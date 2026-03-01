@@ -11,6 +11,7 @@ import { HeroHeadingLogoArrow } from "@/components/our-mission/HeroHeadingLogoAr
 import { HeroBackground } from "@/components/our-mission/HeroBackground";
 import { OurMissionHeroDesktop } from "@/components/our-mission/OurMissionHeroDesktop";
 import { SectionImageScroll } from "@/components/our-mission/SectionImageScroll";
+import { SectionImageSlider } from "@/components/our-mission/SectionImageSlider";
 import { OurTeamSection } from "@/components/our-mission/OurTeamSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { HomeAppDownloadSection } from "@/components/home/HomeAppDownloadSection";
@@ -58,11 +59,19 @@ export default async function OurMissionPage() {
     homePage?.acf?.estimate_button_text?.trim() || "Get An Estimate";
   const missionHeading = page.acf.sub_heading?.trim() || "Our Mission";
   const missionDescription = page.acf.description?.trim() || "";
-  const sectionImageUrl = page.acf.section_image?.url;
+  const sectionImage = page.acf.section_image;
+  const sectionImageUrl = sectionImage?.url;
+  const sectionImageSlide = page.acf.section_image_slide ?? [];
+  const sectionImages =
+    sectionImageSlide.length > 0
+      ? sectionImageSlide.map((img) => ({ url: img.url, alt: img.alt }))
+      : sectionImage
+        ? [{ url: sectionImage.url, alt: sectionImage.alt }]
+        : [];
   const commitmentHeading =
     page.acf.commitment_heading?.trim() || "Our Commitment To You";
   const commitmentDescription = page.acf.commitment_description?.trim() || "";
-  const team = page.acf.team ?? [];
+  const ourTeamStaticImageUrl = page.acf.our_team_static?.url ?? null;
   const backgroundCheckIconUrl = page.acf.background_check_icon?.url;
   const backgroundCheckHeading =
     page.acf.background_check_heading?.trim() || "Background Checked Team";
@@ -136,7 +145,7 @@ export default async function OurMissionPage() {
               </h2>
             )}
             {missionDescription && (
-              <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-white/95 lg:text-[18px]">
+              <div className="mt-6 max-w-md space-y-4 text-left text-base leading-relaxed text-white/95 lg:text-[18px]">
                 {missionParagraphs.length > 0 ? (
                   missionParagraphs.map((p, i) => (
                     <p key={i}>{p.trim()}</p>
@@ -147,13 +156,12 @@ export default async function OurMissionPage() {
               </div>
             )}
           </div>
-          {sectionImageUrl && (
+          {sectionImages.length > 0 && (
             <div className="flex flex-1 shrink-0 justify-center lg:max-w-[50%]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={sectionImageUrl}
-                alt=""
-                className="w-full max-w-md rounded-2xl object-cover lg:max-w-full"
+              <SectionImageSlider
+                images={sectionImages}
+                className="w-full max-w-md lg:max-w-full"
+                imgClassName="max-w-full"
               />
             </div>
           )}
@@ -161,9 +169,12 @@ export default async function OurMissionPage() {
       </section>
 
       {/* Section image — mobile only (desktop uses image in Our Mission section above) */}
-      {sectionImageUrl && (
+      {sectionImages.length > 0 && (
         <div className="md:hidden">
-          <SectionImageScroll sectionImageUrl={sectionImageUrl} />
+          <SectionImageScroll
+            sectionImages={sectionImages}
+            sectionImageUrl={sectionImageUrl}
+          />
         </div>
       )}
 
@@ -180,7 +191,7 @@ export default async function OurMissionPage() {
             {commitmentHeading}
           </h2>
           <div
-            className="mt-5 space-y-3 text-center text-white/95 md:mt-6"
+            className="mt-5 mb-[75px] space-y-3 text-center text-white/95 md:mt-6"
             style={{ fontSize: "12px", lineHeight: "19px" }}
           >
             {commitmentParagraphs.length > 0 ? (
@@ -222,25 +233,10 @@ export default async function OurMissionPage() {
               className="text-center font-semibold text-white"
               style={{ fontSize: "49px", lineHeight: "52px" }}
             >
-              {(() => {
-                const words = commitmentHeading.trim().split(/\s+/);
-                if (words.length <= 3)
-                  return words.map((word, i) => (
-                    <span key={i} className="block">
-                      {word}
-                    </span>
-                  ));
-                return (
-                  <>
-                    <span className="block">{words[0]}</span>
-                    <span className="block">{words[1]}</span>
-                    <span className="block">{words.slice(2).join(" ")}</span>
-                  </>
-                );
-              })()}
+              {commitmentHeading}
             </h2>
             <div
-              className="mt-6 space-y-4 font-normal text-white"
+              className="mt-6 mb-[75px] space-y-4 font-normal text-white"
               style={{ fontSize: "18px", lineHeight: "31px" }}
             >
               {commitmentParagraphs.length > 0 ? (
@@ -256,7 +252,7 @@ export default async function OurMissionPage() {
         {/* Our Team — desktop: below commitment text block */}
         <div className="relative z-10 hidden md:block">
           <OurTeamSection
-            team={team}
+            ourTeamStaticImageUrl={ourTeamStaticImageUrl}
             backgroundCheckIconUrl={backgroundCheckIconUrl}
             backgroundCheckHeading={backgroundCheckHeading}
             backgroundCheckDescription={backgroundCheckDescription}
@@ -267,7 +263,7 @@ export default async function OurMissionPage() {
       {/* Our Team + Background Checked Team — mobile only (desktop is inside Our Commitment section above) */}
       <div className="md:hidden">
         <OurTeamSection
-          team={team}
+          ourTeamStaticImageUrl={ourTeamStaticImageUrl}
           backgroundCheckIconUrl={backgroundCheckIconUrl}
           backgroundCheckHeading={backgroundCheckHeading}
           backgroundCheckDescription={backgroundCheckDescription}

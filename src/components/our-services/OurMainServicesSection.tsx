@@ -219,7 +219,7 @@ function ServiceAccordionItem({
                 </div>
               ) : null}
               {hasContent(note) ? (
-                <p className="mb-12 px-4 py-3 text-center text-xs text-white/80 md:text-sm">
+                <p className="px-4 py-3 text-center text-xs text-white/80 md:text-sm">
                   {note}
                 </p>
               ) : null}

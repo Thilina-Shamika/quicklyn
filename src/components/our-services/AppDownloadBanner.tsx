@@ -78,13 +78,13 @@ export function AppDownloadBanner({ data }: AppDownloadBannerProps) {
         ) : null}
         <div className="mt-2 flex flex-col items-start gap-2">
           {googlePlayUrl && link01 ? (
-            <Link href={link01} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white p-0 shadow">
-              <Image src={googlePlayUrl} alt="Get it on Google Play" width={99} height={35} className="h-14 w-auto object-contain" unoptimized={!!isLocal} />
+            <Link href={link01} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white px-3 py-2 shadow">
+              <Image src={googlePlayUrl} alt="Get it on Google Play" width={99} height={35} className="h-7 w-auto object-contain" unoptimized={!!isLocal} />
             </Link>
           ) : null}
           {appStoreUrl && link02 ? (
-            <Link href={link02} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white p-0 shadow">
-              <Image src={appStoreUrl} alt="Download on the App Store" width={100} height={35} className="h-14 w-auto object-contain" unoptimized={!!isLocal} />
+            <Link href={link02} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white px-3 py-2 shadow">
+              <Image src={appStoreUrl} alt="Download on the App Store" width={100} height={35} className="h-7 w-auto object-contain" unoptimized={!!isLocal} />
             </Link>
           ) : null}
         </div>

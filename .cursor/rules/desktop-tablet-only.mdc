@@ -5,6 +5,8 @@ alwaysApply: true
 
 # Desktop & Tablet Only — Do Not Change Mobile
 
+**Default: Treat every layout/styling change as desktop and tablet only. Do not change mobile unless the user explicitly asks for a mobile change.**
+
 When making design, layout, or styling changes in this project:
 
 - **Change only** desktop and tablet breakpoints (e.g. `md:`, `lg:`, `xl:` and up, or `hidden md:block` / desktop-only sections).

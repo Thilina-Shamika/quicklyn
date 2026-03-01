@@ -224,8 +224,21 @@ export function OurServicesExtrasSection({
           {/* Left: title, icon, intro description */}
           <div className="flex flex-col">
             <div className="flex items-start gap-4">
-              <h3 className="text-[36px] font-semibold leading-tight text-white lg:text-[42px]">
-                {extras_heading}
+              <h3 className="line-clamp-2 pb-5 text-[53px] font-normal leading-[61px] text-white">
+                {(() => {
+                  const words = extras_heading.trim().split(/\s+/);
+                  const firstLine = words[0] ?? "";
+                  const secondLine = words.slice(1).join(" ");
+                  return secondLine ? (
+                    <>
+                      {firstLine}
+                      <br />
+                      {secondLine}
+                    </>
+                  ) : (
+                    firstLine
+                  );
+                })()}
               </h3>
               {extras_icon?.url && (
                 <div className="shrink-0">
@@ -234,7 +247,7 @@ export function OurServicesExtrasSection({
                     alt={extras_icon.alt || extras_heading}
                     width={extras_icon.width || 72}
                     height={extras_icon.height || 72}
-                    className="h-14 w-14 object-contain lg:h-16 lg:w-16"
+                    className="h-20 w-20 object-contain lg:h-24 lg:w-24"
                     unoptimized={extras_icon.url.includes(
                       "quick.rootholdings.com.mv",
                     )}

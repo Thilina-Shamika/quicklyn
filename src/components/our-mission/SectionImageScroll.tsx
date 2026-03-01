@@ -1,18 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SectionImageSlider } from "./SectionImageSlider";
 
 const TRANSITION_DURATION_MS = 600;
 const INITIAL_SCALE = 2.2;
 
 interface SectionImageScrollProps {
-  sectionImageUrl: string;
+  /** When provided, shows image slider with fade (desktop + mobile). */
+  sectionImages?: { url: string; alt?: string }[];
+  /** Fallback single image when sectionImages is empty (e.g. legacy section_image). */
+  sectionImageUrl?: string;
 }
 
-export function SectionImageScroll({ sectionImageUrl }: SectionImageScrollProps) {
+export function SectionImageScroll({
+  sectionImages = [],
+  sectionImageUrl,
+}: SectionImageScrollProps) {
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isIntersectingRef = useRef(false);
+  const images = sectionImages.length > 0 ? sectionImages : sectionImageUrl ? [{ url: sectionImageUrl, alt: "" }] : [];
 
   useEffect(() => {
     const el = ref.current;
@@ -51,23 +59,23 @@ export function SectionImageScroll({ sectionImageUrl }: SectionImageScrollProps)
 
   const transition = `transform ${TRANSITION_DURATION_MS}ms ease-out, opacity ${TRANSITION_DURATION_MS}ms ease-out`;
 
+  if (images.length === 0) return null;
+
   return (
     <section className="relative z-10 overflow-visible px-6 pt-0 pb-12 md:pb-16">
       <div
         ref={ref}
         className="relative mx-auto max-w-2xl my-6 md:my-8 overflow-visible rounded-2xl"
+        style={{
+          opacity: inView ? 1 : 0,
+          transform: inView ? "scale(1)" : `scale(${INITIAL_SCALE})`,
+          transformOrigin: "center center",
+          transition,
+        }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={sectionImageUrl}
-          alt=""
-          className="w-full object-cover rounded-2xl"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? "scale(1)" : `scale(${INITIAL_SCALE})`,
-            transformOrigin: "center center",
-            transition,
-          }}
+        <SectionImageSlider
+          images={images}
+          imgClassName="w-full object-cover"
         />
       </div>
     </section>

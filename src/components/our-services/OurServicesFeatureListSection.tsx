@@ -83,7 +83,7 @@ export function OurServicesFeatureListSection({
                           alt={icon.alt || item.feature_name}
                           width={icon.width || 72}
                           height={icon.height || 72}
-                          className="h-18 w-18 object-contain"
+                          className="h-16 w-16 object-contain"
                           unoptimized={icon.url.includes(
                             "quick.rootholdings.com.mv",
                           )}
@@ -106,7 +106,7 @@ export function OurServicesFeatureListSection({
                           alt={icon.alt || item.feature_name}
                           width={icon.width || 72}
                           height={icon.height || 72}
-                          className="h-18 w-18 object-contain"
+                          className="h-16 w-16 object-contain"
                           unoptimized={icon.url.includes(
                             "quick.rootholdings.com.mv",
                           )}
@@ -122,7 +122,7 @@ export function OurServicesFeatureListSection({
       </section>
 
       {/* Desktop / tablet: 4-column layout with icons above text and dashed dividers */}
-      <section className="relative hidden bg-[#2a7a7c] -mt-8 pb-20 pt-16 text-white md:block">
+      <section className="relative hidden bg-[#2a7a7c] -mt-8 pb-0 pt-16 text-white md:block">
         <div className="relative z-10 mx-auto max-w-[1180px] px-6">
           <div className="grid grid-cols-2 gap-0 lg:grid-cols-4">
             {validFeatures.map((item, index) => {
@@ -134,13 +134,13 @@ export function OurServicesFeatureListSection({
                     index > 0 ? "border-l border-dashed border-white/50" : ""
                   }`}
                 >
-                  <div className="mb-4 flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center lg:h-[80px] lg:w-[80px]">
+                  <div className="mb-4 flex h-[96px] w-[96px] flex-shrink-0 items-center justify-center lg:h-[104px] lg:w-[104px]">
                     {icon?.url && (
                       <Image
                         src={icon.url}
                         alt={icon.alt || item.feature_name}
-                        width={icon.width || 64}
-                        height={icon.height || 64}
+                        width={icon.width || 96}
+                        height={icon.height || 96}
                         className="h-full w-full object-contain object-center [filter:brightness(0)_invert(1)]"
                         unoptimized={icon.url.includes(
                           "quick.rootholdings.com.mv",

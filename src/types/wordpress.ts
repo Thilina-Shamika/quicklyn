@@ -192,11 +192,14 @@ export interface OurMissionACF {
   sub_heading?: string;
   description?: string;
   section_image?: WPImage;
+  /** Section image slider (desktop + mobile); when set, overrides single section_image. */
+  section_image_slide?: WPImage[];
   commitment_heading?: string;
   commitment_description?: string;
   /** Optional background image for commitment section (desktop). */
   commitment_background_image?: WPImage;
   team?: OurMissionTeamItem[];
+  our_team_static?: WPImage;
   background_check_icon?: WPImage;
   background_check_heading?: string;
   background_check_desctiption?: string;
