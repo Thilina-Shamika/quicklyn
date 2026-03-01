@@ -23,6 +23,7 @@ export default async function CareersPage() {
   const desktopBackgroundUrl =
     page.acf.desktop_background?.url ??
     page.acf.desktop_background_image?.url;
+  const mobileBackgroundUrl = page.acf.background_image?.url;
 
   return (
     <CareersContent
@@ -32,6 +33,7 @@ export default async function CareersPage() {
       image2Url={image2Url}
       image3Url={image3Url}
       desktopBackgroundUrl={desktopBackgroundUrl}
+      mobileBackgroundUrl={mobileBackgroundUrl}
     />
   );
 }

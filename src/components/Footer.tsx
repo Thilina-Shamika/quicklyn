@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -67,9 +68,12 @@ function SocialIcon({ slug, className }: { slug: string; className?: string }) {
 
 export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const pathname = usePathname();
-  const isCareersPage = pathname === "/careers";
-  const isContactUsPage = pathname === "/contact-us";
-  const isGetTheAppPage = pathname === "/get-the-app";
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const isCareersPage = mounted && pathname === "/careers";
+  const isContactUsPage = mounted && pathname === "/contact-us";
+  const isGetTheAppPage = mounted && pathname === "/get-the-app";
 
   if (!data?.acf) return null;
 
@@ -112,7 +116,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
     <footer
       className={`relative w-full overflow-hidden text-white ${
         isGetTheAppPage ? "z-10 md:mt-0" : "z-[200] md:-mt-40"
-      } ${isCareersPage ? "z-20 md:-mt-[320px] lg:-mt-[420px]" : ""} ${isContactUsPage ? "md:-mt-48 lg:-mt-64" : ""}`}
+      } ${isCareersPage ? "z-20 md:-mt-[520px] lg:-mt-[620px]" : ""} ${isContactUsPage ? "md:-mt-48 lg:-mt-64" : ""}`}
     >
       <div className="pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden />
       {footerBgUrl && (
@@ -418,13 +422,14 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
           )}
 
           {/* Newsletter */}
-          <div className="mb-10 text-left">
+          <div className="mb-0 text-left">
             <h3 className="mb-4 text-base font-medium text-white">{subscriptionText}</h3>
             <form
               className="flex w-full overflow-hidden rounded-lg border border-[#AAAAAA]"
               onSubmit={(e) => e.preventDefault()}
               data-lpignore="true"
               data-form-type="other"
+              suppressHydrationWarning
             >
               <input
                 type="email"

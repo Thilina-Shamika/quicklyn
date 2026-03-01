@@ -171,7 +171,7 @@ export function GlobalHeader({ header }: GlobalHeaderProps) {
           </div>
 
           <div className="mx-auto w-full max-w-[1180px] px-6 pt-6 lg:pt-7">
-            <header className="flex items-center rounded-full border border-white/15 bg-[#1c6a6f]/90 px-5 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-md lg:px-8">
+            <header className="flex items-center rounded-full border border-white/15 bg-[#1c6a6f]/90 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-md lg:px-8 lg:py-4">
               <div className="flex min-h-[44px] min-w-[150px] items-center lg:min-h-[48px]">
                 {headerLogoUrl ? (
                   <Link href="/" className="inline-flex items-center">

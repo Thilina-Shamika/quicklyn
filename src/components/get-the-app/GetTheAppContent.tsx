@@ -261,7 +261,11 @@ export function GetTheAppContent({
         <div className="relative mx-auto flex h-full w-full max-w-[1320px] items-center justify-center">
           {/* Left phone */}
           {phoneImageUrl && (
-            <div className="pointer-events-none absolute -left-10 -bottom-40 hidden h-[360px] w-[230px] -rotate-[12deg] drop-shadow-2xl lg:-left-6 lg:block lg:h-[440px] lg:w-[280px]">
+            <div
+              className={`pointer-events-none absolute -left-10 -bottom-40 hidden h-[360px] w-[230px] drop-shadow-2xl transition-transform duration-700 ease-out lg:-left-6 lg:block lg:h-[440px] lg:w-[280px] ${
+                active ? "-rotate-[12deg] translate-y-0" : "-rotate-[20deg] translate-y-16"
+              }`}
+            >
               <Image
                 src={phoneImageUrl}
                 alt=""
@@ -275,7 +279,11 @@ export function GetTheAppContent({
 
           {/* Right phone */}
           {phoneImageUrl && (
-            <div className="pointer-events-none absolute -right-10 -bottom-[300px] hidden h-[580px] w-[380px] rotate-[12deg] drop-shadow-2xl lg:-right-2 lg:block lg:h-[700px] lg:w-[460px]">
+            <div
+              className={`pointer-events-none absolute -right-10 -bottom-[300px] hidden h-[580px] w-[380px] drop-shadow-2xl transition-transform duration-700 ease-out lg:-right-2 lg:block lg:h-[700px] lg:w-[460px] ${
+                active ? "rotate-[12deg] translate-y-0" : "rotate-[24deg] translate-y-16"
+              }`}
+            >
               <Image
                 src={phoneImageUrl}
                 alt=""
@@ -289,15 +297,28 @@ export function GetTheAppContent({
 
           {/* Center content */}
           <div className="relative z-10 mt-20 max-w-[1100px] text-center lg:mt-24">
-            <h1 className="text-[87px] font-normal leading-[89px] text-white">
+            <h1
+              className={`text-[87px] font-normal leading-[89px] text-white transition-all duration-700 ease-out ${
+                active ? "translate-x-0 opacity-100" : "-translate-x-16 opacity-0"
+              }`}
+            >
               {headingDisplay}
             </h1>
 
-            {renderSubHeading("mt-6 text-[22px] leading-[34px] text-white/90")}
+            <div
+              className={`transition-opacity duration-700 ease-out ${
+                active ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {renderSubHeading("mt-6 text-[22px] leading-[34px] text-white/90")}
+              {renderDesktopUseCodeLine()}
+            </div>
 
-            {renderDesktopUseCodeLine()}
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-5">
+            <div
+              className={`mt-8 flex flex-wrap items-center justify-center gap-5 transition-transform duration-700 ease-out ${
+                active ? "translate-y-0" : "translate-y-12"
+              }`}
+            >
               {googlePlayUrl && (
                 <Link
                   href={link01}

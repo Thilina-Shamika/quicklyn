@@ -261,7 +261,7 @@ export default async function OurMissionPage() {
       </section>
 
       {/* Our Team + Background Checked Team — mobile only (desktop is inside Our Commitment section above) */}
-      <div className="md:hidden">
+      <div className="-mt-[100px] ml-5 md:mt-0 md:ml-0 md:hidden">
         <OurTeamSection
           ourTeamStaticImageUrl={ourTeamStaticImageUrl}
           backgroundCheckIconUrl={backgroundCheckIconUrl}
@@ -270,8 +270,8 @@ export default async function OurMissionPage() {
         />
       </div>
 
-      {/* Testimonials - same as home page; mobile: pull up to reduce gap from Our Team */}
-      <div className="-mt-20 md:mt-0">
+      {/* Testimonials - same as home page */}
+      <div className="mt-6 md:mt-6">
         <TestimonialsSection testimonials={testimonials} transparentBackground />
       </div>
 

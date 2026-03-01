@@ -123,6 +123,8 @@ export interface CareersACF {
   image_1?: WPImage;
   image_2?: WPImage;
   image_3?: WPImage;
+  /** Mobile / default background image */
+  background_image?: WPImage;
   desktop_background?: WPImage;
   /** Alternative ACF field name for background image */
   desktop_background_image?: WPImage;

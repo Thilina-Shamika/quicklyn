@@ -19,7 +19,7 @@ export function OurTeamSection({
   if (!hasStaticImage && !hasBackgroundCheck) return null;
 
   return (
-    <section className="relative z-10 px-6 pb-0 pt-0 md:-mt-24 md:pb-0">
+    <section className="relative z-10 -mt-10 px-6 pb-0 pt-0 md:mt-0 md:-mt-24 md:pb-0">
       <div className="mx-auto max-w-5xl">
         {/* Our Team heading + line */}
         <div className="flex items-center gap-4">

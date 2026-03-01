@@ -11,6 +11,8 @@ export interface CareersContentProps {
   image2Url: string | undefined;
   image3Url: string | undefined;
   desktopBackgroundUrl?: string | undefined;
+  /** Mobile background from endpoint (e.g. background_image) */
+  mobileBackgroundUrl?: string | undefined;
 }
 
 export function CareersContent({
@@ -20,6 +22,7 @@ export function CareersContent({
   image2Url,
   image3Url,
   desktopBackgroundUrl,
+  mobileBackgroundUrl,
 }: CareersContentProps) {
   const [active, setActive] = useState(false);
 
@@ -30,16 +33,16 @@ export function CareersContent({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#2a7a7c] text-white">
-      {/* Mobile only: background image extends full page height (no cover, no fixed) */}
-      {desktopBackgroundUrl && (
+      {/* Mobile only: background image from endpoint (background_image) */}
+      {mobileBackgroundUrl && (
         <div
           className="pointer-events-none absolute inset-0 z-0 min-h-full md:hidden"
           aria-hidden
           style={{
-            backgroundImage: `url(${encodeURI(desktopBackgroundUrl)})`,
-            backgroundSize: "auto",
+            backgroundImage: `url(${encodeURI(mobileBackgroundUrl)})`,
+            backgroundSize: "cover",
             backgroundPosition: "top center",
-            backgroundRepeat: "repeat",
+            backgroundRepeat: "no-repeat",
           }}
         />
       )}
@@ -261,7 +264,7 @@ export function CareersContent({
 
       {/* Form section - desktop/tablet with background image from desktop_background */}
       <section
-        className="relative z-10 hidden justify-center px-6 pb-[100px] pt-20 md:-mt-16 md:flex md:items-start md:min-h-[140vh] lg:min-h-[170vh]"
+        className="relative z-10 hidden justify-center px-6 pb-[100px] pt-20 md:-mt-32 md:flex md:items-start md:min-h-[140vh] lg:-mt-40 lg:min-h-[170vh]"
         style={
           desktopBackgroundUrl
             ? {

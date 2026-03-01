@@ -25,7 +25,7 @@ function MemberCard({
   return (
     <div key={index} className="flex flex-col items-center text-center">
       {photoUrl && (
-        <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full border-2 border-[#D9D9D9] bg-gray-200 lg:h-44 lg:w-44">
+        <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-full border-2 border-[#D9D9D9] bg-gray-200 lg:h-52 lg:w-52">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={photoUrl}
@@ -35,7 +35,7 @@ function MemberCard({
         </div>
       )}
       {!photoUrl && (
-        <div className="h-40 w-40 shrink-0 rounded-full border-2 border-[#D9D9D9] bg-white/10 lg:h-44 lg:w-44" aria-hidden />
+        <div className="h-48 w-48 shrink-0 rounded-full border-2 border-[#D9D9D9] bg-white/10 lg:h-52 lg:w-52" aria-hidden />
       )}
       {name && (
         <p

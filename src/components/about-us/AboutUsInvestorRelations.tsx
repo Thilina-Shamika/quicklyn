@@ -83,7 +83,7 @@ export function AboutUsInvestorRelations({
                 <div className="mt-8 lg:mt-0">
                   <Link
                     href={contactUrl}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-transparent px-7 py-3 text-sm font-medium text-white shadow-[0_14px_36px_rgba(0,0,0,0.35)] transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-transparent px-8 py-4 text-sm font-medium text-white transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
                   >
                     <PaperPlaneIcon className="h-5 w-5" />
                     <span>{contactLabel}</span>
@@ -148,7 +148,7 @@ export function AboutUsInvestorRelations({
         <div className="mt-8 flex justify-center">
           <Link
             href={contactUrl}
-            className="inline-flex items-center gap-2 rounded-full border border-white px-5 py-2.5 text-white transition hover:bg-white/10"
+            className="inline-flex items-center gap-2 rounded-full border border-white px-6 py-3.5 text-white transition hover:bg-white/10"
           >
             <PaperPlaneIcon className="h-5 w-5" />
             <span>{contactLabel}</span>
