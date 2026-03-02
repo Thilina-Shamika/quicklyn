@@ -465,7 +465,7 @@ export function ServicesSection({
         </div>
       )}
 
-      <div className="relative z-10 mx-auto flex w-full flex-col items-center px-0 text-center md:px-6">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center px-0 text-center md:px-6 md:scale-[0.85] md:origin-top lg:scale-100">
         {/* Counters - mobile unchanged */}
         <div className="mx-auto mb-24 flex w-full max-w-[240px] flex-col gap-4 px-0 text-left md:hidden">
           {(counters ?? []).map((item, index) => (
@@ -563,10 +563,10 @@ export function ServicesSection({
         >
           <div className="relative mx-auto h-[420px] w-full lg:h-[520px]">
             <div className="pointer-events-none absolute inset-0 z-0 flex flex-col items-center justify-center">
-              <span className="hero-text-shadow block text-center text-[120px] font-medium leading-[0.82] tracking-[-0.05em] text-white/90 lg:text-[180px]">
+              <span className="hero-text-shadow block text-center text-[100px] font-medium leading-[0.82] tracking-[-0.05em] text-white/90 lg:text-[180px]">
                 Our
               </span>
-              <span className="hero-text-shadow -mt-2 block text-center text-[120px] font-medium leading-[0.82] tracking-[-0.05em] text-white/90 lg:-mt-4 lg:text-[180px]">
+              <span className="hero-text-shadow -mt-2 block text-center text-[100px] font-medium leading-[0.82] tracking-[-0.05em] text-white/90 lg:-mt-4 lg:text-[180px]">
                 Services
               </span>
             </div>
@@ -576,7 +576,10 @@ export function ServicesSection({
               const title = service.acf?.service_heading || service.title?.rendered || "Service";
               const desc = service.acf?.service_description || "";
               const isSignature = isSignatureService(service);
-              const cardPos =
+              const isApartmentCard = /apartment/i.test(title);
+              const isMoveInOutCard = /move/i.test(title);
+
+              const baseCardPos =
                 slot === "leftTop"
                   ? "left-[-6%] top-[-4%] w-[26%] min-w-[200px] max-w-[290px] lg:left-[-5%] lg:top-[-3%] lg:max-w-[310px]"
                   : slot === "topCenter"
@@ -586,6 +589,13 @@ export function ServicesSection({
                       : slot === "leftBottom"
                         ? "left-[-2%] top-[85%] w-[36%] min-w-[280px] max-w-[420px] lg:left-[-1%] lg:top-[85%] lg:max-w-[440px]"
                         : "right-[2%] top-[82%] w-[32%] min-w-[260px] max-w-[360px] lg:right-0 lg:top-[82%] lg:max-w-[380px]";
+
+              const cardPos =
+                isApartmentCard && slot === "topCenter"
+                  ? `${baseCardPos} md:left-[30%] md:w-[28%] md:max-w-[340px] lg:w-[42%] lg:max-w-[500px]`
+                  : isMoveInOutCard && slot === "rightTop"
+                    ? `${baseCardPos} md:top-[-10%] lg:top-[1%]`
+                    : baseCardPos;
 
               return (
                 <article
@@ -625,16 +635,12 @@ export function ServicesSection({
 
                   <div className="transition-all duration-200 group-hover:md:pt-5">
                     <h3
-                      className={`pr-8 tracking-[-0.02em] ${
+                      className={`pr-8 tracking-[-0.02em] text-[24px] leading-[30px] md:text-[25px] md:leading-[32px] lg:text-[33px] lg:leading-[38px] ${
                         isSignature
                           ? "font-semibold text-[#FFDA00]"
                           : "font-normal text-white"
                       }`}
-                      style={{
-                        fontSize: isSignature ? "27px" : "33px",
-                        lineHeight: isSignature ? "32px" : "38px",
-                        ...(isSignature ? { color: "#FFDA00" } : {}),
-                      }}
+                      style={isSignature ? { color: "#FFDA00" } : undefined}
                     >
                       <span>{title}</span>
                       {isSignature && (
@@ -735,7 +741,7 @@ export function ServicesSection({
 
               <div className="mb-3 pr-10">
                 <h3
-                  className={`text-[23px] font-normal leading-[26px] ${
+                  className={`text-[23px] md:text-[20px] font-normal leading-[26px] ${
                     isSignatureService(service) ? "text-[#FFDA00]" : ""
                   }`}
                 >

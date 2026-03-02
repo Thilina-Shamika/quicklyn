@@ -189,7 +189,8 @@ export function GlobalHeader({ header }: GlobalHeaderProps) {
                 )}
               </div>
 
-              <nav className="mx-auto flex items-center gap-5 lg:gap-8" aria-label="Primary navigation">
+              {/* Tablet: hide inline nav, use flyout instead; Desktop: show inline nav */}
+              <nav className="mx-auto hidden items-center gap-5 lg:flex lg:gap-8" aria-label="Primary navigation">
                 {primaryNavItems.length > 0
                   ? primaryNavItems.map((item, index) => {
                       const label = (item.menu_item_name || item.menu_item_link?.title || "").trim();
@@ -217,22 +218,34 @@ export function GlobalHeader({ header }: GlobalHeaderProps) {
                     ))}
               </nav>
 
-              <Link
-                href={mapWordPressUrlToNextPath(ctaItem?.menu_item_link?.url) || "/get-the-app"}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#FFDA00] px-5 text-sm font-semibold text-[#1B5B5D] shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition hover:opacity-95 lg:h-12 lg:px-6 lg:text-base"
-              >
-                <span>{(ctaItem?.menu_item_name || ctaItem?.menu_item_link?.title || "Get The App").trim()}</span>
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  viewBox="0 0 24 24"
-                  aria-hidden
+              {/* Right actions: tablet = CTA + hamburger (flyout), desktop = CTA only */}
+              <div className="ml-auto flex items-center gap-3">
+                <Link
+                  href={mapWordPressUrlToNextPath(ctaItem?.menu_item_link?.url) || "/get-the-app"}
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#FFDA00] px-5 text-sm font-semibold text-[#1B5B5D] shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition hover:opacity-95 lg:h-12 lg:px-6 lg:text-base"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H9M17 7v8" />
-                </svg>
-              </Link>
+                  <span>{(ctaItem?.menu_item_name || ctaItem?.menu_item_link?.title || "Get The App").trim()}</span>
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    viewBox="0 0 24 24"
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H9M17 7v8" />
+                  </svg>
+                </Link>
+                {/* Tablet: hamburger opens same MobileFlyoverMenu as mobile */}
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(true)}
+                  className="hidden h-10 w-10 items-center justify-center text-white md:flex lg:hidden"
+                  aria-label="Open menu"
+                >
+                  <HamburgerIcon className="text-white" />
+                </button>
+              </div>
             </header>
           </div>
         </div>

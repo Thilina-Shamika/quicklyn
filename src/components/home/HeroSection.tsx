@@ -329,8 +329,10 @@ export function HeroSection({ data, header }: HeroSectionProps) {
 
           <div className="relative z-10 mx-auto flex min-h-[1080px] w-full max-w-[1320px] -mt-6 items-center px-8 pb-24 pt-0 lg:-mt-8 lg:min-h-[1200px] lg:px-8 lg:pt-0">
             <div className="grid w-full grid-cols-12 items-center gap-6 lg:gap-8">
-              <div className="col-span-6 pr-2 md:-translate-y-6 lg:col-span-6 lg:-translate-y-8">
-                <h1 className="hero-text-shadow max-w-[560px] font-semibold tracking-[-0.03em] text-white lg:max-w-[560px]" style={{ fontSize: "60px", lineHeight: "59px" }}>
+              <div className="col-span-7 md:col-span-7 lg:col-span-6 pr-2 md:-translate-y-6 lg:-translate-y-8">
+                <h1
+                  className="hero-text-shadow font-semibold tracking-[-0.03em] text-white md:max-w-[880px] lg:max-w-[560px] text-[40px] leading-[47px] lg:text-[60px] lg:leading-[59px]"
+                >
                   {desktopHeadingParts.length > 0 ? (
                     desktopHeadingParts.map((part, index) => (
                       <span key={`${part}-${index}`} className="block">
@@ -388,39 +390,39 @@ export function HeroSection({ data, header }: HeroSectionProps) {
                 }}
               >
                 {popImg2 && (
-                  <div className="absolute right-[16%] top-[18%] z-20 rotate-[6deg] transition-transform duration-300 hover:scale-105 lg:right-[15%] lg:top-[17%]">
+                  <div className="absolute md:right-0 md:top-[7%] z-20 rotate-[6deg] transition-transform duration-300 hover:scale-105 lg:right-[15%] lg:top-[17%]">
                     <Image
                       src={popImg2}
                       alt=""
                       width={345}
                       height={172}
-                      className="h-auto w-[180px] lg:w-[235px]"
+                      className="h-auto md:w-[150px] lg:w-[235px]"
                       unoptimized={isLocalImage}
                     />
                   </div>
                 )}
 
                 {popImg1 && (
-                  <div className="absolute -left-[4%] top-[38%] z-20 -rotate-[11deg] transition-transform duration-300 hover:scale-105 lg:-left-[5%] lg:top-[35%]">
+                  <div className="absolute md:left-[26%] md:top-[26%] z-20 -rotate-[11deg] transition-transform duration-300 hover:scale-105 lg:-left-[5%] lg:top-[35%]">
                     <Image
                       src={popImg1}
                       alt=""
                       width={265}
                       height={300}
-                      className="h-auto w-[210px] lg:w-[270px]"
+                      className="h-auto md:w-[180px] lg:w-[270px]"
                       unoptimized={isLocalImage}
                     />
                   </div>
                 )}
 
                 {popImg3 && (
-                  <div className="absolute right-[8%] top-[56%] z-20 rotate-[8deg] transition-transform duration-300 hover:scale-105 lg:right-[8%] lg:top-[54%]">
+                  <div className="absolute md:right-[-4%] md:top-[64%] z-20 rotate-[8deg] transition-transform duration-300 hover:scale-105 lg:right-[8%] lg:top-[54%]">
                     <Image
                       src={popImg3}
                       alt=""
                       width={298}
                       height={359}
-                      className="h-auto w-[188px] lg:w-[230px]"
+                      className="h-auto md:w-[165px] lg:w-[230px]"
                       unoptimized={isLocalImage}
                     />
                   </div>

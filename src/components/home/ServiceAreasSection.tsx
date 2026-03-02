@@ -63,7 +63,7 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
       desktopMapWithPinUrl.includes("quick.rootholdings"));
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-20 pt-0 md:-mt-16 md:z-20 md:pb-0">
+    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-20 pt-0 md:-mt-[450px] md:z-20 md:pb-0">
       {/* Linear gradient overlays */}
       {/* Mobile: #226e71 at top fading to transparent at bottom */}
       <div
@@ -125,7 +125,7 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
           <div className="col-span-3">
             {heading && (
               <h2
-                className={`hero-text-shadow text-left text-[54px] font-medium leading-[84px] tracking-[-0.03em] text-white lg:text-[99px] transition-all duration-700 ${
+                className={`hero-text-shadow text-left text-[54px] font-medium leading-[56px] tracking-[-0.03em] text-white lg:text-[99px] lg:leading-[84px] transition-all duration-700 ${
                   isMapInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
               >

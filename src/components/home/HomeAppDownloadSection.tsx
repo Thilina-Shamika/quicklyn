@@ -337,7 +337,7 @@ export function HomeAppDownloadSection({
 
   return (
     <section
-      className={`relative isolate z-[250] mt-0 w-full overflow-x-hidden overflow-y-visible pt-48 md:pt-[7.5rem] lg:pt-[9rem] ${
+      className={`relative isolate z-[250] mt-0 md:mt-[50px] lg:mt-0 w-full overflow-x-hidden overflow-y-visible pt-48 md:pt-[7.5rem] lg:pt-[9rem] ${
         tightBottom ? "pb-0" : "pb-0 md:pb-16"
       }`}
       style={
@@ -351,8 +351,8 @@ export function HomeAppDownloadSection({
       </div>
       {bgImage && (
         <div
-          className="pointer-events-none absolute right-0 top-0 z-[1] h-full w-[70%] md:hidden"
-          style={{ marginTop: "-120px", transform: "translateX(24px)" }}
+          className="pointer-events-none absolute right-0 top-0 z-[1] h-full w-[70%] -mt-[120px] md:mt-0 md:block lg:hidden"
+          style={{ transform: "translateX(24px)" }}
         >
           <Image
             src={mobilePhoneImage || bgImage}
@@ -371,7 +371,8 @@ export function HomeAppDownloadSection({
         </div>
       )}
 
-      <div className="relative z-10 hidden md:block">
+      {/* Desktop layout (lg+ only) */}
+      <div className="relative z-10 hidden lg:block">
         <div className="mx-auto w-full max-w-[1320px] px-10 lg:px-14">
           <div className="relative min-h-[430px] overflow-visible pt-[78px] lg:min-h-[520px] lg:pt-[96px]">
             <div className="relative z-10 rounded-[34px] bg-[#1a5d5f]/95 px-14 py-12 shadow-[0_16px_40px_rgba(0,0,0,0.12)] md:-mt-8 md:bg-transparent md:p-[120px] md:shadow-none lg:-mt-10 lg:rounded-[38px]">
@@ -499,7 +500,8 @@ export function HomeAppDownloadSection({
         </div>
       </div>
 
-        <div className="relative z-10 md:hidden">
+        {/* Mobile-style layout used for mobile and tablet (md), hidden on desktop */}
+        <div className="relative z-10 md:block lg:hidden">
         <div className="mx-auto w-full max-w-4xl px-6">
           <div className="w-[55%] text-left">
             <h2 className="text-2xl font-normal leading-tight text-white md:text-3xl">
