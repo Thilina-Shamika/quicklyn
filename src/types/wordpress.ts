@@ -128,6 +128,8 @@ export interface CareersACF {
   desktop_background?: WPImage;
   /** Alternative ACF field name for background image */
   desktop_background_image?: WPImage;
+  /** Mobile-only hero cover image (replaces stacked images in 1st section) */
+  mobile_cover?: WPImage;
 }
 
 export interface CareersPage {

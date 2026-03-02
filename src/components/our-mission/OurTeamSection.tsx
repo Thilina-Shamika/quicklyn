@@ -50,9 +50,9 @@ export function OurTeamSection({
           </div>
         )}
 
-        {/* Background Checked Team — mobile (unchanged) */}
+        {/* Background Checked Team — mobile */}
         {hasBackgroundCheck && (
-          <div className="mt-4 md:hidden">
+          <div className="mt-6 md:hidden">
             <div className="flex flex-row flex-wrap items-center gap-3 md:gap-4">
               {backgroundCheckIconUrl && (
                 <div className="flex-shrink-0">
@@ -60,7 +60,7 @@ export function OurTeamSection({
                   <img
                     src={backgroundCheckIconUrl}
                     alt=""
-                    className="h-16 w-16 object-contain md:h-20 md:w-20"
+                    className="h-12 w-12 object-contain"
                     aria-hidden
                   />
                 </div>
@@ -70,7 +70,17 @@ export function OurTeamSection({
                   className="max-w-[12rem] font-bold text-white text-left md:max-w-[14rem]"
                   style={{ fontSize: "17px", lineHeight: "21px" }}
                 >
-                  {backgroundCheckHeading}
+                  {(() => {
+                    const t = backgroundCheckHeading.trim();
+                    const words = t.split(/\s+/);
+                    if (words.length <= 1) return t;
+                    return (
+                      <>
+                        <span className="block">{words[0]}</span>
+                        <span className="block">{words.slice(1).join(" ")}</span>
+                      </>
+                    );
+                  })()}
                 </h3>
               )}
             </div>

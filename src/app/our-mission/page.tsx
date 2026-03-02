@@ -98,7 +98,7 @@ export default async function OurMissionPage() {
           style={{
             backgroundImage: `url(${sectionBgImage})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
           }}
           aria-hidden
@@ -188,7 +188,9 @@ export default async function OurMissionPage() {
               lineHeight: "33px",
             }}
           >
-            {commitmentHeading}
+            <span className="block">Our</span>
+            <span className="block">Commitment</span>
+            <span className="block">To you</span>
           </h2>
           <div
             className="mt-5 mb-[75px] space-y-3 text-center text-white/95 md:mt-6"
@@ -271,7 +273,7 @@ export default async function OurMissionPage() {
       </div>
 
       {/* Testimonials - same as home page */}
-      <div className="mt-6 md:mt-6">
+      <div className="-mt-2 md:mt-6">
         <TestimonialsSection testimonials={testimonials} transparentBackground />
       </div>
 

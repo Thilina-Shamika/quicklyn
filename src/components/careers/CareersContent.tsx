@@ -13,6 +13,8 @@ export interface CareersContentProps {
   desktopBackgroundUrl?: string | undefined;
   /** Mobile background from endpoint (e.g. background_image) */
   mobileBackgroundUrl?: string | undefined;
+  /** Mobile hero cover image from endpoint (mobile_cover) */
+  mobileCoverUrl?: string | undefined;
 }
 
 export function CareersContent({
@@ -23,12 +25,12 @@ export function CareersContent({
   image3Url,
   desktopBackgroundUrl,
   mobileBackgroundUrl,
+  mobileCoverUrl,
 }: CareersContentProps) {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setActive(true), 150);
-    return () => clearTimeout(t);
+    setActive(true);
   }, []);
 
   return (
@@ -57,7 +59,7 @@ export function CareersContent({
 
       {/* Mobile layout */}
       <div className="md:hidden">
-        {/* Top: three images — diagonal by default; staggered overlapping when scrolled */}
+        {/* Top: hero image — animation from collapsed to expanded on load */}
         <section className="relative z-10 min-h-[340px] pt-28 md:min-h-[580px] md:pt-40">
           <div
             className={`relative mx-auto mt-10 transition-all duration-500 ease-out md:mt-14 ${
@@ -66,62 +68,81 @@ export function CareersContent({
                 : "h-[320px] w-[110px] md:h-[380px] md:w-[122px]"
             }`}
           >
-            {/* Image 1 — default: top-right. Scrolled: rightmost, hindmost, full opacity, original size */}
-            {image1Url && (
+            {mobileCoverUrl ? (
               <div
                 className={`absolute transition-all duration-500 ease-out ${
                   active
-                    ? "right-[12%] top-[8%] z-10 h-[270px] w-[95px] opacity-100 md:right-[10%] md:top-[6%] md:h-[320px] md:w-[110px]"
-                    : "right-0 top-0 h-[165px] w-[48px] opacity-35 md:h-[195px] md:w-[58px]"
+                    ? "left-1/2 -top-4 z-20 h-[420px] w-[260px] -translate-x-1/2 opacity-100 md:h-[480px] md:w-[300px]"
+                    : "right-0 top-[40%] h-[190px] w-[90px] opacity-40 md:top-[42%] md:h-[220px] md:w-[105px]"
                 }`}
               >
                 <Image
-                  src={image1Url}
+                  src={mobileCoverUrl}
                   alt=""
                   fill
                   className="object-contain object-center"
-                  sizes="130px"
-                  unoptimized={image1Url.includes("quick.rootholdings")}
+                  sizes="260px"
+                  unoptimized={mobileCoverUrl.includes("quicklyn-headless.local") || mobileCoverUrl.includes("quick.rootholdings")}
                 />
               </div>
-            )}
-            {/* Image 2 — default: middle-left. Scrolled: leftmost, foremost, full opacity, original size */}
-            {image2Url && (
-              <div
-                className={`absolute transition-all duration-500 ease-out ${
-                  active
-                    ? "left-[12%] top-[2%] z-30 h-[320px] w-[110px] opacity-100 md:left-[10%] md:top-0 md:h-[370px] md:w-[125px]"
-                    : "left-0 top-[26%] h-[155px] w-[50px] opacity-35 md:top-[24%] md:h-[185px] md:w-[60px]"
-                }`}
-              >
-                <Image
-                  src={image2Url}
-                  alt=""
-                  fill
-                  className="object-contain object-center"
-                  sizes="150px"
-                  unoptimized={image2Url.includes("quick.rootholdings")}
-                />
-              </div>
-            )}
-            {/* Image 3 — default: bottom-right. Scrolled: center, middle layer, full opacity, original size */}
-            {image3Url && (
-              <div
-                className={`absolute transition-all duration-500 ease-out ${
-                  active
-                    ? "left-[36%] -top-[4%] z-20 h-[340px] w-[115px] opacity-100 md:left-[34%] md:-top-[6%] md:h-[400px] md:w-[135px]"
-                    : "right-0 top-[52%] mt-1 h-[160px] w-[48px] opacity-35 md:top-[51%] md:mt-1.5 md:h-[195px] md:w-[58px]"
-                }`}
-              >
-                <Image
-                  src={image3Url}
-                  alt=""
-                  fill
-                  className="object-contain object-center"
-                  sizes="135px"
-                  unoptimized={image3Url.includes("quick.rootholdings")}
-                />
-              </div>
+            ) : (
+              <>
+                {/* Fallback: original three-image animation when mobileCoverUrl is not provided */}
+                {image1Url && (
+                  <div
+                    className={`absolute transition-all duration-500 ease-out ${
+                      active
+                        ? "right-[12%] top-[8%] z-10 h-[270px] w-[95px] opacity-100 md:right-[10%] md:top-[6%] md:h-[320px] md:w-[110px]"
+                        : "right-0 top-0 h-[165px] w-[48px] opacity-35 md:h-[195px] md:w-[58px]"
+                    }`}
+                  >
+                    <Image
+                      src={image1Url}
+                      alt=""
+                      fill
+                      className="object-contain object-center"
+                      sizes="130px"
+                      unoptimized={image1Url.includes("quick.rootholdings")}
+                    />
+                  </div>
+                )}
+                {image2Url && (
+                  <div
+                    className={`absolute transition-all duration-500 ease-out ${
+                      active
+                        ? "left-[12%] top-[2%] z-30 h-[320px] w-[110px] opacity-100 md:left-[10%] md:top-0 md:h-[370px] md:w-[125px]"
+                        : "left-0 top-[26%] h-[155px] w-[50px] opacity-35 md:top-[24%] md:h-[185px] md:w-[60px]"
+                    }`}
+                  >
+                    <Image
+                      src={image2Url}
+                      alt=""
+                      fill
+                      className="object-contain object-center"
+                      sizes="150px"
+                      unoptimized={image2Url.includes("quick.rootholdings")}
+                    />
+                  </div>
+                )}
+                {image3Url && (
+                  <div
+                    className={`absolute transition-all duration-500 ease-out ${
+                      active
+                        ? "left-[36%] -top-[4%] z-20 h-[340px] w-[115px] opacity-100 md:left-[34%] md:-top-[6%] md:h-[400px] md:w-[135px]"
+                        : "right-0 top-[52%] mt-1 h-[160px] w-[48px] opacity-35 md:top-[51%] md:mt-1.5 md:h-[195px] md:w-[58px]"
+                    }`}
+                  >
+                    <Image
+                      src={image3Url}
+                      alt=""
+                      fill
+                      className="object-contain object-center"
+                      sizes="135px"
+                      unoptimized={image3Url.includes("quick.rootholdings")}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
@@ -130,7 +151,7 @@ export function CareersContent({
         <section className="relative z-10 px-6 pb-4 pt-6 md:pb-16 md:pt-8">
           <div
             className={`mx-auto max-w-2xl text-center transition-all duration-500 ease-out ${
-              active ? "-translate-y-44 -mb-40 md:-translate-y-56 md:-mb-56" : "translate-y-0"
+              active ? "-translate-y-32 -mb-32 md:-translate-y-56 md:-mb-56" : "translate-y-0"
             }`}
           >
             <h1

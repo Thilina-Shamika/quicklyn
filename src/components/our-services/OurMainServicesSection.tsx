@@ -369,9 +369,25 @@ export function OurMainServicesSection({ services, appLink }: OurMainServicesSec
       <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
         <h2
           id="main-services-heading"
-          className="mt-0 pt-0 mb-14 text-left text-white"
+          className="mt-0 pt-0 mb-14 text-center text-white md:text-left"
         >
-          <span className="block text-[48px] font-semibold leading-[1.05] md:text-[110px] md:leading-[1]">
+          {/* Mobile: centered, split lines, custom sizes */}
+          <span className="block md:hidden">
+            <span
+              className="block font-normal"
+              style={{ fontSize: "32px", lineHeight: "62px" }}
+            >
+              Our Main
+            </span>
+            <span
+              className="block font-semibold"
+              style={{ fontSize: "57px", lineHeight: "62px" }}
+            >
+              SERVICES
+            </span>
+          </span>
+          {/* Desktop / tablet: original styling preserved */}
+          <span className="hidden text-[48px] font-semibold leading-[1.05] md:block md:text-[110px] md:leading-[1]">
             Our Main Services
           </span>
         </h2>
