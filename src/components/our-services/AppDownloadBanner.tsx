@@ -93,10 +93,10 @@ export function AppDownloadBanner({ data }: AppDownloadBannerProps) {
       {/* Desktop / tablet: block with 2 columns + phone on top of block */}
       <div className="relative hidden min-h-[120px] w-full overflow-visible rounded-2xl border border-white/[0.28] bg-[#1a585c] px-4 py-5 md:block md:min-h-[140px] md:grid md:grid-cols-2 md:items-center md:gap-6 md:px-8 md:py-6">
         <div className="relative z-10 flex flex-col justify-center">
-          <h3 className="text-[25px] font-bold leading-tight text-white">
+          <h3 className="text-[25px] font-bold leading-tight text-white lg:font-normal">
             {heading}
           </h3>
-          <p className="mt-1 text-[18px] leading-snug text-white">
+          <p className="mt-1 text-[18px] leading-snug text-white lg:text-[16px]">
             {renderSubHeadingWithHighlight(subHeading, codeOnly)}
           </p>
         </div>
