@@ -55,6 +55,25 @@ export function ServicesSection({
     const fill = services.filter((s) => !used.has(s.id)).slice(0, Math.max(0, 5 - preferred.length));
     return [...preferred, ...fill].slice(0, 5);
   })();
+
+  // Mobile: explicit ordering for carousel cards
+  const orderedMobileServices = (() => {
+    const preferred = [
+      // Apartment cleaning
+      findServiceByKeywords(["apartment"]),
+      // Deep cleaning
+      findServiceByKeywords(["deep"]),
+      // Move in / move out
+      findServiceByKeywords(["move"]),
+      // Airbnb
+      findServiceByKeywords(["airbnb"]),
+      // Signature Pro
+      findServiceByKeywords(["signature"]),
+    ].filter(Boolean) as WPService[];
+    const used = new Set(preferred.map((s) => s.id));
+    const fill = services.filter((s) => !used.has(s.id));
+    return [...preferred, ...fill];
+  })();
   const desktopCardSlots = [
     "leftTop",
     "topCenter",
@@ -87,6 +106,7 @@ export function ServicesSection({
   const whyDesktopLockedScrollYRef = useRef<number | null>(null);
 
   const gap = 20;
+  const mobileServices = orderedMobileServices;
 
   const dragStartXRef = useRef(0);
   const dragStartScrollRef = useRef(0);
@@ -161,7 +181,7 @@ export function ServicesSection({
         : Math.max(
             0,
             Math.min(
-              services.length - 1,
+              mobileServices.length - 1,
               Math.round((current - 20) / (cardWidth + gap)),
             ),
           );
@@ -445,7 +465,7 @@ export function ServicesSection({
         </div>
       )}
 
-      <div className="relative z-10 mx-auto flex w-full flex-col items-center px-6 text-center">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center px-0 text-center md:px-6">
         {/* Counters - mobile unchanged */}
         <div className="mx-auto mb-24 flex w-full max-w-[240px] flex-col gap-4 px-0 text-left md:hidden">
           {(counters ?? []).map((item, index) => (
@@ -671,7 +691,7 @@ export function ServicesSection({
         >
           <div
             ref={trackRef}
-            className="flex w-screen -ml-[calc((100vw-100%)/2)] -mr-6 pl-6 pr-6 pb-2 pt-1"
+            className="flex w-screen -ml-[calc((100vw-100%)/2)] pl-6 pr-0 pb-2 pt-1"
             style={{
               columnGap: gap,
               transform: `translateX(-${scrollOffsetPx}px)`,
@@ -683,7 +703,7 @@ export function ServicesSection({
             onPointerLeave={endDrag}
             onPointerCancel={endDrag}
           >
-          {services.map((service, index) => (
+          {mobileServices.map((service, index) => (
             <article
               key={service.id}
               className="group relative my-[20px] flex-shrink-0 select-none overflow-visible rounded-2xl bg-[#175c5e] p-5 text-left text-white transition-transform hover:-translate-y-1"
@@ -736,7 +756,7 @@ export function ServicesSection({
               </p>
             </article>
           ))}
-          {services.length > 1 && (
+          {mobileServices.length > 1 && (
             <div
               className="flex-shrink-0"
               style={{ minWidth: "45vw" }}
@@ -747,10 +767,10 @@ export function ServicesSection({
         </div>
 
         {/* Carousel bullets + Learn more link */}
-        {services.length > 1 && (
+        {mobileServices.length > 1 && (
           <div className="mt-4 flex w-full items-center justify-between px-6 md:hidden">
             <div className="flex items-center gap-2">
-              {services.map((_, index) => (
+            {mobileServices.map((_, index) => (
                 <button
                   key={index}
                   type="button"
@@ -813,7 +833,10 @@ export function ServicesSection({
                 const iconUrl = item.icon?.url;
 
                 return (
-                  <div key={`${item.list_heading}-${index}`} className="flex items-stretch gap-4">
+                  <div
+                    key={`${item.list_heading}-${index}`}
+                    className={`flex items-stretch gap-4 ${isOpen && !isLast ? "mb-9" : ""}`}
+                  >
                     {/* Icon + connecting line */}
                     <div className="flex flex-col items-center">
                       <div className="flex h-[80px] w-[80px] flex-shrink-0 items-center justify-center rounded-full p-[20px] shadow-lg" style={{ backgroundColor: "#348284" }}>
@@ -844,27 +867,38 @@ export function ServicesSection({
                       <p className="text-[20px] font-normal leading-[25px] text-white">
                         {item.list_heading}
                       </p>
-                      <button
-                        type="button"
-                        className="mt-1 text-[13px] font-normal text-white/60 underline-offset-2 hover:underline"
-                        onClick={() =>
-                          setOpenWhyIndex(isOpen ? null : index)
-                        }
-                      >
-                        Learn More...
-                      </button>
-                      {item.list_description && (
-                        <div
-                          className={`overflow-hidden transition-all duration-300 ${
-                            isOpen ? "mt-2 max-h-40 opacity-100" : "max-h-0 opacity-0"
-                          }`}
-                          aria-hidden={!isOpen}
+                      {!isOpen && (
+                        <button
+                          type="button"
+                          className="mt-1 text-[13px] font-normal text-white/60 underline-offset-2 hover:underline"
+                          onClick={() =>
+                            setOpenWhyIndex(isOpen ? null : index)
+                          }
                         >
+                          Learn More...
+                        </button>
+                      )}
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${
+                          isOpen ? "mt-2 max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                        aria-hidden={!isOpen}
+                      >
+                        {item.list_description && (
                           <p className="text-[14px] leading-relaxed text-white/80">
                             {item.list_description}
                           </p>
-                        </div>
-                      )}
+                        )}
+                        {isOpen && (
+                          <button
+                            type="button"
+                            className="mt-2 text-[13px] font-normal text-white/60 underline-offset-2 hover:underline"
+                            onClick={() => setOpenWhyIndex(null)}
+                          >
+                            See less
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );

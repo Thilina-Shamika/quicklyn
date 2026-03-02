@@ -93,17 +93,40 @@ export function HomeAppDownloadSection({
 
   const renderSubHeading = () => {
     if (!subHeading) return null;
-    const parts = subHeading.split(/(\d+%)/);
+
+    const renderHighlighted = (value: string) => {
+      const parts = value.split(/(\d+%)/);
+      return parts.map((part, i) =>
+        /\d+%/.test(part) ? (
+          <span key={i} className="text-[#ffda00]">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      );
+    };
+
+    const breakPhrase = "& Save 15% on your";
+    const lower = subHeading.toLowerCase();
+    const phraseIndex = lower.indexOf(breakPhrase.toLowerCase());
+
+    let before = subHeading;
+    let after = "";
+    if (phraseIndex !== -1) {
+      const endIndex = phraseIndex + breakPhrase.length;
+      before = subHeading.slice(0, endIndex);
+      after = subHeading.slice(endIndex);
+    }
+
     return (
       <p className="mt-2 text-[14px] text-white">
-        {parts.map((part, i) =>
-          /\d+%/.test(part) ? (
-            <span key={i} className="text-[#ffda00]">
-              {part}
-            </span>
-          ) : (
-            <span key={i}>{part}</span>
-          )
+        {renderHighlighted(before)}
+        {after && (
+          <>
+            <br />
+            {renderHighlighted(after)}
+          </>
         )}
       </p>
     );
@@ -264,6 +287,7 @@ export function HomeAppDownloadSection({
   const bookingText = acf.booking_text?.trim() || "Book A Cleaning Now";
   const description = acf.description?.trim() || "";
   const bgImage = acf.background_image?.url;
+  const mobilePhoneImage = acf.mobile_phone_image?.url;
   const isLocal =
     (googlePlayUrl &&
       (googlePlayUrl.includes("quicklyn-headless.local") ||
@@ -274,6 +298,10 @@ export function HomeAppDownloadSection({
     (bgImage &&
       (bgImage.includes("quicklyn-headless.local") ||
         bgImage.includes("quick.rootholdings")));
+  const isLocalMobilePhone =
+    !!mobilePhoneImage &&
+    (mobilePhoneImage.includes("quicklyn-headless.local") ||
+      mobilePhoneImage.includes("quick.rootholdings"));
 
   const renderHighlightedText = (value: string, className?: string) => {
     const parts = value.split(/(\d+%\s*off\b|\d+%|[A-Z0-9]{4,})/i);
@@ -309,7 +337,9 @@ export function HomeAppDownloadSection({
 
   return (
     <section
-      className={`relative isolate z-[250] mt-0 w-full overflow-x-hidden overflow-y-visible pt-48 md:pt-[7.5rem] lg:pt-[9rem] ${tightBottom ? "pb-0" : "pb-16"}`}
+      className={`relative isolate z-[250] mt-0 w-full overflow-x-hidden overflow-y-visible pt-48 md:pt-[7.5rem] lg:pt-[9rem] ${
+        tightBottom ? "pb-0" : "pb-0 md:pb-16"
+      }`}
       style={
         transparentBackground
           ? undefined
@@ -322,15 +352,15 @@ export function HomeAppDownloadSection({
       {bgImage && (
         <div
           className="pointer-events-none absolute right-0 top-0 z-[1] h-full w-[70%] md:hidden"
-          style={{ marginTop: "-120px" }}
+          style={{ marginTop: "-120px", transform: "translateX(24px)" }}
         >
           <Image
-            src={bgImage}
+            src={mobilePhoneImage || bgImage}
             alt=""
             fill
             className="object-contain object-right"
             sizes="55vw"
-            unoptimized={!!isLocal}
+            unoptimized={!!(mobilePhoneImage ? isLocalMobilePhone : isLocal)}
           />
           <div
             className="absolute inset-0 pointer-events-none"
@@ -469,7 +499,7 @@ export function HomeAppDownloadSection({
         </div>
       </div>
 
-      <div className="relative z-10 md:hidden">
+        <div className="relative z-10 md:hidden">
         <div className="mx-auto w-full max-w-4xl px-6">
           <div className="w-[55%] text-left">
             <h2 className="text-2xl font-normal leading-tight text-white md:text-3xl">
@@ -532,11 +562,11 @@ export function HomeAppDownloadSection({
             href={bookingUrl}
             target={acf.booking_link?.target || "_self"}
             className="mt-3 inline-flex items-center gap-2 font-bold text-white transition-colors hover:!text-[#ffda00] focus:outline-none"
-            style={{ fontSize: "45px", lineHeight: "65px" }}
+            style={{ fontSize: "20px", lineHeight: "30px" }}
           >
             {bookingText}
             <svg
-              className="h-8 w-8 shrink-0"
+              className="h-5 w-5 shrink-0"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -551,7 +581,21 @@ export function HomeAppDownloadSection({
             </svg>
           </Link>
           {description && (
-            <p className="mt-2 text-[14px] text-white/90">{description}</p>
+            <p className="mt-2 text-[14px] text-white/90">
+              {(() => {
+                const idx = description.indexOf(", ");
+                if (idx === -1) return description;
+                const first = description.slice(0, idx + 1);
+                const rest = description.slice(idx + 2);
+                return (
+                  <>
+                    {first}
+                    <br />
+                    {rest}
+                  </>
+                );
+              })()}
+            </p>
           )}
         </div>
       </div>

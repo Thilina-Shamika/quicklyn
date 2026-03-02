@@ -16,6 +16,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const bgDesktopUrl = backgroundDesktop?.url;
+  const mobileFaqs = [...faqs].reverse();
 
   if (!faqs.length) return null;
 
@@ -172,7 +173,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
           </h2>
 
           <div className="space-y-3">
-            {faqs.map((item, index) => {
+            {mobileFaqs.map((item, index) => {
               const isOpen = openIndex === index;
               const acf = item.acf;
               const question = acf?.question || item.title.rendered;
@@ -302,7 +303,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
       </div>
 
       {/* Download section nested visually inside FAQ, sharing background */}
-      <div className="pb-[340px]">
+      <div className="pb-0 md:pb-[340px]">
         <HomeAppDownloadSection
           data={downloadData ?? null}
           transparentBackground

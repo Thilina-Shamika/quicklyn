@@ -304,7 +304,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
               return (
                 <div
                   key={item.id}
-                  className="absolute left-1/2 top-1/2 flex min-h-[360px] w-[70%] max-w-[280px] flex-col select-none rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
+                  className="absolute left-1/2 top-1/2 flex min-h-[360px] w-[70%] max-w-[280px] flex-col items-center justify-center select-none rounded-[32px] border border-[#89b0b1] bg-[#1a5d5f] px-6 py-6 shadow-lg transition-all duration-300 ease-out"
                   style={{
                     transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotate(${rotate}deg)`,
                     opacity,
@@ -314,9 +314,9 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
                   <QuoteIcon className="absolute left-4 top-4 h-6 w-6 text-white/80" />
                   <QuoteIcon className="absolute bottom-4 right-4 h-6 w-6 rotate-180 text-white/80" />
 
-                  <div className="relative flex flex-1 flex-col pt-2 text-center">
+                  <div className="relative flex flex-col items-center justify-center pt-2 text-center">
                     <StarRating count={parseInt(item.acf?.stars || "5", 10)} />
-                    <p className="mb-4 min-h-[100px] flex-1 text-[14px] leading-relaxed text-white">
+                    <p className="mb-4 text-[14px] leading-relaxed text-white">
                       {item.acf?.testimonial?.trim() || item.title.rendered}
                     </p>
                     <p className="shrink-0 text-[14px] font-medium text-white">

@@ -63,10 +63,19 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
       desktopMapWithPinUrl.includes("quick.rootholdings"));
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-0 pt-0 md:-mt-16 md:z-20">
-      {/* Linear overlay: 100% #226e71 → 0% transparent */}
+    <section className="relative w-full overflow-hidden bg-[#297a7c] pb-20 pt-0 md:-mt-16 md:z-20 md:pb-0">
+      {/* Linear gradient overlays */}
+      {/* Mobile: #226e71 at top fading to transparent at bottom */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1]"
+        className="pointer-events-none absolute inset-0 z-[1] md:hidden"
+        style={{
+          background: "linear-gradient(to bottom, #226e71 0%, transparent 100%)",
+        }}
+        aria-hidden
+      />
+      {/* Desktop / tablet: keep existing overlay color to avoid design changes */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] hidden md:block"
         style={{
           background: "linear-gradient(to bottom, #297a7c 0%, transparent 100%)",
         }}

@@ -224,11 +224,11 @@ export function GetTheAppContent({
               target={bookingTarget}
               rel="noopener noreferrer"
               className="mt-2 inline-flex items-center gap-2 font-bold text-white transition-colors hover:!text-[#ffda00] focus:outline-none focus:ring-2 focus:ring-white/50 rounded"
-              style={{ fontSize: "45px", lineHeight: "65px" }}
+              style={{ fontSize: "20px", lineHeight: "30px" }}
             >
               {bookingText}
               <svg
-                className="h-8 w-8 shrink-0"
+                className="h-5 w-5 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -243,7 +243,21 @@ export function GetTheAppContent({
               </svg>
             </Link>
             {description && (
-              <p className="mt-2 text-sm text-white/80">{description}</p>
+              <p className="mt-2 text-sm text-white/80">
+                {(() => {
+                  const idx = description.indexOf(", ");
+                  if (idx === -1) return description;
+                  const first = description.slice(0, idx + 1);
+                  const rest = description.slice(idx + 2);
+                  return (
+                    <>
+                      {first}
+                      <br />
+                      {rest}
+                    </>
+                  );
+                })()}
+              </p>
             )}
           </div>
         )}

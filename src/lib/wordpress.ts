@@ -435,6 +435,8 @@ export interface WPAppLink {
     booking_link?: { title: string; url: string; target: string };
     description?: string;
     background_image?: WPImage;
+    /** Optional mobile-only phone image for download sections */
+    mobile_phone_image?: WPImage;
     back_image?: WPImage;
     /** Optional desktop-only background image for Get The App page */
     back_image_desktop?: WPImage;

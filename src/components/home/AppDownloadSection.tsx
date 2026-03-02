@@ -185,12 +185,11 @@ export function AppDownloadSection({
             <Link
               href={bookingUrl}
               target={acf.booking_link?.target || "_self"}
-              className="mt-3 inline-flex items-center gap-2 font-bold text-white transition-colors hover:!text-[#ffda00] focus:outline-none"
-              style={{ fontSize: "45px", lineHeight: "65px" }}
+            className="mt-3 inline-flex items-center gap-2 font-bold text-white transition-colors hover:!text-[#ffda00] focus:outline-none text-[20px] leading-[30px] md:text-[45px] md:leading-[65px]"
             >
               {bookingText}
               <svg
-                className="h-8 w-8 shrink-0"
+              className="h-5 w-5 shrink-0 md:h-8 md:w-8"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -205,7 +204,21 @@ export function AppDownloadSection({
               </svg>
             </Link>
             {description && (
-              <p className="mt-2 text-[14px] text-white/90">{description}</p>
+              <p className="mt-2 text-[14px] text-white/90">
+                {(() => {
+                  const idx = description.indexOf(", ");
+                  if (idx === -1) return description;
+                  const first = description.slice(0, idx + 1);
+                  const rest = description.slice(idx + 2);
+                  return (
+                    <>
+                      {first}
+                      <br />
+                      {rest}
+                    </>
+                  );
+                })()}
+              </p>
             )}
           </div>
         )}
