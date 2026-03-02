@@ -405,7 +405,11 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
           <div className="mb-10 grid gap-x-8 gap-y-1" style={{ gridTemplateColumns: "60% 40%" }}>
             <nav className="flex flex-col gap-2" aria-label="Footer navigation">
               {leftNav.map((item) => {
-                const href = mapWordPressUrlToNextPath(item.page_link?.url);
+                const isFaq =
+                  (item.menu_name || "").trim().toLowerCase() === "faq";
+                const href = isFaq
+                  ? "/#faq"
+                  : mapWordPressUrlToNextPath(item.page_link?.url);
                 return (
                   <Link
                     key={item.menu_name}
@@ -419,7 +423,11 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
             </nav>
             <nav className="flex flex-col gap-2" aria-label="Footer navigation secondary">
               {rightNav.map((item) => {
-                const href = mapWordPressUrlToNextPath(item.page_link?.url);
+                const isFaq =
+                  (item.menu_name || "").trim().toLowerCase() === "faq";
+                const href = isFaq
+                  ? "/#faq"
+                  : mapWordPressUrlToNextPath(item.page_link?.url);
                 return (
                   <Link
                     key={item.menu_name}

@@ -550,6 +550,8 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     if (path.includes("book-a-cleaning")) return "/book-a-cleaning";
     if (path.includes("contact-us")) return "/contact-us";
     if (path.includes("careers")) return "/careers";
+    // Always send any FAQ page link to the FAQ section on the home page
+    if (path.includes("faq")) return "/#faq";
     if (path.includes("terms")) return "/terms-and-conditions";
     if (path.includes("blogs")) return "/blogs";
     // Keep hash for same-page anchors

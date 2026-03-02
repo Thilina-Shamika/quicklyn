@@ -21,7 +21,7 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
   if (!faqs.length) return null;
 
   return (
-    <section className="relative z-0 w-full overflow-hidden bg-[#2a7a7c] pb-16 pt-0">
+    <section id="faq" className="relative z-0 w-full overflow-hidden bg-[#2a7a7c] pb-16 pt-0">
       <div
         className="pointer-events-none absolute inset-0 hidden md:block"
         aria-hidden
