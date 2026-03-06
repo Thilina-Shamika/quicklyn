@@ -36,6 +36,9 @@ yarn-error.log*
 *.swp
 *.swo
 
+# cursor IDE metadata
+.cursor
+
 # vercel
 .vercel
 
