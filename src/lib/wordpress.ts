@@ -550,13 +550,17 @@ export interface WPHeader {
   };
 }
 
-/** Map WordPress menu URLs to Next.js frontend paths (stay on same app). */
+/** Map known WordPress page URLs to Next.js frontend paths. Other / external URLs are left as-is. */
 export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
   if (!wpUrl || typeof wpUrl !== "string") return "/";
   const u = wpUrl.trim();
   if (!u || u === "#") return "/#estimate";
+
   try {
-    const path = new URL(u, "https://x").pathname.toLowerCase().replace(/\/$/, "") || "/";
+    const parsed = new URL(u, "https://x.example");
+    const path = parsed.pathname.toLowerCase().replace(/\/$/, "") || "/";
+
+    // Known internal routes – keep using Next.js paths for these
     if (path === "/home" || path === "/") return "/";
     if (path.includes("our-services")) return "/our-services";
     if (path.includes("our-mission")) return "/our-mission";
@@ -569,10 +573,13 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     if (path.includes("faq")) return "/#faq";
     if (path.includes("terms")) return "/terms-and-conditions";
     if (path.includes("blogs")) return "/blogs";
-    // Keep hash for same-page anchors
-    const hash = new URL(u, "https://x").hash;
+
+    // Keep hash for same-page anchors on the home page
+    const hash = parsed.hash;
     if (hash && path === "/") return `/${hash}`;
-    return path.startsWith("/") ? path : `/${path}`;
+
+    // For any other URL (including external or unknown WP paths), return original URL as-is
+    return u;
   } catch {
     return u.startsWith("#") ? u : u;
   }

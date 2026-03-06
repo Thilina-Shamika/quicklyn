@@ -91,7 +91,8 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const footerMenuColumn1 = [
     { label: "Home", href: "/" },
     { label: "Services", href: "/our-services" },
-    { label: "Book now", href: "/book-a-cleaning" },
+    // Use external booking link from app-link when available
+    { label: "Book now", href: appLink?.acf?.booking_link?.url?.trim() || "/book-a-cleaning" },
     { label: "Our mission", href: "/our-mission" },
     { label: "FAQ", href: "/#faq" },
   ];

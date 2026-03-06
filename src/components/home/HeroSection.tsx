@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { HomePageACF } from "@/types/wordpress";
-import type { WPHeader } from "@/lib/wordpress";
+import type { WPAppLink, WPHeader } from "@/lib/wordpress";
 
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80";
@@ -52,12 +52,16 @@ function HamburgerIcon({ className }: { className?: string }) {
 interface HeroSectionProps {
   data: HomePageACF;
   header?: WPHeader | null;
+  appLink?: WPAppLink | null;
 }
 
-export function HeroSection({ data, header }: HeroSectionProps) {
+export function HeroSection({ data, header, appLink }: HeroSectionProps) {
   const bgUrl = data.background_image?.url || PLACEHOLDER_IMAGE;
   const appStoreUrl = data.appstore?.url ?? "";
   const googlePlayUrl = data.google_play?.url ?? "";
+  const appLinkAcf = appLink?.acf;
+  const googlePlayHref = appLinkAcf?.link_01?.url || "#";
+  const appStoreHref = typeof appLinkAcf?.link_02 === "string" ? appLinkAcf.link_02 : "#";
   const estimateLink = "/book-a-cleaning";
   const [mobileIntroDone, setMobileIntroDone] = useState(false);
   const [desktopGradientFadedOut, setDesktopGradientFadedOut] = useState(false);
@@ -216,7 +220,9 @@ export function HeroSection({ data, header }: HeroSectionProps) {
             <div className="mb-6 mt-8 flex flex-wrap items-center justify-center gap-[14px]">
               {appStoreUrl && (
                 <Link
-                  href="#"
+                  href={appStoreHref || "#"}
+                  target={appLinkAcf?.link_02 ? "_blank" : undefined}
+                  rel={appLinkAcf?.link_02 ? "noopener noreferrer" : undefined}
                   className="relative z-[10] block transition hover:opacity-95"
                 >
                   <Image
@@ -231,7 +237,9 @@ export function HeroSection({ data, header }: HeroSectionProps) {
               )}
               {googlePlayUrl && (
                 <Link
-                  href="#"
+                  href={googlePlayHref || "#"}
+                  target={appLinkAcf?.link_01?.target || (googlePlayHref ? "_blank" : undefined)}
+                  rel={googlePlayHref ? "noopener noreferrer" : undefined}
                   className="relative z-[10] block transition hover:opacity-95"
                 >
                   <Image
@@ -350,7 +358,12 @@ export function HeroSection({ data, header }: HeroSectionProps) {
 
                 <div className="mt-8 flex flex-wrap items-center gap-4 lg:mt-10">
                   {googlePlayUrl && (
-                    <Link href="#" className="transition hover:opacity-95">
+                    <Link
+                      href={googlePlayHref || "#"}
+                      target={appLinkAcf?.link_01?.target || (googlePlayHref ? "_blank" : undefined)}
+                      rel={googlePlayHref ? "noopener noreferrer" : undefined}
+                      className="transition hover:opacity-95"
+                    >
                       <div className="rounded-xl bg-white/90 p-0 shadow-[0_10px_18px_rgba(0,0,0,0.18)]">
                         <Image
                           src={googlePlayUrl}
@@ -364,7 +377,12 @@ export function HeroSection({ data, header }: HeroSectionProps) {
                     </Link>
                   )}
                   {appStoreUrl && (
-                    <Link href="#" className="transition hover:opacity-95">
+                    <Link
+                      href={appStoreHref || "#"}
+                      target={appLinkAcf?.link_02 ? "_blank" : undefined}
+                      rel={appStoreHref ? "noopener noreferrer" : undefined}
+                      className="transition hover:opacity-95"
+                    >
                       <div className="rounded-xl bg-white/90 p-0 shadow-[0_10px_18px_rgba(0,0,0,0.18)]">
                         <Image
                           src={appStoreUrl}

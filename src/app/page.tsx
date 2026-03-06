@@ -41,7 +41,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#195b5d]">
-      <HeroSection data={page.acf} header={header} />
+      <HeroSection data={page.acf} header={header} appLink={appLink} />
       <div className="md:-mt-[100px]">
         <ServicesSection
           background={page.acf.section2_background}

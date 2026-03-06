@@ -25,7 +25,7 @@ export function GetEstimateButton({
   return (
     <Link
       href={targetUrl}
-      className="fixed left-1/2 z-[99999] flex h-12 w-[224px] -translate-x-1/2 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-[#FFDA00] focus:ring-offset-2 focus:ring-offset-[#297476] group"
+      className="fixed left-1/2 z-[99999] flex h-12 w-[224px] -translate-x-1/2 items-center justify-center rounded-full focus:outline-none group"
       style={{
         minWidth: "224px",
         bottom: "max(36px, env(safe-area-inset-bottom, 0px) + 32px)",
