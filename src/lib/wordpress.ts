@@ -550,14 +550,27 @@ export interface WPHeader {
   };
 }
 
-/** Map known WordPress page URLs to Next.js frontend paths. Other / external URLs are left as-is. */
+/** Map known WordPress page URLs for this site to Next.js frontend paths.
+ * Any URL that is clearly external (different host) is left as-is.
+ */
 export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
   if (!wpUrl || typeof wpUrl !== "string") return "/";
   const u = wpUrl.trim();
   if (!u || u === "#") return "/#estimate";
 
   try {
-    const parsed = new URL(u, "https://x.example");
+    const parsed = new URL(u, "https://example.com");
+    const host = parsed.host.toLowerCase();
+    const isKnownWpHost =
+      !host || // relative URLs
+      host.includes("quicklyn-headless.local") ||
+      host.includes("quick.rootholdings.com.mv");
+
+    // If this URL is not on a known WordPress host, treat it as external.
+    if (!isKnownWpHost) {
+      return u;
+    }
+
     const path = parsed.pathname.toLowerCase().replace(/\/$/, "") || "/";
 
     // Known internal routes – keep using Next.js paths for these
@@ -578,7 +591,7 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     const hash = parsed.hash;
     if (hash && path === "/") return `/${hash}`;
 
-    // For any other URL (including external or unknown WP paths), return original URL as-is
+    // For any other WP URL we don't recognize, return the original URL as-is
     return u;
   } catch {
     return u.startsWith("#") ? u : u;

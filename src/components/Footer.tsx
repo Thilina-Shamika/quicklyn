@@ -87,12 +87,23 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const leftNav = navItems.slice(0, 6);
   const rightNav = navItems.slice(6, 12);
 
+  // Resolve "Book now" URL/target from footer navigation when available,
+  // otherwise fall back to app-link booking_link, then internal route.
+  const bookNowNavItem = navItems.find(
+    (item) => (item.menu_name || "").trim().toLowerCase() === "book now",
+  );
+  const bookNowHref =
+    bookNowNavItem?.page_link?.url?.trim() ||
+    appLink?.acf?.booking_link?.url?.trim() ||
+    "/book-a-cleaning";
+  const bookNowTarget =
+    bookNowNavItem?.page_link?.target || appLink?.acf?.booking_link?.target || undefined;
+
   /** Desktop/tablet footer menu order: 3 columns */
   const footerMenuColumn1 = [
     { label: "Home", href: "/" },
     { label: "Services", href: "/our-services" },
-    // Use external booking link from app-link when available
-    { label: "Book now", href: appLink?.acf?.booking_link?.url?.trim() || "/book-a-cleaning" },
+    { label: "Book now", href: bookNowHref, target: bookNowTarget },
     { label: "Our mission", href: "/our-mission" },
     { label: "FAQ", href: "/#faq" },
   ];
@@ -276,8 +287,10 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                 <nav className="flex flex-col gap-3" aria-label="Footer navigation">
                   {footerMenuColumn1.map((item) => (
                     <Link
-                      key={item.href}
+                      key={`${item.label}-${item.href}`}
                       href={item.href}
+                      target={item.target}
+                      rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
                       className="text-[16px] leading-[36px] text-white/90 transition hover:text-white"
                     >
                       {item.label}
