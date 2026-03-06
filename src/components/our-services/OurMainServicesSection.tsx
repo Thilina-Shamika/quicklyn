@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import type { WPService, WPAppLink } from "@/lib/wordpress";
 import { AppDownloadBanner } from "./AppDownloadBanner";
+import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
 
 function getFirstParagraph(text: string): string {
   if (!text?.trim()) return "";
@@ -139,7 +140,7 @@ function ServiceAccordionItem({
               {hasContent(fullDescription) ? (
                 <div
                   className="mb-4 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0"
-                  dangerouslySetInnerHTML={{ __html: fullDescription }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(fullDescription) }}
                 />
               ) : null}
               {image?.url ? (
@@ -176,7 +177,7 @@ function ServiceAccordionItem({
                         </span>
                         <div
                           className="min-w-0 text-sm text-white/90 prose prose-sm max-w-none prose-p:my-2 prose-p:first:mt-0 prose-p:last:mb-0 prose-p:leading-snug whitespace-pre-line [&_p]:whitespace-pre-line"
-                          dangerouslySetInnerHTML={{ __html: supplies! }}
+                          dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(supplies!) }}
                         />
                       </>
                     ) : null}

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/wordpress";
+import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
 
 export default async function BlogArticlePage({
   params,
@@ -51,7 +52,7 @@ export default async function BlogArticlePage({
 
         <div
           className="blog-article-content mt-8"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(post.content) }}
         />
       </article>
     </main>

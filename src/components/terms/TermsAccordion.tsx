@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { TermsListItem } from "@/types/wordpress";
+import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
 
 interface TermsAccordionProps {
   items: TermsListItem[];
@@ -75,7 +76,7 @@ export function TermsAccordion({ items }: TermsAccordionProps) {
                   <div className="border-t border-white/20 px-4 pb-4 pt-2 md:px-5 md:pb-4 md:pt-3">
                     <div
                       className="prose prose-invert max-w-none text-sm leading-relaxed text-white/95 prose-p:mb-2 prose-p:last:mb-0 prose-a:text-[#ffda00] prose-a:underline prose-a:underline-offset-2"
-                      dangerouslySetInnerHTML={{ __html: item.terms }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(item.terms) }}
                     />
                   </div>
                 </div>

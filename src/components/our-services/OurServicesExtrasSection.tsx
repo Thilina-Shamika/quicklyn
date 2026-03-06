@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { ExtrasListItem } from "@/types/wordpress";
+import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
 
 interface OurServicesExtrasSectionProps {
   extras: ExtrasListItem[];
@@ -163,7 +164,7 @@ export function OurServicesExtrasSection({
               [&_li]:mb-1 ${
                 !isExpanded && shouldShowReadMore ? " line-clamp-7" : ""
               }`}
-              dangerouslySetInnerHTML={{ __html: extras_description! }}
+              dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(extras_description!) }}
             />
           )}
 
@@ -331,7 +332,7 @@ export function OurServicesExtrasSection({
             {hasContent(extras_description) && (
               <div
                 className="max-w-none text-[14px] leading-[1.6] text-white/90 [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-5 [&_ul]:mb-3 [&_li]:mb-1 [&_h3]:mb-2 [&_h3]:text-[12px] [&_h3]:font-semibold [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-white"
-                dangerouslySetInnerHTML={{ __html: extras_description! }}
+                dangerouslySetInnerHTML={{ __html: sanitizeWordPressHtml(extras_description!) }}
               />
             )}
           </div>
