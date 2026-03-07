@@ -151,7 +151,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
     <footer
       className={`relative w-full overflow-hidden text-white ${
         isGetTheAppPage ? "z-10 md:mt-0" : isHomePage ? "z-[200] md:!-mt-[28rem] lg:!-mt-[30rem]" : "z-[200] md:-mt-40"
-      } ${isCareersPage ? "z-20 md:-mt-[520px] lg:-mt-[620px]" : ""} ${isContactUsPage ? "md:-mt-48 lg:-mt-64" : ""} ${isOurServicesPage ? "md:-mt-8 lg:-mt-12" : ""} ${isOurMissionPage ? "md:-mt-24 lg:-mt-28" : ""}`}
+      } ${isCareersPage ? "z-20 md:-mt-[520px] lg:-mt-[620px]" : ""} ${isContactUsPage ? "md:-mt-48 lg:-mt-48" : ""} ${isOurServicesPage ? "md:-mt-8 lg:-mt-12" : ""} ${isOurMissionPage ? "md:-mt-24 lg:-mt-28" : ""}`}
     >
       <div className="pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden />
       {footerBgUrl && (
