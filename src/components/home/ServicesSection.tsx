@@ -189,7 +189,7 @@ export function ServicesSection({
     scrollOffsetRef.current = snapped;
     setScrollOffsetPx(snapped);
     setActiveIndex(nearestIndex);
-  }, [services.length, mobileServices.length]);
+  }, [mobileServices.length]);
 
   useEffect(() => {
     scrollOffsetRef.current = scrollOffsetPx;
