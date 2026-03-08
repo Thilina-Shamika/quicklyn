@@ -611,3 +611,19 @@ export async function getHeader(): Promise<WPHeader | null> {
     return null;
   }
 }
+
+/** Favicon from WordPress favicon endpoint (custom post type with ACF favicon image). */
+export async function getFaviconUrl(): Promise<string | null> {
+  try {
+    const res = await fetch(getApiUrl("/favicon?acf_format=standard"), {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as Array<{ acf?: { favicon?: { url?: string } } }>;
+    const first = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    const url = first?.acf?.favicon?.url?.trim();
+    return url || null;
+  } catch {
+    return null;
+  }
+}

@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { getFooter, getAppLink, getHeader, getSocialLinks } from "@/lib/wordpress";
+import { getFooter, getAppLink, getHeader, getSocialLinks, getFaviconUrl } from "@/lib/wordpress";
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Quicklyn | Premium Cleaning Services in NYC",
-  description:
-    "Trusted, vetted cleaning professionals delivering consistent, white-glove service across NYC.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const faviconUrl = await getFaviconUrl();
+  return {
+    title: "Quicklyn | Premium Cleaning Services in NYC",
+    description:
+      "Trusted, vetted cleaning professionals delivering consistent, white-glove service across NYC.",
+    ...(faviconUrl && { icons: { icon: faviconUrl } }),
+  };
+}
 
 export default async function RootLayout({
   children,

@@ -17,11 +17,20 @@ export function ContactForm({ layout = "mobile" }: { layout?: "mobile" | "deskto
     e.preventDefault();
     setStatus("sending");
     try {
-      await new Promise((r) => setTimeout(r, 800));
-      setStatus("sent");
-      setName("");
-      setEmail("");
-      setMessage("");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setStatus("sent");
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
