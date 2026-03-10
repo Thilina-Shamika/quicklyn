@@ -33,7 +33,7 @@ export function TermsAccordion({ items }: TermsAccordionProps) {
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : index)}
-              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-white focus:outline-none focus:ring-0 md:px-5 md:py-3.5 md:focus:ring-2 md:focus:ring-white/30 md:focus:ring-inset"
+              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-white focus:outline-none focus:ring-0 md:px-5 md:py-3.5"
               aria-expanded={isOpen}
               aria-controls={`terms-content-${index}`}
               id={`terms-heading-${index}`}

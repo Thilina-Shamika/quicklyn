@@ -116,6 +116,21 @@ export interface ContactUsPage {
   acf: ContactUsACF;
 }
 
+export interface GiftCardsACF {
+  heading?: string;
+  description?: string;
+  hero_back_image?: WPImage;
+  page_background?: WPImage;
+}
+
+export interface GiftCardsPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content: { rendered: string; protected?: boolean };
+  acf: GiftCardsACF;
+}
+
 export interface CareersACF {
   /** API typo: haeding */
   haeding?: string;
@@ -179,6 +194,16 @@ export interface TermsAndConditionsPage {
   title: { rendered: string };
   content: { rendered: string; protected?: boolean };
   acf: TermsAndConditionsACF;
+}
+
+export type PrivacyPolicyACF = TermsAndConditionsACF;
+
+export interface PrivacyPolicyPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content: { rendered: string; protected?: boolean };
+  acf: PrivacyPolicyACF;
 }
 
 export interface OurMissionTeamItem {

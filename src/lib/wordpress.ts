@@ -7,6 +7,8 @@ import type {
   ContactUsPage,
   CareersPage,
   TermsAndConditionsPage,
+  PrivacyPolicyPage,
+  GiftCardsPage,
   OurMissionPage,
   AboutUsPage,
   BookACleaningPage,
@@ -82,6 +84,20 @@ export async function getCareersPage(): Promise<CareersPage | null> {
   }
 }
 
+export async function getGiftCardsPage(): Promise<GiftCardsPage | null> {
+  try {
+    const res = await fetch(
+      getApiUrl("/pages?slug=gift-cards&acf_format=standard"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as GiftCardsPage[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getTermsPage(): Promise<TermsAndConditionsPage | null> {
   try {
     const res = await fetch(
@@ -90,6 +106,20 @@ export async function getTermsPage(): Promise<TermsAndConditionsPage | null> {
     );
     if (!res.ok) return null;
     const data = (await res.json()) as TermsAndConditionsPage[];
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getPrivacyPolicyPage(): Promise<PrivacyPolicyPage | null> {
+  try {
+    const res = await fetch(
+      getApiUrl("/pages?slug=privacy-policy&acf_format=standard"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as PrivacyPolicyPage[];
     return Array.isArray(data) && data.length > 0 ? data[0] : null;
   } catch {
     return null;
@@ -582,9 +612,11 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     if (path.includes("book-a-cleaning")) return "/book-a-cleaning";
     if (path.includes("contact-us")) return "/contact-us";
     if (path.includes("careers")) return "/careers";
+    if (path.includes("gift-cards")) return "/gift-cards";
     // Always send any FAQ page link to the FAQ section on the home page
     if (path.includes("faq")) return "/#faq";
     if (path.includes("terms")) return "/terms-and-conditions";
+    if (path.includes("privacy-policy")) return "/privacy-policy";
     if (path.includes("blogs")) return "/blogs";
 
     // Keep hash for same-page anchors on the home page
