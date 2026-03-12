@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getGiftCardsPage, getAppLink } from "@/lib/wordpress";
-import { GiftCardsForm } from "@/components/gift-cards/GiftCardsForm";
+import { GiftCardsWidget } from "@/components/gift-cards/GiftCardsWidget";
 import { HomeAppDownloadSection } from "@/components/home/HomeAppDownloadSection";
 
 export const metadata = {
@@ -112,7 +112,7 @@ export default async function GiftCardsPage() {
           </div>
         </section>
 
-        {/* Form + download section with page background */}
+        {/* Widget + download section with page background */}
         <section
           className="w-full px-6 pb-6 lg:px-8 lg:pb-10"
           style={
@@ -130,7 +130,7 @@ export default async function GiftCardsPage() {
           }
         >
           <div className="mx-auto w-full max-w-[1180px]">
-            <GiftCardsForm />
+            <GiftCardsWidget />
           </div>
 
           {/* Download section (same as home, but without its own background) */}
