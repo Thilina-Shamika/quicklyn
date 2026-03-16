@@ -18,9 +18,15 @@ import type {
 import { fallbackHomePage } from "./fallback-home";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL ?? "http://quicklyn-headless.local";
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? "https://quicklyn.com").replace(/\/$/, "");
 
 export function getWordPressUrl(): string {
   return WORDPRESS_URL.replace(/\/$/, "");
+}
+
+/** Frontend base URL for sitemaps, canonical URLs, etc. */
+export function getSiteUrl(): string {
+  return SITE_URL;
 }
 
 export function getApiUrl(path: string): string {
@@ -291,6 +297,195 @@ export async function getPostBySlug(slug: string): Promise<BlogPostSingle | null
     };
   } catch {
     return null;
+  }
+}
+
+/** All post slugs + modified date for sitemap (paginated fetch). */
+export async function getAllPostSlugsForSitemap(): Promise<{ slug: string; modified: string }[]> {
+  const out: { slug: string; modified: string }[] = [];
+  let page = 1;
+  const perPage = 100;
+  while (true) {
+    const res = await fetch(
+      getApiUrl(`/posts?per_page=${perPage}&page=${page}&_fields=slug,modified`),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) break;
+    const data = (await res.json()) as Array<{ slug?: string; modified?: string }>;
+    if (!Array.isArray(data) || data.length === 0) break;
+    for (const p of data) {
+      const slug = p.slug ?? String(p);
+      if (slug && typeof slug === "string") out.push({ slug, modified: p.modified ?? "" });
+    }
+    if (data.length < perPage) break;
+    page++;
+  }
+  return out;
+}
+
+export interface WPCategorySitemap {
+  slug: string;
+}
+
+export async function getCategoriesForSitemap(): Promise<WPCategorySitemap[]> {
+  try {
+    const res = await fetch(
+      getApiUrl("/categories?per_page=100&_fields=slug"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as Array<{ slug?: string }>;
+    if (!Array.isArray(data)) return [];
+    return data
+      .filter((c) => c.slug && c.slug !== "uncategorized")
+      .map((c) => ({ slug: c.slug! }));
+  } catch {
+    return [];
+  }
+}
+
+export interface WPTagSitemap {
+  slug: string;
+}
+
+export async function getTagsForSitemap(): Promise<WPTagSitemap[]> {
+  try {
+    const res = await fetch(
+      getApiUrl("/tags?per_page=100&_fields=slug"),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as Array<{ slug?: string }>;
+    if (!Array.isArray(data)) return [];
+    return data.map((c) => ({ slug: c.slug ?? "" })).filter((t) => t.slug);
+  } catch {
+    return [];
+  }
+}
+
+/** Fetch posts filtered by category ID (for category archive pages). */
+export async function getPostsByCategoryId(categoryId: number): Promise<BlogPostItem[]> {
+  try {
+    const res = await fetch(
+      getApiUrl(`/posts?categories=${categoryId}&acf_format=standard&_embed&per_page=50`),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as WPPostRaw[];
+    if (!Array.isArray(data)) return [];
+    return data.map((post) => {
+      const media = post._embedded?.["wp:featuredmedia"]?.[0];
+      const shortDesc =
+        post.acf?.short_description?.trim() ||
+        stripHtml(post.excerpt?.rendered ?? "").slice(0, 200);
+      const readTime = post.acf?.how_many_minutes_to_read?.trim() || "— Min Read";
+      return {
+        id: post.id,
+        slug: post.slug ?? String(post.id),
+        title: stripHtml(post.title?.rendered ?? ""),
+        link: post.link ?? "#",
+        date: post.date,
+        dateFormatted: formatPostDate(post.date),
+        excerpt: stripHtml(post.excerpt?.rendered ?? ""),
+        shortDescription: shortDesc,
+        readTime,
+        featuredImageUrl: media?.source_url,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+/** Fetch posts filtered by tag ID (for tag archive pages). */
+export async function getPostsByTagId(tagId: number): Promise<BlogPostItem[]> {
+  try {
+    const res = await fetch(
+      getApiUrl(`/posts?tags=${tagId}&acf_format=standard&_embed&per_page=50`),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as WPPostRaw[];
+    if (!Array.isArray(data)) return [];
+    return data.map((post) => {
+      const media = post._embedded?.["wp:featuredmedia"]?.[0];
+      const shortDesc =
+        post.acf?.short_description?.trim() ||
+        stripHtml(post.excerpt?.rendered ?? "").slice(0, 200);
+      const readTime = post.acf?.how_many_minutes_to_read?.trim() || "— Min Read";
+      return {
+        id: post.id,
+        slug: post.slug ?? String(post.id),
+        title: stripHtml(post.title?.rendered ?? ""),
+        link: post.link ?? "#",
+        date: post.date,
+        dateFormatted: formatPostDate(post.date),
+        excerpt: stripHtml(post.excerpt?.rendered ?? ""),
+        shortDescription: shortDesc,
+        readTime,
+        featuredImageUrl: media?.source_url,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export interface WPCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export async function getCategoryBySlug(slug: string): Promise<WPCategory | null> {
+  try {
+    const res = await fetch(getApiUrl(`/categories?slug=${encodeURIComponent(slug)}`), {
+      next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as Array<{ id: number; name: string; slug: string }>;
+    const cat = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    return cat ? { id: cat.id, name: cat.name, slug: cat.slug } : null;
+  } catch {
+    return null;
+  }
+}
+
+export interface WPTag {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export async function getTagBySlug(slug: string): Promise<WPTag | null> {
+  try {
+    const res = await fetch(getApiUrl(`/tags?slug=${encodeURIComponent(slug)}`), {
+      next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as Array<{ id: number; name: string; slug: string }>;
+    const tag = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    return tag ? { id: tag.id, name: tag.name, slug: tag.slug } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** WooCommerce products if available. Returns empty if no products API. */
+export async function getProductsForSitemap(): Promise<{ slug: string; modified: string }[]> {
+  try {
+    const base = getWordPressUrl();
+    const res = await fetch(`${base}/wp-json/wc/store/v1/products?per_page=100`, {
+      next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as Array<{ slug?: string; date_modified?: string }>;
+    if (!Array.isArray(data)) return [];
+    return data
+      .filter((p) => p.slug)
+      .map((p) => ({ slug: p.slug!, modified: p.date_modified ?? "" }));
+  } catch {
+    return [];
   }
 }
 
