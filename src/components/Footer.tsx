@@ -260,22 +260,23 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                   onSubmit={(e) => e.preventDefault()}
                   data-lpignore="true"
                   data-form-type="other"
+                  suppressHydrationWarning
                 >
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-[72%] min-w-0 border-0 bg-transparent px-3 py-2 text-[11px] text-white placeholder:text-white/45 focus:outline-none focus:ring-0"
-                    aria-label="Email for newsletter"
-                    autoComplete="off"
-                    data-lpignore="true"
-                  />
-                  <button
-                    type="submit"
-                    className="w-[28%] shrink-0 border-l border-white/35 bg-white px-2 py-2 text-[9px] font-medium uppercase tracking-wide text-[#141414]"
-                  >
-                    Submit
-                  </button>
-                </form>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      className="w-[72%] min-w-0 border-0 bg-transparent px-3 py-2 text-[11px] text-white placeholder:text-white/45 focus:outline-none focus:ring-0"
+                      aria-label="Email for newsletter"
+                      autoComplete="off"
+                      data-lpignore="true"
+                    />
+                    <button
+                      type="submit"
+                      className="w-[28%] shrink-0 border-l border-white/35 bg-white px-2 py-2 text-[9px] font-medium uppercase tracking-wide text-[#141414]"
+                    >
+                      Submit
+                    </button>
+                  </form>
                 <p className="mt-7 max-w-[240px] text-[10px] text-white/55">{copyrightText}</p>
               </div>
             </div>

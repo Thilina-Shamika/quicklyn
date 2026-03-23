@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { CounterItem, WPImage, WhyListItem } from "@/types/wordpress";
 import type { WPService } from "@/lib/wordpress";
+import { WhyQuicklynSection } from "@/components/home/WhyQuicklynSection";
 
 interface ServicesSectionProps {
   background?: WPImage;
@@ -15,7 +16,6 @@ interface ServicesSectionProps {
   services: WPService[];
   sectionHeading?: string;
   whyList?: WhyListItem[];
-  whyIcon?: WPImage;
 }
 
 export function ServicesSection({
@@ -25,11 +25,9 @@ export function ServicesSection({
   services,
   sectionHeading,
   whyList = [],
-  whyIcon,
 }: ServicesSectionProps) {
   const bgUrl = background?.url;
   const bgDesktopUrl = backgroundDesktop?.url || bgUrl;
-  const whyIconUrl = whyIcon?.url;
   const isSignatureService = (service: WPService) => {
     const normalizedId = String(service.acf?.id || service.slug || "")
       .toLowerCase()
@@ -93,17 +91,6 @@ export function ServicesSection({
   const touchIdRef = useRef<number | null>(null);
   const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
   const maxScrollRef = useRef(0);
-  const [openWhyIndex, setOpenWhyIndex] = useState<number | null>(null);
-  const whyDesktopSectionRef = useRef<HTMLDivElement | null>(null);
-  const whyDesktopViewportRef = useRef<HTMLDivElement | null>(null);
-  const whyDesktopTrackRef = useRef<HTMLDivElement | null>(null);
-  const [whyDesktopTranslateX, setWhyDesktopTranslateX] = useState(0);
-  const [whyDesktopOuterHeight, setWhyDesktopOuterHeight] = useState<number | null>(null);
-  const whyDesktopProgressRef = useRef(0);
-  const whyDesktopMaxTranslateRef = useRef(0);
-  const whyDesktopTouchYRef = useRef<number | null>(null);
-  const whyDesktopLockActiveRef = useRef(false);
-  const whyDesktopLockedScrollYRef = useRef<number | null>(null);
 
   const gap = 20;
   const mobileServices = orderedMobileServices;
@@ -270,165 +257,6 @@ export function ServicesSection({
       document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
   }, [snapToNearest]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const setWhyDesktopProgress = (next: number) => {
-      const max = Math.max(0, whyDesktopMaxTranslateRef.current);
-      const clamped = Math.max(0, Math.min(max, next));
-      whyDesktopProgressRef.current = clamped;
-      setWhyDesktopTranslateX(-clamped);
-      return clamped;
-    };
-
-    const updateDesktopWhyMeasurements = () => {
-      if (window.innerWidth < 768) {
-        setBodyLock(false);
-        whyDesktopMaxTranslateRef.current = 0;
-        setWhyDesktopTranslateX(0);
-        setWhyDesktopOuterHeight(null);
-        return;
-      }
-      const viewportEl = whyDesktopViewportRef.current;
-      const trackEl = whyDesktopTrackRef.current;
-      if (!viewportEl || !trackEl) return;
-
-      const maxTranslate = Math.max(0, trackEl.scrollWidth - viewportEl.clientWidth);
-      whyDesktopMaxTranslateRef.current = maxTranslate;
-      setWhyDesktopOuterHeight(window.innerHeight);
-      setWhyDesktopProgress(whyDesktopProgressRef.current);
-    };
-
-    const setBodyLock = (locked: boolean) => {
-      if (whyDesktopLockActiveRef.current === locked) return;
-      whyDesktopLockActiveRef.current = locked;
-      if (locked) {
-        whyDesktopLockedScrollYRef.current = window.scrollY;
-        document.documentElement.style.overflow = "hidden";
-        document.body.style.overflow = "hidden";
-        document.body.style.overscrollBehavior = "none";
-      } else {
-        document.documentElement.style.overflow = "";
-        document.body.style.overflow = "";
-        document.body.style.overscrollBehavior = "";
-        whyDesktopLockedScrollYRef.current = null;
-      }
-    };
-
-    const getLockState = () => {
-      if (window.innerWidth < 768) {
-        return { canLock: false, rectTop: 0, rectBottom: 0, pinned: false };
-      }
-      const sectionEl = whyDesktopSectionRef.current;
-      if (!sectionEl) {
-        return { canLock: false, rectTop: 0, rectBottom: 0, pinned: false };
-      }
-      const rect = sectionEl.getBoundingClientRect();
-      const pinned = rect.top <= 0 && rect.bottom >= window.innerHeight;
-      // Enter lock a little before pin so we can snap the section to the top and start horizontal motion.
-      const nearEntry =
-        rect.top <= Math.max(120, window.innerHeight * 0.22) &&
-        rect.bottom > window.innerHeight * 0.8;
-      return { canLock: nearEntry, rectTop: rect.top, rectBottom: rect.bottom, pinned };
-    };
-
-    const alignSectionToTop = (rectTop: number) => {
-      if (Math.abs(rectTop) < 1) return;
-      window.scrollTo({ top: window.scrollY + rectTop, behavior: "auto" });
-    };
-
-    const lockSection = (rectTop: number) => {
-      alignSectionToTop(rectTop);
-      setBodyLock(true);
-      // Re-align after lock styles apply to avoid 1-frame drift on some browsers.
-      requestAnimationFrame(() => {
-        const sectionEl = whyDesktopSectionRef.current;
-        if (!sectionEl) return;
-        const rect = sectionEl.getBoundingClientRect();
-        if (Math.abs(rect.top) > 0.5) {
-          window.scrollTo({ top: window.scrollY + rect.top, behavior: "auto" });
-        }
-      });
-    };
-
-    const consumeDelta = (deltaY: number) => {
-      const lockState = getLockState();
-      const max = whyDesktopMaxTranslateRef.current;
-      const current = whyDesktopProgressRef.current;
-      if (max <= 0 || !lockState.canLock) {
-        setBodyLock(false);
-        return false;
-      }
-
-      if (deltaY > 0 && current < max) {
-        if (!whyDesktopLockActiveRef.current) lockSection(lockState.rectTop);
-        setWhyDesktopProgress(current + deltaY * 1.05);
-        return true;
-      }
-      if (deltaY < 0 && current > 0) {
-        if (!whyDesktopLockActiveRef.current) lockSection(lockState.rectTop);
-        setWhyDesktopProgress(current + deltaY * 1.05);
-        return true;
-      }
-
-      setBodyLock(false);
-      return false;
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (consumeDelta(e.deltaY)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      whyDesktopTouchYRef.current = e.touches[0].clientY;
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      const lastY = whyDesktopTouchYRef.current;
-      const currentY = e.touches[0].clientY;
-      if (lastY == null) {
-        whyDesktopTouchYRef.current = currentY;
-        return;
-      }
-      const deltaY = lastY - currentY;
-      if (consumeDelta(deltaY * 1.2)) {
-        e.preventDefault();
-        e.stopPropagation();
-        whyDesktopTouchYRef.current = currentY;
-      } else {
-        whyDesktopTouchYRef.current = currentY;
-      }
-    };
-
-    const onTouchEnd = () => {
-      whyDesktopTouchYRef.current = null;
-    };
-
-    updateDesktopWhyMeasurements();
-
-    window.addEventListener("resize", updateDesktopWhyMeasurements);
-    document.addEventListener("wheel", onWheel, { passive: false, capture: true });
-    document.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
-    document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
-    document.addEventListener("touchend", onTouchEnd, { passive: true, capture: true });
-    document.addEventListener("touchcancel", onTouchEnd, { passive: true, capture: true });
-
-    return () => {
-      window.removeEventListener("resize", updateDesktopWhyMeasurements);
-      setBodyLock(false);
-      document.removeEventListener("wheel", onWheel as EventListener, true);
-      document.removeEventListener("touchstart", onTouchStart as EventListener, true);
-      document.removeEventListener("touchmove", onTouchMove as EventListener, true);
-      document.removeEventListener("touchend", onTouchEnd as EventListener, true);
-      document.removeEventListener("touchcancel", onTouchEnd as EventListener, true);
-    };
-  }, [whyList.length]);
 
   return (
     <section className="relative z-20 -mt-[10vh] w-full overflow-x-hidden overflow-y-visible bg-transparent pb-16 pt-[100px] md:-mt-[260px] md:pt-[120px]">
@@ -834,188 +662,14 @@ export function ServicesSection({
           </div>
         )}
 
-        {/* Why Quicklyn list (3rd section content) */}
+        {/* Why Quicklyn - inside services section so background image shows through */}
         {(sectionHeading || whyList.length > 0) && (
-          <>
-          <div className="mt-16 w-full px-6 md:hidden">
-            {sectionHeading && (
-<h2 className="mb-4 text-center text-[36px] font-semibold leading-snug text-white">
-              {sectionHeading}
-            </h2>
-            )}
-
-            <div className="mx-auto w-full max-w-sm space-y-3 pt-5 pb-0 pr-[20px]">
-              {whyList.map((item, index) => {
-                const isLast = index === whyList.length - 1;
-                const isOpen = openWhyIndex === index;
-                const iconUrl = item.icon?.url;
-
-                return (
-                  <div
-                    key={`${item.list_heading}-${index}`}
-                    className={`flex items-stretch gap-4 ${isOpen && !isLast ? "mb-9" : ""}`}
-                  >
-                    {/* Icon + connecting line */}
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-[80px] w-[80px] flex-shrink-0 items-center justify-center rounded-full p-[20px] shadow-lg" style={{ backgroundColor: "#348284" }}>
-                        {iconUrl && (
-                          <Image
-                            src={iconUrl}
-                            alt={item.icon?.alt || item.list_heading}
-                            width={40}
-                            height={40}
-                            className="h-10 w-10 object-contain"
-                            unoptimized={
-                            iconUrl.includes("quicklyn-headless.local") ||
-                            iconUrl.includes("quick.rootholdings")
-                          }
-                          />
-                        )}
-                      </div>
-                      {!isLast && (
-                        <div
-                          className="mt-2 min-h-[40px] flex-1 w-0 border-l-2 border-dashed border-white transition-all duration-300"
-                          aria-hidden
-                        />
-                      )}
-                    </div>
-
-                    {/* Text */}
-                    <div className="flex-1 text-left">
-                      <p className="text-[20px] font-normal leading-[25px] text-white">
-                        {item.list_heading}
-                      </p>
-                      {!isOpen && (
-                        <button
-                          type="button"
-                          className="mt-1 text-[13px] font-normal text-white/60 underline-offset-2 hover:underline"
-                          onClick={() =>
-                            setOpenWhyIndex(isOpen ? null : index)
-                          }
-                        >
-                          Learn More...
-                        </button>
-                      )}
-                      <div
-                        className={`overflow-hidden transition-all duration-300 ${
-                          isOpen ? "mt-2 max-h-[400px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
-                        aria-hidden={!isOpen}
-                      >
-                        {item.list_description && (
-                          <p className="text-[14px] leading-relaxed text-white/80">
-                            {item.list_description}
-                          </p>
-                        )}
-                        {isOpen && (
-                          <button
-                            type="button"
-                            className="mt-2 text-[13px] font-normal text-white/60 underline-offset-2 hover:underline"
-                            onClick={() => setOpenWhyIndex(null)}
-                          >
-                            See less
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="mt-16 w-full md:mt-20">
+            <WhyQuicklynSection
+              heading={sectionHeading ? `${sectionHeading}?` : "Why Quicklyn?"}
+              items={whyList}
+            />
           </div>
-          <div
-            ref={whyDesktopSectionRef}
-            className="relative mt-16 hidden w-full pt-[120px] pb-12 md:mt-0 md:block"
-          >
-            <div className="sticky top-0 h-[80vh]">
-              <div className="mx-auto h-full w-screen max-w-none px-0">
-                <div className="relative h-full">
-                  {/* Centered wrapper to align left content with nav width */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="mx-auto flex h-full w-full max-w-[1280px] px-8 lg:px-6">
-                      <div className="relative h-full w-[42%] min-w-[300px] max-w-[470px]">
-                        <div className="pointer-events-auto absolute top-1/2 left-0 z-20 w-full -translate-y-1/2">
-                          <div className="relative flex flex-col justify-center pl-4 pr-10 lg:pl-6 lg:pr-16">
-                            <div className="mb-6 lg:mb-8">
-                              {whyIconUrl ? (
-                                <Image
-                                  src={whyIconUrl}
-                                  alt={whyIcon?.alt || "Why Quicklyn icon"}
-                                  width={320}
-                                  height={320}
-                                  className="block h-[260px] w-[260px] object-contain opacity-95 lg:h-[340px] lg:w-[340px]"
-                                  unoptimized={
-                                    whyIconUrl.includes("quicklyn-headless.local") ||
-                                    whyIconUrl.includes("quick.rootholdings")
-                                  }
-                                />
-                              ) : (
-                                <svg
-                                  viewBox="0 0 128 128"
-                                  className="block h-[260px] w-[260px] text-[#0f4a4d]/80 lg:h-[340px] lg:w-[340px]"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="6"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  aria-hidden
-                                >
-                                  <circle cx="54" cy="54" r="26" />
-                                  <path d="M73 73l28 28" />
-                                  <path d="M34 76c6-9 14-13 20-13s14 4 20 13" />
-                                  <circle cx="54" cy="46" r="6" />
-                                  <path d="M22 86v-6c0-7 5-12 12-12h3" />
-                                  <path d="M86 68h8c7 0 12 5 12 12v6" />
-                                </svg>
-                              )}
-                            </div>
-                            <div className="inline-block rounded-[40px] -mt-8">
-                              <h3 className="hero-text-shadow text-left text-[52px] font-semibold leading-[0.95] tracking-[-0.03em] text-white lg:text-[76px]">
-                                <span className="block">Why</span>
-                                <span className="block">
-                                  {(sectionHeading || "Quicklyn").replace(/^Why\s+/i, "")}?
-                                </span>
-                              </h3>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Full-width cards on the right */}
-                  <div className="relative z-10 flex h-full items-center">
-                    <div
-                      ref={whyDesktopViewportRef}
-                      className="relative ml-[34%] w-[66%] overflow-hidden"
-                    >
-                      <div
-                        ref={whyDesktopTrackRef}
-                        className="flex will-change-transform pl-[34%] lg:pl-[38%]"
-                        style={{ transform: `translate3d(${whyDesktopTranslateX}px, 0, 0)` }}
-                      >
-                        {whyList.map((item, index) => (
-                          <article
-                            key={`why-desktop-${item.list_heading}-${index}`}
-                            className="flex h-[420px] w-[320px] flex-shrink-0 flex-col justify-start border border-white/25 px-6 py-8 text-left text-white lg:h-[500px] lg:w-[380px] lg:px-10 lg:py-10"
-                          >
-                            <h4 className="text-[22px] font-semibold leading-tight text-white lg:text-[28px]">
-                              {item.list_heading}
-                            </h4>
-                            <p className="mt-auto text-[14px] leading-relaxed text-white/90 lg:text-[16px]">
-                              {item.list_description}
-                            </p>
-                          </article>
-                        ))}
-                        <div className="h-[420px] w-[220px] flex-shrink-0 border-y border-transparent lg:h-[500px] lg:w-[260px]" aria-hidden />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          </>
         )}
       </div>
     </section>

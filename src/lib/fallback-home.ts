@@ -69,13 +69,25 @@ export const fallbackHomePage: WPPage = {
     why_list: [
       {
         acf_fc_layout: "list_points",
-        list_heading: "Pay for Time, Not Tasks",
+        list_heading: "Pay For Time, Not Tasks",
         list_description:
           "Your online price is an estimate. Final pricing is based on the actual time required to complete the job.",
       },
       {
         acf_fc_layout: "list_points",
-        list_heading: "Smart Pricing",
+        list_heading: "Background Checked Team",
+        list_description:
+          "Every Quicklyn professional is thoroughly vetted and background-checked for your peace of mind.",
+      },
+      {
+        acf_fc_layout: "list_points",
+        list_heading: "Easy Booking",
+        list_description:
+          "Book in minutes through our app or website. Choose your time, add extras, and we handle the rest.",
+      },
+      {
+        acf_fc_layout: "list_points",
+        list_heading: "Smarter Savings",
         list_description:
           "Save compared to average NYC rates without compromising on quality or consistency.",
       },

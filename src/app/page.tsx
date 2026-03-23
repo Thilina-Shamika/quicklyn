@@ -50,7 +50,6 @@ export default async function HomePage() {
           services={services}
           sectionHeading={page.acf.section_heading}
           whyList={page.acf.why_list}
-          whyIcon={page.acf.why_icon}
         />
       </div>
       <ServiceAreasSection data={page.acf} />
