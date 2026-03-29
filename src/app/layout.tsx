@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getFooter, getAppLink, getHeader, getSocialLinks, getFaviconUrl } from "@/lib/wordpress";
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,6 +29,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body
         className="font-sans antialiased"
         style={
