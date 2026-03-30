@@ -12,10 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const defaultTitle = `${SITE_NAME} | Premium Cleaning Services in NYC`;
   return {
     metadataBase: getMetadataBase(),
-    title: {
-      default: defaultTitle,
-      template: "%s",
-    },
+    /** Plain default; child routes override. Avoid title template merging oddities in Google. */
+    title: defaultTitle,
     description: DEFAULT_DESCRIPTION,
     alternates: { canonical: "/" },
     robots: { index: true, follow: true },

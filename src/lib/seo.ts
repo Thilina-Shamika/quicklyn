@@ -18,6 +18,27 @@ type PageMetaInput = {
   index?: boolean;
 };
 
+/** Avoid "Quicklyn | Quicklyn" and duplicate brand suffixes (bad for Google sitelinks). */
+export function formatDocumentTitle(raw: string): string {
+  const t = raw.trim();
+  if (!t) return SITE_NAME;
+  const brandSuffix = ` | ${SITE_NAME}`;
+  // WordPress may already send "Page Title | Quicklyn"
+  if (t.toLowerCase().endsWith(brandSuffix.toLowerCase())) return t;
+  // Single-word brand only → give a real page label
+  if (t === SITE_NAME) return `${SITE_NAME} | Home`;
+  return `${t}${brandSuffix}`;
+}
+
+/** Blog / CMS titles: never duplicate "| Quicklyn". */
+export function formatArticleTitle(postTitle: string): string {
+  const t = postTitle.trim();
+  if (!t) return `Blog | ${SITE_NAME}`;
+  if (/\|\s*Quicklyn\s*$/i.test(t)) return t;
+  if (t === SITE_NAME) return `${SITE_NAME} | Blog`;
+  return `${t} | ${SITE_NAME}`;
+}
+
 export function buildPageMetadata({
   title,
   description,
@@ -26,7 +47,7 @@ export function buildPageMetadata({
 }: PageMetaInput): Metadata {
   const base = getSiteUrl();
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
-  const fullTitle = title.includes("Quicklyn") ? title : `${title} | ${SITE_NAME}`;
+  const fullTitle = formatDocumentTitle(title);
 
   return {
     title: fullTitle,

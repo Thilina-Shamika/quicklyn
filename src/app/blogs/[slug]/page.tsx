@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/wordpress";
 import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
-import { getMetadataBase, SITE_NAME } from "@/lib/seo";
+import { formatArticleTitle, getMetadataBase, SITE_NAME } from "@/lib/seo";
 
 function excerptFromHtml(html: string, max = 160): string {
   const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -24,7 +24,7 @@ export async function generateMetadata({
   const path = `/blogs/${post.slug}`;
   const base = getMetadataBase();
   const url = new URL(path, base);
-  const title = `${post.title} | ${SITE_NAME}`;
+  const title = formatArticleTitle(post.title);
 
   return {
     title,
