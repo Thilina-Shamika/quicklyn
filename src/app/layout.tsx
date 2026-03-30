@@ -3,14 +3,35 @@ import { getFooter, getAppLink, getHeader, getSocialLinks, getFaviconUrl } from 
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { OrganizationJsonLd } from "@/components/seo/OrganizationJsonLd";
+import { DEFAULT_DESCRIPTION, getMetadataBase, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const faviconUrl = await getFaviconUrl();
+  const defaultTitle = `${SITE_NAME} | Premium Cleaning Services in NYC`;
   return {
-    title: "Quicklyn | Premium Cleaning Services in NYC",
-    description:
-      "Trusted, vetted cleaning professionals delivering consistent, white-glove service across NYC.",
+    metadataBase: getMetadataBase(),
+    title: {
+      default: defaultTitle,
+      template: "%s",
+    },
+    description: DEFAULT_DESCRIPTION,
+    alternates: { canonical: "/" },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/",
+      siteName: SITE_NAME,
+      title: defaultTitle,
+      description: DEFAULT_DESCRIPTION,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: defaultTitle,
+      description: DEFAULT_DESCRIPTION,
+    },
     ...(faviconUrl && { icons: { icon: faviconUrl } }),
   };
 }
@@ -50,6 +71,7 @@ export default async function RootLayout({
             : undefined
         }
       >
+        <OrganizationJsonLd />
         <GlobalHeader header={header} />
         {children}
         <Footer data={footer} appLink={appLink} socialLinks={socialLinks} />

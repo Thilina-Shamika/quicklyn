@@ -1,3 +1,4 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getBookACleaningPage } from "@/lib/wordpress";
 import type {
   BookACleaningApartmentType,
@@ -7,11 +8,12 @@ import type {
 import { BookACleaningForm } from "@/components/book-a-cleaning/BookACleaningForm";
 import { ContactPageContent } from "@/components/contact/ContactPageContent";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Book a cleaning | Quicklyn",
   description:
     "Reserve and pay online. All in one place. Get an estimate for your cleaning.",
-};
+  path: "/book-a-cleaning",
+});
 
 export default async function BookACleaningPage() {
   const page = await getBookACleaningPage();

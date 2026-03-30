@@ -1,8 +1,53 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/wordpress";
 import { sanitizeWordPressHtml } from "@/lib/sanitizeHtml";
+import { getMetadataBase, SITE_NAME } from "@/lib/seo";
+
+function excerptFromHtml(html: string, max = 160): string {
+  const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return { title: "Blog" };
+
+  const description = excerptFromHtml(post.content);
+  const path = `/blogs/${post.slug}`;
+  const base = getMetadataBase();
+  const url = new URL(path, base);
+  const title = `${post.title} | ${SITE_NAME}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url.toString() },
+    openGraph: {
+      type: "article",
+      url: url.toString(),
+      title,
+      description,
+      siteName: SITE_NAME,
+      locale: "en_US",
+      publishedTime: post.date,
+      ...(post.featuredImageUrl && { images: [{ url: post.featuredImageUrl, alt: post.title }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(post.featuredImageUrl && { images: [post.featuredImageUrl] }),
+    },
+  };
+}
 
 export default async function BlogArticlePage({
   params,
@@ -30,7 +75,7 @@ export default async function BlogArticlePage({
           <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
             <Image
               src={post.featuredImageUrl}
-              alt=""
+              alt={post.title}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 896px"

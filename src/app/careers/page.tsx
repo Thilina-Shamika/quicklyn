@@ -1,5 +1,13 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getCareersPage } from "@/lib/wordpress";
 import { CareersContent } from "@/components/careers/CareersContent";
+
+export const metadata = buildPageMetadata({
+  title: "Careers | Quicklyn",
+  description:
+    "Join the Quicklyn team. Explore career opportunities in NYC home cleaning and operations.",
+  path: "/careers",
+});
 
 export default async function CareersPage() {
   const page = await getCareersPage();

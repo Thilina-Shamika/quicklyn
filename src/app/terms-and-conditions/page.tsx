@@ -1,10 +1,12 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getTermsPage } from "@/lib/wordpress";
 import { TermsAccordion } from "@/components/terms/TermsAccordion";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Terms & Conditions | Quicklyn",
   description: "Terms and conditions for Quicklyn cleaning services.",
-};
+  path: "/terms-and-conditions",
+});
 
 export default async function TermsAndConditionsPage() {
   const page = await getTermsPage();

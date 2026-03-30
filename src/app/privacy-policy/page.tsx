@@ -1,10 +1,12 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getPrivacyPolicyPage } from "@/lib/wordpress";
 import { TermsAccordion } from "@/components/terms/TermsAccordion";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Privacy Policy | Quicklyn",
   description: "Privacy policy for Quicklyn cleaning services.",
-};
+  path: "/privacy-policy",
+});
 
 export default async function PrivacyPolicyPage() {
   const page = await getPrivacyPolicyPage();

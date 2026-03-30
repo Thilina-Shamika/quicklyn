@@ -1,12 +1,14 @@
+import { buildPageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { getGiftCardsPage, getAppLink } from "@/lib/wordpress";
 import { GiftCardsWidget } from "@/components/gift-cards/GiftCardsWidget";
 import { HomeAppDownloadSection } from "@/components/home/HomeAppDownloadSection";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Gift Cards | Quicklyn",
   description: "Send a Quicklyn gift card — the perfect present for a spotless home.",
-};
+  path: "/gift-cards",
+});
 
 export default async function GiftCardsPage() {
   const [page, appLink] = await Promise.all([getGiftCardsPage(), getAppLink()]);

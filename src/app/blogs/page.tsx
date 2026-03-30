@@ -1,9 +1,17 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getPosts } from "@/lib/wordpress";
 import { BlogCard } from "@/components/blogs/BlogCard";
 
 const BLOG_TITLE = "Blog";
 const BLOG_SUBTITLE =
   "Articles, Guides, And Home Care Insights For An Easier Home.";
+
+export const metadata = buildPageMetadata({
+  title: "Blog | Quicklyn",
+  description:
+    "Cleaning tips, home care guides, and insights from Quicklyn — NYC’s premium cleaning service.",
+  path: "/blogs",
+});
 
 export default async function BlogsPage() {
   const posts = await getPosts();

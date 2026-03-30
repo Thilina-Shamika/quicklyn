@@ -1,3 +1,4 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getAboutUsPage, getHeader } from "@/lib/wordpress";
 import type { AboutUsFeatureItem, AboutUsTeamMember } from "@/types/wordpress";
 import { AboutUsScrollSection } from "@/components/about-us/AboutUsScrollSection";
@@ -5,11 +6,12 @@ import { AboutUsDesktopSection } from "@/components/about-us/AboutUsDesktopSecti
 import { AboutUsExecutiveTeam } from "@/components/about-us/AboutUsExecutiveTeam";
 import { AboutUsInvestorRelations } from "@/components/about-us/AboutUsInvestorRelations";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "About us | Quicklyn",
   description:
     "Quicklyn is a technology-driven platform focused on making everyday services faster, more reliable, and easier to access.",
-};
+  path: "/about-us",
+});
 
 export default async function AboutUsPage() {
   const [page, header] = await Promise.all([

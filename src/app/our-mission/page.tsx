@@ -1,3 +1,4 @@
+import { buildPageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import {
   getOurMissionPage,
@@ -18,11 +19,12 @@ import { OurTeamSection } from "@/components/our-mission/OurTeamSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { HomeAppDownloadSection } from "@/components/home/HomeAppDownloadSection";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Our Mission | Quicklyn",
   description:
     "Behind Quicklyn — our mission to set a new standard in home services.",
-};
+  path: "/our-mission",
+});
 
 export default async function OurMissionPage() {
   const [page, header, homePage, testimonials, appLink] = await Promise.all([

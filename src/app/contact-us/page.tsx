@@ -1,3 +1,4 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getContactUsPage, getSocialLinks } from "@/lib/wordpress";
 import type { WPSocialLink } from "@/lib/wordpress";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -33,6 +34,13 @@ function ContactSocialIcon({ slug, className }: { slug: string; className?: stri
     </svg>
   );
 }
+
+export const metadata = buildPageMetadata({
+  title: "Contact Us | Quicklyn",
+  description:
+    "Get in touch with Quicklyn — questions, support, or booking help for NYC cleaning services.",
+  path: "/contact-us",
+});
 
 export default async function ContactUsPage() {
   const [page, socialLinks] = await Promise.all([

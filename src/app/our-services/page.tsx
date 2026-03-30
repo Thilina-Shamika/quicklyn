@@ -1,3 +1,4 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getOurServicesPage, getServices, getAppLink, getEstimateConfig } from "@/lib/wordpress";
 import { OurServicesHero } from "@/components/our-services/OurServicesHero";
 import { OurMainServicesSection } from "@/components/our-services/OurMainServicesSection";
@@ -5,6 +6,13 @@ import { OurServicesExtrasSection } from "@/components/our-services/OurServicesE
 import { OurServicesFeatureListSection } from "@/components/our-services/OurServicesFeatureListSection";
 import { HomeAppDownloadSection } from "@/components/home/HomeAppDownloadSection";
 import { GetEstimateButton } from "@/components/GetEstimateButton";
+
+export const metadata = buildPageMetadata({
+  title: "Our Services | Quicklyn",
+  description:
+    "Apartment cleaning, deep cleaning, move-in/out, Airbnb turnover, and Signature Pro — professional cleaning across NYC.",
+  path: "/our-services",
+});
 
 export default async function OurServicesPage() {
   const [page, services, appLink, estimate] = await Promise.all([

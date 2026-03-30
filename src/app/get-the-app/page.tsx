@@ -1,5 +1,13 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { getAppLink } from "@/lib/wordpress";
 import { GetTheAppContent } from "@/components/get-the-app/GetTheAppContent";
+
+export const metadata = buildPageMetadata({
+  title: "Get the App | Quicklyn",
+  description:
+    "Download the Quicklyn app to book cleaning, manage visits, and get exclusive offers.",
+  path: "/get-the-app",
+});
 
 export default async function GetTheAppPage() {
   const data = await getAppLink();

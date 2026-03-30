@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { buildPageMetadata } from "@/lib/seo";
 import { getTagBySlug, getPostsByTagId } from "@/lib/wordpress";
 import { BlogCard } from "@/components/blogs/BlogCard";
 
@@ -7,14 +9,15 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
   const tag = await getTagBySlug(slug);
   if (!tag) return { title: "Tag" };
-  return {
+  return buildPageMetadata({
     title: `${tag.name} | Quicklyn Blog`,
     description: `Articles tagged with ${tag.name}.`,
-  };
+    path: `/tag/${slug}`,
+  });
 }
 
 export default async function TagPage({
