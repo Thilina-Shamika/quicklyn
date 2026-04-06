@@ -391,7 +391,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
       </div>
 
       <div className="relative z-10 md:hidden">
-        <div className="mx-auto max-w-5xl px-6 pb-[100px] pt-[90px]">
+        <div className="mx-auto max-w-5xl px-[74px] pb-[164px] pt-[154px]">
           {/* Logo + description */}
           <div className="mb-10">
             {logo && (
@@ -417,7 +417,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
           </div>
 
           {/* Two columns of navigation: 60% / 40% */}
-          <div className="mb-10 grid gap-x-8 gap-y-1" style={{ gridTemplateColumns: "60% 40%" }}>
+          <div className="mb-0 grid gap-x-8 gap-y-1" style={{ gridTemplateColumns: "60% 40%" }}>
             <nav className="flex flex-col gap-2" aria-label="Footer navigation">
               {leftNav.map((item) => {
                 const isFaq =
@@ -455,6 +455,10 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
               })}
             </nav>
           </div>
+          <div
+            className="mb-10 mt-[30px] h-px w-full bg-gradient-to-r from-white to-transparent"
+            aria-hidden
+          />
 
           {/* Contact email & phone (above newsletter) */}
           {(contactEmail || contactPhone) && (
@@ -508,7 +512,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
 
           {/* Newsletter */}
           <div className="mb-0 text-left">
-            <h3 className="mb-4 text-base font-medium text-white">{subscriptionText}</h3>
+            <h3 className="mb-4 text-[13px] font-light text-white">{subscriptionText}</h3>
             <form
               className="flex w-full overflow-hidden rounded-lg border border-[#AAAAAA]"
               onSubmit={(e) => e.preventDefault()}
@@ -535,23 +539,23 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
 
           {/* App download */}
           <div className="mb-8 text-center">
-            <p className="mb-4 text-[13px] font-medium uppercase tracking-wide text-white/95">
+            <p className="mb-4 mt-[20px] text-[13px] font-light uppercase tracking-wide text-white/95">
               {downloadText}
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="grid grid-cols-2 items-center justify-center gap-3">
               {googlePlayUrl && (
                 <Link
                   href={googlePlayLink}
                   target={appLink?.acf?.link_01?.target || "_blank"}
                   rel="noopener noreferrer"
-                  className="focus:outline-none"
+                  className="flex min-w-0 justify-center focus:outline-none"
                 >
                   <Image
                     src={googlePlayUrl}
                     alt="Get it on Google Play"
                     width={200}
                     height={66}
-                    className="h-[66px] w-auto object-contain"
+                    className="h-[66px] w-auto max-w-full object-contain"
                     unoptimized={!!isLocal}
                   />
                 </Link>
@@ -561,14 +565,14 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                   href={appStoreLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="focus:outline-none"
+                  className="flex min-w-0 justify-center focus:outline-none"
                 >
                   <Image
                     src={appStoreUrl}
                     alt="Download on the App Store"
                     width={200}
                     height={66}
-                    className="h-[66px] w-auto object-contain"
+                    className="h-[66px] w-auto max-w-full object-contain"
                     unoptimized={!!isLocal}
                   />
                 </Link>

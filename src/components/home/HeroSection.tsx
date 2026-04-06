@@ -105,6 +105,9 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
   const headingTop = mobileIntroActive ? "calc(17vh + 20px)" : "17vh";
   const headingOpacity = mobileIntroActive ? 0.7 : 1;
   const tealOverlayOpacity = 0.4;
+  /** Mobile-only: bottom edge of black fade (softer than full black). */
+  const mobileHeroBottomGradient =
+    "linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)";
 
   return (
     <>
@@ -144,8 +147,7 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
         <div
           className="pointer-events-none absolute inset-0 z-[2]"
           style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)",
+            background: mobileHeroBottomGradient,
             opacity: mobileIntroActive ? 0 : 1,
             transition: "opacity 0.6s ease-out",
           }}
@@ -154,8 +156,7 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
         <div
           className="pointer-events-none absolute inset-0 z-[3]"
           style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)",
+            background: mobileHeroBottomGradient,
             opacity: mobileIntroActive ? 0 : 1,
             transition: "opacity 0.6s ease-out",
           }}
@@ -164,8 +165,7 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
         <div
           className="pointer-events-none absolute inset-0 z-[4]"
           style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)",
+            background: mobileHeroBottomGradient,
             opacity: mobileIntroActive ? 0 : 1,
             transition: "opacity 0.6s ease-out",
           }}
@@ -174,8 +174,7 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
         <div
           className="pointer-events-none absolute inset-0 z-[5]"
           style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)",
+            background: mobileHeroBottomGradient,
             opacity: mobileIntroActive ? 0 : 1,
             transition: "opacity 0.6s ease-out",
           }}
