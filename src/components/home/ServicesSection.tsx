@@ -668,7 +668,7 @@ export function ServicesSection({
 
         {/* Why Quicklyn - inside services section so background image shows through */}
         {(sectionHeading || whyList.length > 0) && (
-          <div className="mt-16 w-full md:mt-20">
+          <div className="mt-6 w-full md:mt-20">
             <WhyQuicklynSection
               heading={sectionHeading ? `${sectionHeading}?` : "Why Quicklyn?"}
               items={whyList}

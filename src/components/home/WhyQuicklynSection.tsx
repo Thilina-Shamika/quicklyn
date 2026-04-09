@@ -150,14 +150,14 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
   const gridItems = items.slice(0, 4);
 
   return (
-    <section className="relative w-full overflow-hidden bg-transparent py-16 md:py-20">
+    <section className="relative w-full overflow-hidden bg-transparent py-8 md:py-20">
       <div className="relative z-10 mx-auto max-w-4xl px-6">
         <h2 className="mt-10 mb-4 text-center text-[36px] font-semibold leading-tight text-white md:mb-16 md:text-[66px]">
           {heading}
         </h2>
 
         {/* Mobile: previous vertical list design */}
-        <div className="mx-auto w-full max-w-sm space-y-3 px-0 pt-5 pb-0 pr-5 md:hidden">
+        <div className="mx-auto w-full max-w-[280px] space-y-3 rounded-2xl px-0 pt-5 pb-0 pr-5 md:hidden">
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
             const isOpen = expandedIndex === index;
@@ -192,7 +192,11 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
                   </div>
                   {!isLast && (
                     <div
-                      className="mt-2 min-h-[40px] flex-1 w-0 border-l-2 border-dashed border-white transition-all duration-300"
+                      className="mt-2 min-h-[40px] flex-1 w-px transition-all duration-300"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to bottom, rgba(255,255,255,0.6) 0 6px, rgba(255,255,255,0) 6px 12px)",
+                      }}
                       aria-hidden
                     />
                   )}
@@ -238,7 +242,7 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
         </div>
 
         {/* Desktop & tablet: 2 columns - only expanding column grows, right stays fixed */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex w-full overflow-hidden rounded-2xl">
           {/* Left column - grows when cells expand */}
           <div className="flex flex-1 flex-col">
             {gridItems.filter((_, i) => i % 2 === 0).map((item, colIndex) => {
