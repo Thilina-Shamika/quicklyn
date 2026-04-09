@@ -295,7 +295,7 @@ export function ServicesSection({
 
       <div className="relative z-10 mx-auto flex w-full flex-col items-center px-0 text-center md:px-6 md:scale-[0.85] md:origin-top lg:scale-100">
         {/* Counters - mobile unchanged */}
-        <div className="mx-auto mb-24 flex w-full max-w-[240px] flex-col gap-4 px-0 text-left md:hidden">
+        <div className="mx-auto mb-14 flex w-full max-w-[240px] flex-col gap-4 px-0 text-left md:hidden">
           {(counters ?? []).map((item, index) => (
             <div key={`${item.counter_text}-${index}`} className="w-full">
               {index > 0 && (
@@ -311,6 +311,8 @@ export function ServicesSection({
                       start={0}
                       end={Number(item.counter_number) || 0}
                       duration={1.5}
+                      enableScrollSpy
+                      scrollSpyOnce
                     />
                   </span>
                   <span style={{ fontWeight: 200 }}>{item.counter_suffix}</span>
@@ -358,6 +360,8 @@ export function ServicesSection({
                                   start={0}
                                   end={Number(item.counter_number) || 0}
                                   duration={1.5}
+                                  enableScrollSpy
+                                  scrollSpyOnce
                                 />
                               </span>
                               <span className="ml-1 text-[40px] tracking-[-0.02em] lg:text-[54px]">
@@ -378,7 +382,7 @@ export function ServicesSection({
           })()}
 
         {/* Section heading (mobile only) */}
-        <h2 className="mt-10 mb-[30px] text-[68px] font-medium leading-[58px] text-white md:hidden">
+        <h2 className="mt-6 mb-[18px] text-[68px] font-medium leading-[58px] text-white md:hidden">
           <span className="block">Our</span>
           <span className="block">Services</span>
         </h2>
@@ -524,7 +528,7 @@ export function ServicesSection({
         {/* Services cards carousel — viewport + transform (no native scroll) so iOS swipe works with document-level touch */}
         <div
           ref={viewportRef}
-          className="mt-[10px] w-full overflow-hidden cursor-grab md:hidden"
+          className="mt-[6px] w-full overflow-hidden cursor-grab md:hidden"
           style={{ touchAction: "pan-y" }}
         >
           <div
