@@ -94,10 +94,10 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
   const mobileIntroActive = !mobileIntroDone;
   // Before page load on mobile: image is ~50% more zoomed than the final state
   // and shifted ~10% to the left, but uses the SAME rotation as the final state.
-  // After intro: use the tuned final transform (slightly scaled up, rotation -12deg).
+  // After intro: tuned final transform (scaled up for a zoomed crop, rotation -12deg).
   const bgTransform = mobileIntroActive
-    ? "translate(-10%, -8%) scale(4.65) rotate(-12deg)"
-    : "translate(-40%, -8%) scale(3.3) rotate(-12deg)";
+    ? "translate(-10%, -8%) scale(6.2) rotate(-12deg)"
+    : "translate(-40%, -8%) scale(4.4) rotate(-12deg)";
   // Keep the background image flush with the top so it can fill the full viewport height
   const bgMarginTop = "0%";
   // Mobile heading: before load it's 20px lower and slightly transparent; after load it moves up and becomes fully opaque
@@ -107,7 +107,7 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
   const tealOverlayOpacity = 0.4;
   /** Mobile-only: bottom edge of black fade (softer than full black). */
   const mobileHeroBottomGradient =
-    "linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)";
+    "linear-gradient(to top, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%)";
 
   return (
     <>
