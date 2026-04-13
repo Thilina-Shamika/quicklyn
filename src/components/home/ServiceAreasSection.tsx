@@ -83,37 +83,39 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
       />
       {/* Mobile layout */}
       <div className="md:hidden">
-        {/* Map image as right-aligned background */}
-        {mapUrl && (
-          <div className="pointer-events-none absolute right-0 top-[140px] mr-[20px] h-[230px] w-[75%] z-[30]">
-            <Image
-              src={mapUrl}
-              alt={map.alt || heading || "Service areas map"}
-              fill
-              className="object-contain object-right"
-              priority={false}
-              unoptimized={isLocalMap}
-            />
-          </div>
-        )}
-
-          <div className="relative z-10 mx-auto w-full max-w-4xl px-6">
+        <div className="relative z-10 mx-auto w-full max-w-4xl px-6">
           {heading && (
             <h2 className="mb-8 text-center text-[40px] font-semibold leading-[42px] text-white">
               {heading}
             </h2>
           )}
 
-          <div className="w-[45%] text-left">
-            {subHeading && (
-              <p className="mb-3 text-[20px] font-normal leading-snug text-white">
-                {subHeading}
-              </p>
-            )}
-            {description && (
-              <p className="text-[12px] leading-relaxed text-white/85">
-                {description}
-              </p>
+          <div className="flex items-center gap-4">
+            <div className="w-[45%] text-left">
+              {subHeading && (
+                <p className="mb-3 text-[20px] font-normal leading-snug text-white">
+                  {subHeading}
+                </p>
+              )}
+              {description && (
+                <p className="text-[12px] leading-relaxed text-white/85">
+                  {description}
+                </p>
+              )}
+            </div>
+
+            {/* Map image aligned to text block */}
+            {mapUrl && (
+              <div className="pointer-events-none relative h-[230px] w-[55%]">
+                <Image
+                  src={mapUrl}
+                  alt={map.alt || heading || "Service areas map"}
+                  fill
+                  className="object-contain object-right"
+                  priority={false}
+                  unoptimized={isLocalMap}
+                />
+              </div>
             )}
           </div>
         </div>

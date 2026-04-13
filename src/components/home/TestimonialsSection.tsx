@@ -158,7 +158,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
 
   return (
     <section
-      className={`relative w-full overflow-hidden pb-8 pt-[3.75rem] ${
+      className={`relative w-full overflow-hidden pb-8 pt-8 ${
         transparentBackground ? "" : "bg-[#2a7a7c]"
       }`}
     >

@@ -21,23 +21,34 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
   if (!faqs.length) return null;
 
   return (
-    <section id="faq" className="relative z-0 w-full overflow-hidden bg-[#2a7a7c] pb-16 pt-0">
-      <div
-        className="pointer-events-none absolute inset-0 hidden md:block"
-        aria-hidden
-        style={
-          bgDesktopUrl
-            ? {
-                backgroundImage: `url(${bgDesktopUrl})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                backgroundPosition: "center top",
-              }
-            : undefined
-        }
-      />
-      <div className="relative z-10 mx-auto w-full max-w-2xl px-6 md:max-w-[1320px] md:px-10 lg:px-14">
-        <div className="hidden items-stretch md:grid md:grid-cols-[180px_minmax(0,1fr)] md:gap-10 md:pt-0 md:pb-4 lg:grid-cols-[210px_minmax(0,1fr)] lg:gap-14">
+    <section id="faq" className="relative z-0 w-full overflow-hidden">
+      {/* FAQ accordion area background only */}
+      <div className="relative bg-[#2a7a7c] pb-16 pt-0">
+        {/* Mobile-only FAQ background gradient */}
+        <div
+          className="pointer-events-none absolute inset-[10px] rounded-xl md:hidden"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(25,92,94,0) 0%, #195c5e 70%, #195c5e 100%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 hidden md:block"
+          aria-hidden
+          style={
+            bgDesktopUrl
+              ? {
+                  backgroundImage: `url(${bgDesktopUrl})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center top",
+                }
+              : undefined
+          }
+        />
+        <div className="relative z-10 mx-auto w-full max-w-2xl px-6 md:max-w-[1320px] md:px-10 lg:px-14">
+          <div className="hidden items-stretch md:grid md:grid-cols-[180px_minmax(0,1fr)] md:gap-10 md:pt-0 md:pb-4 lg:grid-cols-[210px_minmax(0,1fr)] lg:gap-14">
           <div className="flex h-full flex-col justify-between pt-0 pb-2">
             <h2 className="text-left text-[68px] font-medium uppercase leading-none tracking-wide text-white lg:text-[78px]">
               FAQ
@@ -301,9 +312,10 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
           </div>
         </div>
       </div>
+      </div>
 
-      {/* Download section nested visually inside FAQ, sharing background */}
-      <div className="pb-0 md:pb-[340px]">
+      {/* Download section below FAQ (separate background) */}
+      <div className="bg-[#2a7a7c] pb-0 md:pb-[340px]">
         <HomeAppDownloadSection
           data={downloadData ?? null}
           transparentBackground
