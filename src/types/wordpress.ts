@@ -330,3 +330,19 @@ export interface WPGetEstimate {
   title: { rendered: string };
   acf: WPGetEstimateACF;
 }
+
+/** Local / SEO service landing pages (CPT `services` in WordPress). */
+export interface ServiceLandingACF {
+  ["1st_section_heading"]?: string;
+  ["1st_section_description_1"]?: string;
+  ["1st_section_description_2"]?: string;
+  ["1st_section_image"]?: WPImage;
+}
+
+export interface WPServiceLanding {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  content?: { rendered: string; protected?: boolean };
+  acf?: ServiceLandingACF;
+}

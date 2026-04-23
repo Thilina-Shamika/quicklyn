@@ -14,6 +14,7 @@ import type {
   BookACleaningPage,
   WPGetEstimate,
   WPPostRaw,
+  WPServiceLanding,
 } from "@/types/wordpress";
 import { fallbackHomePage } from "./fallback-home";
 
@@ -527,6 +528,29 @@ export async function getServices(): Promise<WPService[]> {
     return data;
   } catch {
     return [];
+  }
+}
+
+/**
+ * Local marketing / SEO landing pages from the `services` post type
+ * (`/wp/v2/services?slug=…`), distinct from the `/service` listing items.
+ */
+export async function getServiceLandingBySlug(
+  slug: string,
+): Promise<WPServiceLanding | null> {
+  try {
+    const res = await fetch(
+      getApiUrl(
+        `/services?slug=${encodeURIComponent(slug)}&acf_format=standard`,
+      ),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as WPServiceLanding[];
+    if (!Array.isArray(data) || data.length === 0) return null;
+    return data[0];
+  } catch {
+    return null;
   }
 }
 

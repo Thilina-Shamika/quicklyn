@@ -308,7 +308,6 @@ export function ServicesSection({
                 >
                   <span style={{ fontWeight: 200 }}>
                     <CountUp
-                      start={0}
                       end={Number(item.counter_number) || 0}
                       duration={1.5}
                       enableScrollSpy
@@ -357,7 +356,6 @@ export function ServicesSection({
                             >
                               <span className="text-[54px] tracking-[-0.03em] lg:text-[72px]">
                                 <CountUp
-                                  start={0}
                                   end={Number(item.counter_number) || 0}
                                   duration={1.5}
                                   enableScrollSpy
