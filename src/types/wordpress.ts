@@ -346,3 +346,11 @@ export interface WPServiceLanding {
   content?: { rendered: string; protected?: boolean };
   acf?: ServiceLandingACF;
 }
+
+/** CMS default document title / tagline (`site-title` CPT + ACF `site_title`). */
+export interface WPSiteTitle {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  acf?: { site_title?: string };
+}

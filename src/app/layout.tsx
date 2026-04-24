@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { getFooter, getAppLink, getHeader, getSocialLinks, getFaviconUrl } from "@/lib/wordpress";
+import {
+  getFooter,
+  getAppLink,
+  getHeader,
+  getSocialLinks,
+  getFaviconUrl,
+  getSiteTitleTaglineFromWordPress,
+} from "@/lib/wordpress";
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
@@ -8,8 +15,11 @@ import { DEFAULT_DESCRIPTION, getMetadataBase, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const faviconUrl = await getFaviconUrl();
-  const defaultTitle = `${SITE_NAME} | Premium Cleaning Services in NYC`;
+  const [faviconUrl, siteTitleTagline] = await Promise.all([
+    getFaviconUrl(),
+    getSiteTitleTaglineFromWordPress(),
+  ]);
+  const defaultTitle = `${SITE_NAME} | ${siteTitleTagline}`;
   return {
     metadataBase: getMetadataBase(),
     /** Plain default; child routes override. Avoid title template merging oddities in Google. */

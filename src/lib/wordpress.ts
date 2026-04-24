@@ -15,6 +15,7 @@ import type {
   WPGetEstimate,
   WPPostRaw,
   WPServiceLanding,
+  WPSiteTitle,
 } from "@/types/wordpress";
 import { fallbackHomePage } from "./fallback-home";
 
@@ -876,5 +877,53 @@ export async function getFaviconUrl(): Promise<string | null> {
     return url || null;
   } catch {
     return null;
+  }
+}
+
+const FALLBACK_SITE_TITLE_TAGLINE = "Premium Cleaning Services in NYC";
+
+function decodeWpTitleText(html: string): string {
+  const noTags = html.replace(/<[^>]*>/g, "");
+  return noTags
+    .replace(/&#(\d+);/g, (_, code) =>
+      String.fromCodePoint(Number.parseInt(code, 10)),
+    )
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) =>
+      String.fromCodePoint(Number.parseInt(hex, 16)),
+    )
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .trim();
+}
+
+/**
+ * Tagline for the default document title: `Quicklyn | {tagline}`.
+ * Uses `site-title` CPT, ACF `site_title`, else `title.rendered`, else a static fallback.
+ */
+export async function getSiteTitleTaglineFromWordPress(): Promise<string> {
+  try {
+    const res = await fetch(
+      getApiUrl(
+        "/site-title?per_page=1&status=publish&acf_format=standard&orderby=date&order=desc",
+      ),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return FALLBACK_SITE_TITLE_TAGLINE;
+    const data = (await res.json()) as WPSiteTitle[];
+    if (!Array.isArray(data) || data.length === 0) {
+      return FALLBACK_SITE_TITLE_TAGLINE;
+    }
+    const first = data[0];
+    const fromAcf = first.acf?.site_title?.trim();
+    if (fromAcf) return fromAcf;
+    const rendered = first.title?.rendered?.trim();
+    if (rendered) return decodeWpTitleText(rendered);
+    return FALLBACK_SITE_TITLE_TAGLINE;
+  } catch {
+    return FALLBACK_SITE_TITLE_TAGLINE;
   }
 }
