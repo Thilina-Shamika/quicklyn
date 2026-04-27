@@ -78,6 +78,32 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const isOurMissionPage = mounted && pathname === "/our-mission";
   const isHomePage = mounted && pathname === "/";
 
+  /**
+   * Top-level `app/*` route segments — anything else at `/one-segment` is the dynamic
+   * `[slug]` service landing. Those pages use `main` (low z-index); the default footer
+   * `z-[200] md:-mt-40` would sit on top and hide the last sections (e.g. section 7).
+   */
+  const staticTopLevelSegments = new Set([
+    "about-us",
+    "blogs",
+    "book-a-cleaning",
+    "careers",
+    "category",
+    "contact-us",
+    "get-the-app",
+    "gift-cards",
+    "our-mission",
+    "our-services",
+    "privacy-policy",
+    "tag",
+    "terms-and-conditions",
+  ]);
+  const oneSegment = pathname?.split("/").filter(Boolean) ?? [];
+  /** No `mounted` guard: must match SSR so footer classes don't flash or mismatch. */
+  const isDynamicServiceSlugPage =
+    oneSegment.length === 1 &&
+    !staticTopLevelSegments.has(oneSegment[0]!);
+
   if (!data?.acf) return null;
 
   const acf = data.acf;
@@ -150,7 +176,11 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   return (
     <footer
       className={`relative w-full overflow-hidden text-white ${
-        isGetTheAppPage ? "z-10 md:mt-0" : isHomePage ? "z-[200] md:!-mt-[28rem] lg:!-mt-[30rem]" : "z-[200] md:-mt-40"
+        isDynamicServiceSlugPage || isGetTheAppPage
+          ? "z-10 md:mt-0"
+          : isHomePage
+            ? "z-[200] md:!-mt-[28rem] lg:!-mt-[30rem]"
+            : "z-[200] md:-mt-40"
       } ${isCareersPage ? "z-20 md:-mt-[520px] lg:-mt-[620px]" : ""} ${isContactUsPage ? "md:-mt-48 lg:-mt-48" : ""} ${isOurServicesPage ? "md:-mt-8 lg:-mt-12" : ""} ${isOurMissionPage ? "md:-mt-24 lg:-mt-28" : ""}`}
     >
       <div className="pointer-events-none absolute inset-0 z-0 hidden md:block" aria-hidden />

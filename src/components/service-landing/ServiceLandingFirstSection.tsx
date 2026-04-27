@@ -37,7 +37,7 @@ export function ServiceLandingFirstSection({
   const imageHeight = image?.height && image.height > 0 ? image.height : 900;
 
   return (
-    <section className="mt-0 mb-0 pb-0">
+    <section className="mt-0 mb-0 bg-[#2a7a7c] pb-0">
       <div className="mx-auto w-full max-w-[1280px] px-5 pb-0 pt-44 text-white sm:px-6 sm:pt-48 md:pt-52 lg:px-8 lg:pt-60">
         <Link
           href="/our-services"
@@ -83,9 +83,11 @@ export function ServiceLandingFirstSection({
           </div>
 
           {/* Right column: 2nd description */}
-          <div className="min-w-0 space-y-4 text-[18px] leading-[33px] text-white/95">
+          <div className="min-w-0 w-full max-w-[50ch] space-y-4 text-[18px] leading-[33px] text-white/95">
             {rightParagraphs.map((p, i) => (
-              <p key={i}>{p}</p>
+              <p key={i} className="text-balance">
+                {p}
+              </p>
             ))}
           </div>
         </div>

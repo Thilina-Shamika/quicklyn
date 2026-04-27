@@ -27,3 +27,46 @@ export function sanitizeWordPressHtml(html: string | undefined | null): string {
   });
 }
 
+/**
+ * Decodes a few common HTML entities when WordPress/ACF stores inline markup in a text field.
+ */
+export function decodeCommonWpHtmlEntities(s: string): string {
+  if (!s.includes("&")) return s;
+  return s
+    .split("&amp;")
+    .join("&#0AMP0;")
+    .split("&lt;")
+    .join("<")
+    .split("&gt;")
+    .join(">")
+    .split("&#0AMP0;")
+    .join("&")
+    .replace(/&nbsp;/g, " ");
+}
+
+/**
+ * One-line service landing heading: inline emphasis only (<strong>, <b>, <i>, <em>).
+ */
+export function sanitizeServiceLandingHeadingLine(
+  html: string | null | undefined,
+): string {
+  if (!html) return "";
+  return sanitizeHtml(html, {
+    allowedTags: ["strong", "b", "i", "em"],
+    allowedAttributes: {},
+  });
+}
+
+/**
+ * Service landing section 6 heading: line breaks + inline emphasis.
+ */
+export function sanitizeServiceLandingSection6Heading(
+  html: string | null | undefined,
+): string {
+  if (!html) return "";
+  return sanitizeHtml(html, {
+    allowedTags: ["strong", "b", "i", "em", "br"],
+    allowedAttributes: {},
+  });
+}
+

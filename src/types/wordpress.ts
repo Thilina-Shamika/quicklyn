@@ -331,12 +331,120 @@ export interface WPGetEstimate {
   acf: WPGetEstimateACF;
 }
 
+/** Repeater row for the features grid (2nd section) on service landing pages. */
+export interface ServiceLandingSecondItem {
+  acf_fc_layout?: string;
+  heading?: string;
+  /** Shown at rest; falls back to legacy `image` if omitted. */
+  before_hover?: WPImage;
+  /** Shown on row hover. */
+  after_hover?: WPImage;
+  /** @deprecated use `before_hover` */
+  image?: WPImage;
+  ["2nd_section_description"]?: string;
+}
+
+/** Repeater row: apartment cleaning options accordion (3rd section). */
+export interface ServiceLandingThirdAccordionItem {
+  acf_fc_layout?: string;
+  cleaning_heading?: string;
+  cleaning_description?: string;
+}
+
+/** Repeater: “Why choose Quicklyn” row (icon + line), section 8. */
+export interface ServiceLandingWhyChooseItem {
+  acf_fc_layout?: string;
+  why_choose_icon?: WPImage;
+  why_choose_text?: string;
+}
+
 /** Local / SEO service landing pages (CPT `services` in WordPress). */
 export interface ServiceLandingACF {
   ["1st_section_heading"]?: string;
   ["1st_section_description_1"]?: string;
   ["1st_section_description_2"]?: string;
   ["1st_section_image"]?: WPImage;
+  ["2nd_section_items"]?: ServiceLandingSecondItem[];
+  ["3rd_section_heading"]?: string;
+  ["3rd_section_description"]?: string;
+  ["3rd_section_accordion"]?: ServiceLandingThirdAccordionItem[];
+  /** Middle panel background (full-bleed, cover). */
+  ["3rd_section_background_image"]?: WPImage;
+  /** Decorative strip at top of 3rd section. */
+  top_curve?: WPImage;
+  /** Same as `top_curve` if ACF uses a grouped field name. */
+  ["3rd_section_top_curve"]?: WPImage;
+  /** Decorative strip at bottom of 3rd section. */
+  bottom_curve?: WPImage;
+  /** Same as `bottom_curve` if ACF uses a grouped field name. */
+  ["3rd_section_bottom_curve"]?: WPImage;
+  /** 4th “why demand / neighborhood” block */
+  ["4th_section_heading"]?: string;
+  ["4th_section_sub_heading"]?: string;
+  features?: ServiceLandingFeatureItem[];
+  ["4th_section_description_text"]?: string;
+  /** Full-bleed background for the lower rounded panel (teal + subtle pattern). */
+  ["4th_section_banner_background"]?: WPImage;
+  /** Photo for the lower rounded banner (e.g. cleaner). */
+  ["4th_section_banner"]?: WPImage;
+  banner_contents?: ServiceLandingBannerPoint[];
+  /** Right-side paragraph in the lower banner. */
+  ["4th_section_description_banner"]?: string;
+  /** Subheading above bullets inside the lower banner. */
+  banner_heading?: string;
+  /** Section 5–6 shared full-bleed background (teal + art; used for both blocks). */
+  ["5th_section_background_image"]?: WPImage;
+  ["5th_section_heading"]?: string;
+  ["5th_section_description"]?: string;
+  button_text?: string;
+  button_url?: string;
+  apartment_types?: ServiceLandingApartmentType[];
+  /** Section 5 footer line (ACF field name may be `service_desclaimer`). */
+  service_desclaimer?: string;
+  ["6th_section_heading"]?: string;
+  ["6th_section_sub_heading"]?: string;
+  what_to_expect?: ServiceLandingWhatToExpectItem[];
+  what_to_expect_disclaimer?: string;
+  /** Section 7: pricing / cost callout. */
+  ["7th_section_heading"]?: string;
+  ["7th_section_description"]?: string;
+  /** HTML: intro line + &lt;ul&gt; of pricing points. */
+  structure?: string;
+  bottom_description?: string;
+  /** Shared full-bleed art for sections 7–9. */
+  ["7th_section_8th_section_background"]?: WPImage;
+  ["8th_section_heading"]?: string;
+  ["8th_section_description"]?: string;
+  why_choose_quicklyn?: ServiceLandingWhyChooseItem[];
+  why_choose_us_disclaimer?: string;
+  final_thoughts?: string;
+  final_thoughts_description?: string;
+}
+
+/** Repeater: apartment layout card (section 5). */
+export interface ServiceLandingApartmentType {
+  acf_fc_layout?: string;
+  apartment_type_name?: string;
+  approx_time?: string;
+  service_description?: string;
+}
+
+/** Repeater: numbered “what to expect” step (section 6). */
+export interface ServiceLandingWhatToExpectItem {
+  acf_fc_layout?: string;
+  what_to_expect_points?: string;
+}
+
+/** Repeater: horizontal feature list (4th section, top). */
+export interface ServiceLandingFeatureItem {
+  acf_fc_layout?: string;
+  feature_name?: string;
+}
+
+/** Repeater: bullet line items (4th section, lower banner). */
+export interface ServiceLandingBannerPoint {
+  acf_fc_layout?: string;
+  point_name?: string;
 }
 
 export interface WPServiceLanding {

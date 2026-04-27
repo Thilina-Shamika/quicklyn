@@ -549,7 +549,22 @@ export async function getServiceLandingBySlug(
     if (!res.ok) return null;
     const data = (await res.json()) as WPServiceLanding[];
     if (!Array.isArray(data) || data.length === 0) return null;
-    return data[0];
+    const first = data[0]!;
+    // Single-item fetch returns full ACF; the list response can omit repeater subfields
+    // and image fields (e.g. top/bottom curve). Merge by-id ACF for every post.
+    if (first.id) {
+      const byId = await fetch(
+        getApiUrl(`/services/${first.id}?acf_format=standard`),
+        { next: { revalidate: 60 } },
+      );
+      if (byId.ok) {
+        const one = (await byId.json()) as WPServiceLanding;
+        if (one?.acf) {
+          return { ...first, acf: { ...first.acf, ...one.acf } };
+        }
+      }
+    }
+    return first;
   } catch {
     return null;
   }
