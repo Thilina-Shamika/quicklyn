@@ -201,7 +201,14 @@ export function ServiceLandingFourthSection({
         ) : null}
 
         {hasBannerImage && (
-          <div className="relative -mx-4 mt-10 w-[calc(100%+2rem)] overflow-x-visible overflow-y-visible sm:-mx-5 sm:mt-12 sm:w-[calc(100%+2.5rem)] md:-mx-6 md:mt-14 md:w-[calc(100%+3rem)] lg:-mx-7 lg:w-[calc(100%+3.5rem)] xl:-mx-8 xl:w-[calc(100%+4rem)]">
+          <div
+            className={[
+              "relative -mx-4 mt-10 w-[calc(100%+2rem)] overflow-x-visible overflow-y-visible sm:-mx-5 sm:mt-12 sm:w-[calc(100%+2.5rem)] md:-mx-6 md:mt-14 md:w-[calc(100%+3rem)] lg:-mx-7 lg:w-[calc(100%+3.5rem)] xl:-mx-8 xl:w-[calc(100%+4rem)]",
+              !showBannerText ? "max-sm:hidden" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
             {/*
               Rounded image panel (no inset shadow) + overlay copy; points/description
               column inset from the left to clear the figure in the art.
@@ -211,10 +218,13 @@ export function ServiceLandingFourthSection({
                 className={[
                   "relative isolate overflow-hidden",
                   "rounded-[1.5rem] sm:rounded-[1.75rem] md:rounded-[2.25rem] lg:rounded-[2.5rem]",
-                ].join(" ")}
+                  showBannerText ? "max-sm:bg-[#2a7a7c]" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
               >
                 <div
-                  className="pointer-events-none absolute inset-0 z-0"
+                  className="pointer-events-none absolute inset-0 z-0 max-sm:hidden"
                   aria-hidden={showBannerText}
                 >
                   <Image

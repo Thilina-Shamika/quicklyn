@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import {
   decodeCommonWpHtmlEntities,
   sanitizeServiceLandingHeadingLine,
@@ -122,19 +123,35 @@ function SixthSectionHeading({ text }: { text: string }) {
 }
 
 /** Splits e.g. "APROX TIME: 3 to 3.5 hours" into caps label + italic duration. */
-function ApproxTimeLine({ time }: { time: string }) {
+function ApproxTimeLine({
+  time,
+  className,
+}: {
+  time: string;
+  className?: string;
+}) {
   const t = time.trim();
   const m = t.match(/^(APROX\s*TIME\s*:\s*)(.*)$/i);
   if (!m) {
     return (
-      <p className="w-full min-w-0 text-right text-[18px] font-normal leading-[29px] text-white">
+      <p
+        className={cn(
+          "w-full min-w-0 text-right text-[18px] font-normal leading-[29px] text-white",
+          className,
+        )}
+      >
         {t}
       </p>
     );
   }
   const value = m[2]?.trim() ?? "";
   return (
-    <p className="w-full min-w-0 max-w-full text-balance text-right text-[18px] font-normal leading-[29px] text-white">
+    <p
+      className={cn(
+        "w-full min-w-0 max-w-full text-balance text-right text-[18px] font-normal leading-[29px] text-white",
+        className,
+      )}
+    >
       <span className="not-italic uppercase text-white/95">APROX TIME: </span>
       {value ? (
         <span className="whitespace-pre-wrap break-words pl-0.5 italic text-white">
@@ -162,17 +179,25 @@ function ApartmentTypeCard({
     <article className="mb-5 w-full min-w-0 last:mb-0 overflow-hidden rounded-2xl sm:rounded-3xl">
       {hasHeader ? (
         <div className="border-b border-white/10 bg-[#4A8E8E]/60 px-6 py-5 sm:px-8 sm:py-6">
-          <div className="flex w-full min-w-0 flex-wrap items-start justify-between gap-x-4 gap-y-2">
+          <div
+            className={cn(
+              "flex w-full min-w-0 max-sm:flex-col max-sm:items-stretch max-sm:gap-2",
+              "sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-4 sm:gap-y-2",
+            )}
+          >
             {title ? (
-              <h3 className="min-w-0 flex-1 text-[37px] font-normal leading-[45px] text-white">
+              <h3 className="w-full min-w-0 text-[37px] font-normal leading-[45px] text-white sm:w-auto sm:min-w-0 sm:flex-1 sm:max-w-none">
                 {title}
               </h3>
             ) : (
-              <span className="min-w-0 flex-1" />
+              <span className="hidden min-w-0 sm:block sm:flex-1" aria-hidden />
             )}
             {time ? (
-              <div className="shrink-0 self-start sm:ml-auto sm:max-w-[min(100%,20rem)]">
-                <ApproxTimeLine time={time} />
+              <div className="w-full shrink-0 self-start sm:ml-auto sm:w-auto sm:max-w-[min(100%,20rem)]">
+                <ApproxTimeLine
+                  time={time}
+                  className="max-sm:text-left"
+                />
               </div>
             ) : null}
           </div>
@@ -264,13 +289,14 @@ function WhatToExpectList({ items }: { items: string[] }) {
                 py-1
                 pl-0.5
                 pr-1
-                text-left text-[22px] font-normal
-                leading-[36px]
+                text-left text-[18px] font-normal
+                leading-[30px]
                 text-white/60
                 transition-all
                 duration-300
                 ease-out
                 sm:pr-1.5
+                sm:text-[22px] sm:leading-[36px]
                 group-hover:text-white"
             >
               {line}

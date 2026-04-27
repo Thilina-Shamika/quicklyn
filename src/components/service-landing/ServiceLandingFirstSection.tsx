@@ -62,8 +62,8 @@ export function ServiceLandingFirstSection({
                 </span>
               )}
             </h1>
-            <div className="-mt-10 grid -translate-y-[45px] grid-cols-1 gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-center sm:gap-5 sm:-mt-11 md:-mt-14 lg:-mt-[4.5rem] lg:gap-6">
-              <div className="min-w-0 text-[18px] leading-[33px] text-white/95">
+            <div className="mt-6 grid grid-cols-1 gap-8 translate-y-0 sm:-mt-11 sm:-translate-y-[45px] sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-center sm:gap-5 md:-mt-14 lg:-mt-[4.5rem] lg:gap-6">
+              <div className="min-w-0 text-[18px] leading-[33px] text-white/95 max-sm:mt-[20px]">
                 {description1}
               </div>
               {imageUrl ? (

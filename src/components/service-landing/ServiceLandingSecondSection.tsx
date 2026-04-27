@@ -161,8 +161,8 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
                   <div
                     className="relative z-10 grid min-w-0 grid-cols-1 items-stretch gap-0 py-6 sm:grid-cols-[minmax(0,35fr)_minmax(0,10fr)_minmax(0,65fr)] sm:py-6 md:py-7 lg:py-8"
                   >
-                    <div className="flex min-h-0 w-full min-w-0 items-center justify-end pr-0 pb-5 sm:h-full sm:min-h-0 sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3">
-                      <h3 className="min-w-0 text-balance text-right text-[33px] font-light italic leading-tight tracking-tight transition-[font-weight] duration-200 group-hover/feat:font-semibold">
+                    <div className="flex min-h-0 w-full min-w-0 items-center justify-center pr-0 pb-5 sm:h-full sm:min-h-0 sm:justify-end sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3">
+                      <h3 className="min-w-0 text-balance text-center text-[33px] font-light italic leading-tight tracking-tight transition-[font-weight] duration-200 group-hover/feat:font-semibold sm:text-right">
                         {label}
                       </h3>
                     </div>
@@ -175,8 +175,8 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
                         />
                       </div>
                     </div>
-                    <div className="flex min-h-0 w-full min-w-0 items-center justify-start pl-0 sm:h-full sm:min-h-0 sm:pl-2 sm:pr-0 md:pl-3">
-                      <p className="min-w-0 w-full max-w-[50ch] text-balance text-left text-[16px] leading-[30px] text-white/95 sm:pl-1 sm:text-[17px] md:text-[18px] md:leading-[33px]">
+                    <div className="flex min-h-0 w-full min-w-0 items-center justify-center pl-0 sm:h-full sm:min-h-0 sm:justify-start sm:pl-2 sm:pr-0 md:pl-3">
+                      <p className="min-w-0 w-full max-w-[50ch] text-balance text-center text-[16px] leading-[30px] text-white/95 sm:pl-1 sm:text-left sm:text-[17px] md:text-[18px] md:leading-[33px]">
                         {desc ? <RichSecondDescription text={desc} /> : null}
                       </p>
                     </div>
