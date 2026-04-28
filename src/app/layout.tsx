@@ -6,6 +6,7 @@ import {
   getSocialLinks,
   getFaviconUrl,
   getSiteTitleTaglineFromWordPress,
+  getPublishedServicesForNav,
 } from "@/lib/wordpress";
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
@@ -49,12 +50,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [footer, appLink, header, socialLinks] = await Promise.all([
-    getFooter(),
-    getAppLink(),
-    getHeader(),
-    getSocialLinks(),
-  ]);
+  const [footer, appLink, header, socialLinks, serviceNavItems] =
+    await Promise.all([
+      getFooter(),
+      getAppLink(),
+      getHeader(),
+      getSocialLinks(),
+      getPublishedServicesForNav(),
+    ]);
 
   return (
     <html lang="en" className="scroll-smooth">
@@ -80,7 +83,7 @@ export default async function RootLayout({
         }
       >
         <OrganizationJsonLd />
-        <GlobalHeader header={header} />
+        <GlobalHeader header={header} serviceNavItems={serviceNavItems} />
         {children}
         <Footer data={footer} appLink={appLink} socialLinks={socialLinks} />
       </body>

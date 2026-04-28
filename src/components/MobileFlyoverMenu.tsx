@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import type { WPHeader } from "@/lib/wordpress";
-import { mapWordPressUrlToNextPath } from "@/lib/wordpress";
+import {
+  isServicesHubNavItem,
+  mapWordPressUrlToNextPath,
+  type ServiceNavItem,
+  type WPHeader,
+} from "@/lib/wordpress";
 
 function CloseIcon({ className }: { className?: string }) {
   return (
@@ -26,12 +30,14 @@ interface MobileFlyoverMenuProps {
   open: boolean;
   onClose: () => void;
   header: WPHeader | null;
+  serviceNavItems: ServiceNavItem[];
 }
 
 export function MobileFlyoverMenu({
   open,
   onClose,
   header,
+  serviceNavItems,
 }: MobileFlyoverMenuProps) {
   const navItems = header?.acf?.navitgation ?? [];
   const menuDescription = header?.acf?.menu_description?.trim() ?? "";
@@ -105,6 +111,40 @@ export function MobileFlyoverMenu({
               const wpUrl = item.menu_item_link?.url ?? "#";
               const href = mapWordPressUrlToNextPath(wpUrl);
               const isCta = label.toUpperCase() === "GET THE APP";
+              const servicesSubmenu =
+                serviceNavItems.length > 0 &&
+                isServicesHubNavItem(label, href);
+
+              if (servicesSubmenu) {
+                return (
+                  <div key={index} className="flex flex-col gap-2">
+                    <Link
+                      href="/our-services"
+                      onClick={onClose}
+                      className="text-left text-[16px] font-medium text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
+                    >
+                      {label}
+                    </Link>
+                    <ul
+                      role="list"
+                      className="ml-3 flex flex-col gap-3 border-l border-white/25 pl-4"
+                      aria-label="Service pages"
+                    >
+                      {serviceNavItems.map((s) => (
+                        <li key={s.slug}>
+                          <Link
+                            href={`/${s.slug}`}
+                            onClick={onClose}
+                            className="text-left text-[14px] font-medium leading-snug text-white/90 hover:text-[#ffda00] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
+                          >
+                            {s.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }
 
               return (
                 <Link

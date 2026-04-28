@@ -536,6 +536,53 @@ export async function getServices(): Promise<WPService[]> {
  * Local marketing / SEO landing pages from the `services` post type
  * (`/wp/v2/services?slug=…`), distinct from the `/service` listing items.
  */
+/** Published `services` CPT items for header / mobile nav (title + slug only). */
+export type ServiceNavItem = { slug: string; title: string };
+
+/** Match CMS “Services” / “Our services” row pointing at the hub for dropdown behavior. */
+export function isServicesHubNavItem(label: string, nextHref: string): boolean {
+  const lbl = label.trim().toLowerCase();
+  if (lbl === "services" || lbl === "our services") return true;
+  const path = nextHref.trim().replace(/\/$/, "").split(/[?#]/)[0] ?? "";
+  return path === "/our-services";
+}
+
+function stripWpRenderedTitle(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * All published service landing pages for the Services dropdown.
+ * Revalidates periodically so new CMS services appear without redeploying.
+ */
+export async function getPublishedServicesForNav(): Promise<ServiceNavItem[]> {
+  try {
+    const res = await fetch(
+      getApiUrl(
+        "/services?per_page=100&status=publish&orderby=title&order=asc",
+      ),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as Array<{
+      slug?: string;
+      title?: { rendered?: string };
+    }>;
+    if (!Array.isArray(data)) return [];
+    return data
+      .map((p) => ({
+        slug: (p.slug ?? "").trim(),
+        title: stripWpRenderedTitle(p.title?.rendered ?? ""),
+      }))
+      .filter((x) => x.slug.length > 0 && x.title.length > 0);
+  } catch {
+    return [];
+  }
+}
+
 export async function getServiceLandingBySlug(
   slug: string,
 ): Promise<WPServiceLanding | null> {
@@ -841,6 +888,11 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     // Known internal routes – keep using Next.js paths for these
     if (path === "/home" || path === "/") return "/";
     if (path.includes("our-services")) return "/our-services";
+    /** Marketing landing pages: WP `/services/{slug}` → Next `/{slug}` */
+    const servicesLanding = path.match(/^\/services\/([^/]+)\/?$/);
+    if (servicesLanding?.[1]) {
+      return `/${servicesLanding[1]}`;
+    }
     if (path.includes("our-mission")) return "/our-mission";
     if (path.includes("about-us")) return "/about-us";
     if (path.includes("get-the-app")) return "/get-the-app";
