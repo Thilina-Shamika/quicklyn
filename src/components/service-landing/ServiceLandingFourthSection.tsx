@@ -43,7 +43,7 @@ function FourthSectionTitle({ text }: { text: string }) {
   const t = text.replace(/\s{2,}/g, " ").trim();
   if (!t) return null;
   return (
-    <h2 className="text-center text-2xl font-bold leading-tight text-balance sm:text-3xl md:text-4xl">
+    <h2 className="text-center text-balance text-[27px] font-normal leading-[35px] sm:text-3xl sm:font-bold sm:leading-tight md:text-4xl md:leading-tight lg:text-[36px] lg:font-normal lg:leading-[50px]">
       {highlightHeadingLine(t)}
     </h2>
   );
@@ -179,17 +179,24 @@ export function ServiceLandingFourthSection({
 
         {featureNames.length > 0 ? (
           <div
-            className="mt-8 flex flex-col gap-0 divide-y divide-white/30 md:mt-10 md:flex-row md:items-stretch md:justify-center md:divide-x md:divide-y-0 md:divide-white/30"
+            className="mt-8 flex flex-col gap-0 md:mt-10 md:flex-row md:items-stretch md:justify-center md:divide-x md:divide-y-0 md:divide-white/30"
             role="list"
           >
             {featureNames.map((name, i) => (
-              <div
-                key={i}
-                className="flex-1 px-2 py-4 text-center text-xs font-medium leading-snug text-white/95 first:pl-0 last:pr-0 sm:px-4 sm:text-sm md:py-0"
-                role="listitem"
-              >
-                {name}
-              </div>
+              <Fragment key={`${name}-${i}`}>
+                {i > 0 ? (
+                  <div
+                    className="h-px w-full shrink-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_50%,transparent_100%)] md:hidden"
+                    aria-hidden
+                  />
+                ) : null}
+                <div
+                  className="flex-1 px-2 py-4 text-center text-xs font-medium leading-snug text-white/95 first:pl-0 last:pr-0 sm:px-4 sm:text-sm md:py-0"
+                  role="listitem"
+                >
+                  {name}
+                </div>
+              </Fragment>
             ))}
           </div>
         ) : null}
@@ -243,7 +250,7 @@ export function ServiceLandingFourthSection({
                 >
                   {bannerHeading ? (
                     <h3
-                      className="w-full pt-[60px] pb-[25px] text-center text-[34px] font-normal leading-[44px] text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.45)]"
+                      className="w-full pt-[60px] pb-[25px] text-center text-[23px] font-light leading-[31px] text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.45)] sm:text-[34px] sm:font-normal sm:leading-[44px]"
                     >
                       <BannerHeadingContent text={bannerHeading} />
                     </h3>

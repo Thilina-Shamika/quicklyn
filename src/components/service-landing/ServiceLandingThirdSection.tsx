@@ -114,14 +114,14 @@ function ThirdSectionContentGrid({
           : "grid w-full grid-cols-1 gap-6"
       }
     >
-      <div className="min-w-0 self-start space-y-4 md:pr-2">
+      <div className="min-w-0 self-start space-y-4 max-sm:text-center sm:text-left md:pr-2">
         {h ? (
-          <h2 className="max-w-[16ch] text-balance text-[37px] font-normal leading-[47px] sm:max-w-[18ch] md:max-w-[20ch]">
+          <h2 className="max-w-[16ch] text-balance text-[37px] font-normal leading-[47px] max-sm:mx-auto max-sm:text-center sm:mx-0 sm:text-left sm:max-w-[18ch] md:max-w-[20ch]">
             <ThirdSectionHeadingText text={h} />
           </h2>
         ) : null}
         {d ? (
-          <p className="max-w-[52ch] text-[18px] font-normal leading-[33px] text-white/95">
+          <p className="max-w-[52ch] text-[18px] font-normal leading-[33px] text-white/95 max-sm:mx-auto max-sm:text-center sm:mx-0 sm:text-left">
             {d}
           </p>
         ) : null}

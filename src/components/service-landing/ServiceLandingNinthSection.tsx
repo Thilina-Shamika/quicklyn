@@ -1,3 +1,6 @@
+import { Fragment } from "react";
+import { sanitizeServiceLandingHeadingLine } from "@/lib/sanitizeHtml";
+
 type Props = {
   finalThoughtsHeading?: string;
   finalThoughtsDescription?: string;
@@ -16,16 +19,35 @@ export function ServiceLandingNinthSection({
 
   if (!h9 && paragraphs.length === 0) return null;
 
+  const headingSegments = h9
+    .split(/<\s*br\s*\/?>/i)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   return (
     <div
       className="w-full min-h-0 border-t border-white/10 text-white"
       data-section="9"
     >
-      <div className="mx-auto w-full max-w-6xl border-b border-dashed border-white/25 px-5 py-[60px] sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl px-5 py-[60px] sm:px-6 lg:px-8">
         {h9 ? (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] md:items-start md:gap-12 lg:gap-16">
-            <h2 className="m-0 text-balance text-[67px] font-semibold leading-[64px] text-white">
-              {h9}
+            <h2 className="m-0 text-balance text-[42px] font-semibold italic leading-[45px] text-white sm:text-[67px] sm:leading-[64px]">
+              {headingSegments.map((segment, i) => (
+                <Fragment key={i}>
+                  {i > 0 ? (
+                    <>
+                      <br className="sm:hidden" aria-hidden />
+                      <span className="hidden sm:inline">&nbsp;</span>
+                    </>
+                  ) : null}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeServiceLandingHeadingLine(segment),
+                    }}
+                  />
+                </Fragment>
+              ))}
             </h2>
             <div className="min-w-0 space-y-4">
               {paragraphs.map((p, i) => (

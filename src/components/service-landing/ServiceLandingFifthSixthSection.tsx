@@ -33,7 +33,7 @@ const EMPHASIS_5 = "Different Layouts";
 const EMPHASIS_6 = "What to Expect";
 
 const FIFTH_HEADING_BASE_CLASS =
-  "max-w-[19ch] text-balance text-[53px] font-light leading-[63px] text-white md:max-w-[20ch] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
+  "max-w-[19ch] text-balance text-[32px] font-light leading-[42px] text-white mx-auto text-center md:max-w-[20ch] sm:mx-0 sm:text-left sm:text-[53px] sm:leading-[63px] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
 
 const SECTION_DISCLAIMER_CLASS =
   "mx-auto max-w-[56rem] text-center text-[18px] font-light italic leading-[29px] text-[#f5f5f5]";
@@ -41,10 +41,7 @@ const SECTION_DISCLAIMER_CLASS =
 /** Horizontal rule: transparent → solid → transparent (for between section 5 and 6). */
 function ServiceLandingSection5Separator() {
   return (
-    <div
-      className="w-full py-[130px]"
-      role="separator"
-    >
+    <div className="w-full py-8 sm:py-10 md:py-12" role="separator">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8">
         <div
           className="h-px w-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_12%,rgba(255,255,255,0.6)_50%,rgba(255,255,255,0.45)_88%,transparent_100%)]"
@@ -89,7 +86,7 @@ function FifthSectionHeading({ text }: { text: string }) {
 }
 
 const SIXTH_HEADING_BASE_CLASS =
-  "mb-5 text-balance text-center text-[52px] font-normal leading-[50px] text-white [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
+  "mb-5 text-balance text-center text-[31px] font-light leading-[41px] text-white sm:text-[52px] sm:font-normal sm:leading-[50px] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
 
 function SixthSectionHeading({ text }: { text: string }) {
   const raw = text.trim();
@@ -114,7 +111,7 @@ function SixthSectionHeading({ text }: { text: string }) {
   return (
     <h2 className={SIXTH_HEADING_BASE_CLASS}>
       {i > 0 ? <span className="text-white">{t.slice(0, i)}</span> : null}
-      <span className="font-extralight italic text-white">
+      <span className="font-light italic text-white sm:font-extralight">
         {t.slice(i, i + EMPHASIS_6.length)}
       </span>
       <span className="text-white">{t.slice(i + EMPHASIS_6.length)}</span>
@@ -186,7 +183,7 @@ function ApartmentTypeCard({
             )}
           >
             {title ? (
-              <h3 className="w-full min-w-0 text-[37px] font-normal leading-[45px] text-white sm:w-auto sm:min-w-0 sm:flex-1 sm:max-w-none">
+              <h3 className="w-full min-w-0 text-[27px] font-normal leading-[31px] text-white sm:w-auto sm:min-w-0 sm:flex-1 sm:max-w-none sm:text-[37px] sm:leading-[45px]">
                 {title}
               </h3>
             ) : (
@@ -205,7 +202,7 @@ function ApartmentTypeCard({
       ) : null}
       {body ? (
         <div className="bg-[#347C7C]/60 px-6 py-6 sm:px-8 sm:py-8">
-          <p className="m-0 w-full min-w-0 text-left text-[18px] font-normal leading-[29px] text-white">
+          <p className="m-0 w-full min-w-0 text-left text-[12px] font-normal text-white sm:text-[18px] sm:leading-[29px]">
             {body}
           </p>
         </div>
@@ -425,14 +422,18 @@ export function ServiceLandingFifthSixthSection({
           {hasSection5 ? (
             <div className="mb-0">
               <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] md:items-start md:gap-12 lg:gap-16">
-                <div className="min-w-0 w-full max-w-sm space-y-5 md:pr-2">
+                <div className="min-w-0 w-full max-w-sm space-y-5 text-center sm:text-left md:pr-2">
                   {h5 ? <FifthSectionHeading text={h5} /> : null}
                   {d5 ? (
-                    <p className="max-w-[40ch] text-[18px] font-normal leading-[29px] text-white/95">
+                    <p className="mx-auto max-w-[40ch] text-center text-[18px] font-normal leading-[29px] text-white/95 sm:mx-0 sm:text-left">
                       {d5}
                     </p>
                   ) : null}
-                  {hasCta ? <CtaButton label={btnLabel} href={btnHref} /> : null}
+                  {hasCta ? (
+                    <div className="flex justify-center sm:contents">
+                      <CtaButton label={btnLabel} href={btnHref} />
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex min-w-0 w-full flex-col">
                   {types.map((card, i) => {
@@ -451,7 +452,10 @@ export function ServiceLandingFifthSixthSection({
                   })}
                   {disc5 ? (
                     <p
-                      className={`${SECTION_DISCLAIMER_CLASS} mt-8 w-full sm:mt-10`}
+                      className={cn(
+                        SECTION_DISCLAIMER_CLASS,
+                        "mt-8 w-full text-[12px] leading-[21px] sm:mt-10 sm:text-[18px] sm:leading-[29px]",
+                      )}
                     >
                       {disc5}
                     </p>
@@ -476,9 +480,7 @@ export function ServiceLandingFifthSixthSection({
                 <WhatToExpectList items={steps} />
               </div>
               {disc6 ? (
-                <p
-                  className={`${SECTION_DISCLAIMER_CLASS} my-[100px]`}
-                >
+                <p className={`${SECTION_DISCLAIMER_CLASS} my-[100px]`}>
                   {disc6}
                 </p>
               ) : null}

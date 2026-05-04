@@ -21,6 +21,9 @@ function getAcfImageUrl(
   return undefined;
 }
 
+const EIGHTH_SECTION_HEADING_CLASS =
+  "text-balance text-center text-[30px] font-light leading-[41px] sm:text-[51px] sm:leading-[64px]";
+
 function EighthSectionHeading({ text }: { text: string }) {
   const t = text.trim();
   if (!t) return null;
@@ -28,7 +31,7 @@ function EighthSectionHeading({ text }: { text: string }) {
   const idx = lower.indexOf(ACCENT.toLowerCase());
   if (idx === -1) {
     return (
-      <h2 className="text-balance text-center text-[51px] font-light leading-[64px] text-white">
+      <h2 className={`${EIGHTH_SECTION_HEADING_CLASS} text-white`}>
         {t}
       </h2>
     );
@@ -37,7 +40,7 @@ function EighthSectionHeading({ text }: { text: string }) {
   const before = idx > 0 ? t.slice(0, idx) : "";
   const after = t.slice(endAccent);
   return (
-    <h2 className="text-balance text-center text-[51px] font-light leading-[64px]">
+    <h2 className={EIGHTH_SECTION_HEADING_CLASS}>
       {before ? <span className="text-white">{before}</span> : null}
       <span className="text-[#ffda00]">{t.slice(idx, endAccent)}</span>
       <span className="text-white">{after}</span>
@@ -55,6 +58,15 @@ function Sparkle({ className }: { className?: string }) {
     </span>
   );
 }
+
+/** Mobile: staggered / scattered cards (see design). md+ uses absolute layout below. */
+const WHY_CHOOSE_CARD_LAYOUT_MOBILE: readonly string[] = [
+  "max-md:relative max-md:z-[2] max-md:w-[min(100%,17.5rem)] max-md:self-start max-md:-rotate-[6deg]",
+  "max-md:relative max-md:z-[4] max-md:-mt-9 max-md:w-[min(100%,17.5rem)] max-md:self-end max-md:rotate-[5deg] max-md:translate-x-1",
+  "max-md:relative max-md:z-[6] max-md:-mt-5 max-md:mx-auto max-md:w-[min(100%,19rem)] max-md:rotate-0",
+  "max-md:relative max-md:z-[3] max-md:-mt-3 max-md:w-[min(100%,17.5rem)] max-md:self-start max-md:ml-1 max-md:rotate-0",
+  "max-md:relative max-md:z-[2] max-md:-mt-3 max-md:w-[min(100%,17.5rem)] max-md:self-end max-md:rotate-0",
+];
 
 /** Staggered, overlapping layout (md+) — order matches ACF: top row L→R, then bottom row L→R. */
 const WHY_CHOOSE_CARD_LAYOUT: readonly string[] = [
@@ -79,7 +91,6 @@ function WhyChooseCard({
     <div
       className={cn(
         "flex min-h-[4.5rem] items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-4 py-3 shadow-[0_10px_28px_rgba(0,0,0,0.4)] backdrop-blur-sm sm:gap-4 sm:px-5 sm:py-4",
-        "max-md:mx-auto max-md:max-w-lg max-md:rotate-[-1deg]",
         className,
       )}
     >
@@ -97,7 +108,7 @@ function WhyChooseCard({
       ) : (
         <div className="h-12 w-12 shrink-0 rounded-lg bg-white/5 sm:h-14 sm:w-14" />
       )}
-      <p className="m-0 min-w-0 flex-1 text-left text-[27px] font-light leading-[37px] text-white">
+      <p className="m-0 min-w-0 flex-1 text-left text-[16px] font-light leading-[25px] text-white sm:text-[27px] sm:leading-[37px]">
         {text}
       </p>
     </div>
@@ -159,7 +170,7 @@ export function ServiceLandingEighthSection({
 
         {whyPrimary.length > 0 ? (
           <div
-            className="relative isolate mt-8 w-full min-h-0 sm:mt-10 md:mt-12 md:min-h-[26rem] md:pb-4 lg:min-h-[32rem] xl:min-h-[36rem]"
+            className="relative isolate mt-8 flex w-full min-h-0 flex-col items-stretch sm:mt-10 md:mt-12 md:block md:min-h-[26rem] md:pb-4 lg:min-h-[32rem] xl:min-h-[36rem]"
             aria-label="Why choose us"
           >
             {whyPrimary.map((row, i) => (
@@ -167,7 +178,10 @@ export function ServiceLandingEighthSection({
                 key={`why-${i}`}
                 text={row.text}
                 icon={row.icon}
-                className={WHY_CHOOSE_CARD_LAYOUT[i] ?? "md:static"}
+                className={cn(
+                  WHY_CHOOSE_CARD_LAYOUT_MOBILE[i] ?? "",
+                  WHY_CHOOSE_CARD_LAYOUT[i] ?? "md:static",
+                )}
               />
             ))}
           </div>

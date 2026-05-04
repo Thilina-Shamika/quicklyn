@@ -69,7 +69,7 @@ export function ServiceLandingSeventhSection({
 
   return (
     <div className="relative w-full min-h-0 text-white">
-      <div className="mx-auto w-full max-w-[1280px] px-5 py-[60px] sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1280px] px-5 pt-[60px] pb-[200px] sm:px-6 lg:px-8">
         <div
           className="relative mx-auto w-full max-w-6xl rounded-[2.5rem] border border-white/80 px-6 pb-20 pt-9 sm:rounded-[2.75rem] sm:px-8 sm:pb-24 sm:pt-10 md:px-12 md:pb-28 md:pt-12 lg:rounded-[3rem] lg:px-14"
           data-section="7"

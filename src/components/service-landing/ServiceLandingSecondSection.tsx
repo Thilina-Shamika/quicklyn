@@ -120,7 +120,7 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
   return (
     <section className="relative z-10 mb-[20px] bg-[#2a7a7c] text-white">
       <div className="mx-auto w-full max-w-[1280px] px-5 py-14 sm:px-6 sm:py-16 md:py-20 lg:px-8">
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-8 sm:gap-2">
           {items.map((item, index) => {
             const itemRecord = item as ServiceLandingSecondItem &
               Record<string, unknown>;
@@ -151,23 +151,29 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
               >
                 <a
                   href={`#${rowId}`}
-                  className="group/feat text-inherit no-underline relative block w-full min-w-0 cursor-pointer overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
+                  className="group/feat text-inherit no-underline relative block w-full min-w-0 cursor-pointer overflow-visible rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50 sm:overflow-hidden sm:rounded-2xl"
                   aria-label={rowA11yName}
                 >
                   <div
-                    className="pointer-events-none absolute inset-0 -z-0 rounded-2xl bg-gradient-to-r from-white/0 via-white/[0.12] to-white/0 opacity-0 transition-opacity duration-300 group-hover/feat:opacity-100"
+                    className="pointer-events-none absolute inset-0 -z-0 hidden rounded-2xl bg-gradient-to-r from-white/0 via-white/[0.12] to-white/0 opacity-0 transition-opacity duration-300 group-hover/feat:opacity-100 sm:block"
                     aria-hidden
                   />
                   <div
-                    className="relative z-10 grid min-w-0 grid-cols-1 items-stretch gap-0 py-6 sm:grid-cols-[minmax(0,35fr)_minmax(0,10fr)_minmax(0,65fr)] sm:py-6 md:py-7 lg:py-8"
+                    className="relative z-10 grid min-w-0 grid-cols-[72px_minmax(0,1fr)] grid-rows-[auto_auto] items-start gap-x-4 gap-y-1.5 py-0 sm:grid-cols-[minmax(0,35fr)_minmax(0,10fr)_minmax(0,65fr)] sm:grid-rows-1 sm:items-stretch sm:gap-0 sm:py-6 md:py-7 lg:py-8"
                   >
-                    <div className="flex min-h-0 w-full min-w-0 items-center justify-center pr-0 pb-5 sm:h-full sm:min-h-0 sm:justify-end sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3">
-                      <h3 className="min-w-0 text-balance text-center text-[33px] font-light italic leading-tight tracking-tight transition-[font-weight] duration-200 group-hover/feat:font-semibold sm:text-right">
+                    <div className="col-start-2 row-start-1 flex min-h-0 w-full min-w-0 items-start justify-start pr-0 pb-0 sm:col-start-1 sm:row-start-1 sm:h-full sm:min-h-0 sm:justify-end sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3">
+                      <h3 className="min-w-0 text-balance text-left text-[14px] font-bold uppercase italic leading-snug tracking-wide transition-[font-weight] duration-200 group-hover/feat:font-semibold sm:text-right sm:text-[33px] sm:font-light sm:normal-case sm:tracking-tight sm:italic">
                         {label}
                       </h3>
                     </div>
-                    <div className="flex min-h-0 w-full items-center justify-center px-0 pb-5 sm:h-full sm:min-h-0 sm:pb-0 sm:px-2 md:px-3">
-                      <div className="mx-auto flex justify-center sm:mx-0">
+                    <div className="relative col-start-1 row-span-2 row-start-1 flex min-h-0 w-full items-start justify-center self-stretch px-0 pb-0 sm:col-start-2 sm:row-span-1 sm:row-start-1 sm:h-full sm:min-h-0 sm:px-2 md:px-3">
+                      {index < items.length - 1 ? (
+                        <span
+                          className="pointer-events-none absolute bottom-[-2rem] left-1/2 top-[72px] z-[5] w-0 -translate-x-1/2 border-l-2 border-dashed border-white/40 sm:hidden"
+                          aria-hidden
+                        />
+                      ) : null}
+                      <div className="relative z-10 mx-auto flex justify-center sm:mx-0">
                         <SecondSectionRowIcon
                           before={before}
                           after={after}
@@ -175,8 +181,8 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
                         />
                       </div>
                     </div>
-                    <div className="flex min-h-0 w-full min-w-0 items-center justify-center pl-0 sm:h-full sm:min-h-0 sm:justify-start sm:pl-2 sm:pr-0 md:pl-3">
-                      <p className="min-w-0 w-full max-w-[50ch] text-balance text-center text-[16px] leading-[30px] text-white/95 sm:pl-1 sm:text-left sm:text-[17px] md:text-[18px] md:leading-[33px]">
+                    <div className="col-start-2 row-start-2 flex min-h-0 w-full min-w-0 items-start justify-start pl-0 sm:col-start-3 sm:row-start-1 sm:h-full sm:min-h-0 sm:justify-start sm:pl-2 sm:pr-0 md:pl-3">
+                      <p className="min-w-0 w-full max-w-[50ch] text-balance text-left text-[15px] leading-[24px] text-white/95 sm:pl-1 sm:text-[17px] sm:leading-[30px] md:text-[18px] md:leading-[33px]">
                         {desc ? <RichSecondDescription text={desc} /> : null}
                       </p>
                     </div>
