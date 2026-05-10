@@ -38,15 +38,117 @@ const FIFTH_HEADING_BASE_CLASS =
 const SECTION_DISCLAIMER_CLASS =
   "mx-auto max-w-[56rem] text-center text-[18px] font-light italic leading-[29px] text-[#f5f5f5]";
 
+/** Same 1px rule as `ServiceLandingSection5Separator` (between section 5 / 6). */
+const GRADIENT_SECTION_HAIRLINE =
+  "h-px w-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_12%,rgba(255,255,255,0.6)_50%,rgba(255,255,255,0.45)_88%,transparent_100%)]";
+
+const IMPROVES_HIGHLIGHT = "improves:";
+const YELLOW_IMPROVES_CLASS =
+  "font-bold italic text-[#FFDA00]";
+
+/** Heading: optional yellow + italic “improves:” to match CMS / reference design. */
+function NewImprovementsHeading({ text }: { text: string }) {
+  const raw = text.trim();
+  if (!raw) return null;
+  const t = decodeCommonWpHtmlEntities(raw);
+
+  if (/<\s*(strong|b|i|em)\b/i.test(t)) {
+    return (
+      <h2
+        className="text-balance text-left text-[26px] font-light leading-[1.25] text-white sm:text-[32px] sm:leading-[1.2] md:text-[36px] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold"
+        dangerouslySetInnerHTML={{
+          __html: sanitizeServiceLandingHeadingLine(t),
+        }}
+      />
+    );
+  }
+
+  const lower = t.toLowerCase();
+  const key = IMPROVES_HIGHLIGHT.toLowerCase();
+  const i = lower.indexOf(key);
+  if (i === -1) {
+    return (
+      <h2 className="text-balance text-left text-[26px] font-light leading-[1.25] text-white sm:text-[32px] sm:leading-[1.2] md:text-[36px]">
+        {t}
+      </h2>
+    );
+  }
+  return (
+    <h2 className="text-balance text-left text-[26px] font-light leading-[1.25] text-white sm:text-[32px] sm:leading-[1.2] md:text-[36px]">
+      <span className="text-white">{t.slice(0, i)}</span>
+      <span className={YELLOW_IMPROVES_CLASS}>
+        {t.slice(i, i + IMPROVES_HIGHLIGHT.length)}
+      </span>
+      <span className="text-white">{t.slice(i + IMPROVES_HIGHLIGHT.length)}</span>
+    </h2>
+  );
+}
+
+function ServiceLandingNewImprovementsBand({
+  heading,
+  description,
+  items,
+  hasSection5Above,
+}: {
+  heading: string;
+  description: string;
+  items: string[];
+  hasSection5Above: boolean;
+}) {
+  const h = heading.trim();
+  const d = description.replace(/\r\n/g, "\n").trim();
+  const list = items.filter(Boolean);
+  if (!h && !d && list.length === 0) return null;
+
+  return (
+    <div
+      className={cn(
+        "relative left-1/2 z-[2] isolate mb-[100px] w-screen max-w-[100vw] -translate-x-1/2 bg-[#266a6a] text-white",
+        hasSection5Above ? "mt-12 sm:mt-14 md:mt-16" : "",
+      )}
+    >
+      <div className={cn(GRADIENT_SECTION_HAIRLINE, "shrink-0")} aria-hidden />
+      <div className="py-[70px]">
+        <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-start md:gap-14 lg:gap-20">
+            <div className="min-w-0 space-y-5 text-left">
+              {h ? <NewImprovementsHeading text={h} /> : null}
+              {d ? (
+                <p className="m-0 max-w-xl text-[17px] font-normal leading-[1.65] text-white sm:text-[18px] sm:leading-[29px]">
+                  {d}
+                </p>
+              ) : null}
+            </div>
+            {list.length > 0 ? (
+              <ul className="m-0 min-w-0 list-none p-0">
+                {list.map((line, idx) => (
+                  <li
+                    key={`${idx}-${line.slice(0, 32)}`}
+                    className={cn(
+                      "py-5 text-left text-[18px] font-medium leading-[1.45] text-white sm:text-[20px] sm:leading-[1.45]",
+                      idx < list.length - 1 &&
+                        "border-b border-dashed border-white/35",
+                    )}
+                  >
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+      </div>
+      <div className={cn(GRADIENT_SECTION_HAIRLINE, "shrink-0")} aria-hidden />
+    </div>
+  );
+}
+
 /** Horizontal rule: transparent → solid → transparent (for between section 5 and 6). */
 function ServiceLandingSection5Separator() {
   return (
     <div className="w-full py-8 sm:py-10 md:py-12" role="separator">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8">
-        <div
-          className="h-px w-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_12%,rgba(255,255,255,0.6)_50%,rgba(255,255,255,0.45)_88%,transparent_100%)]"
-          aria-hidden
-        />
+        <div className={GRADIENT_SECTION_HAIRLINE} aria-hidden />
       </div>
     </div>
   );
@@ -344,6 +446,10 @@ type Props = {
   buttonUrl?: string;
   apartmentTypes: ServiceLandingApartmentType[];
   serviceDisclaimer?: string;
+  /** ACF: band between section 5 and 6 (“new improvements”). */
+  newImprovementsHeading?: string;
+  newImprovementsDescription?: string;
+  newImprovementLabels?: string[];
   section6Heading?: string;
   section6SubHeading?: string;
   whatToExpect: ServiceLandingWhatToExpectItem[];
@@ -358,6 +464,9 @@ export function ServiceLandingFifthSixthSection({
   buttonUrl,
   apartmentTypes,
   serviceDisclaimer,
+  newImprovementsHeading,
+  newImprovementsDescription,
+  newImprovementLabels = [],
   section6Heading,
   section6SubHeading,
   whatToExpect,
@@ -383,6 +492,11 @@ export function ServiceLandingFifthSixthSection({
   const btnHref = buttonUrl?.trim() ?? "";
   const hasCta = Boolean(btnLabel && btnHref);
 
+  const nimH = newImprovementsHeading?.trim() ?? "";
+  const nimD = newImprovementsDescription?.trim() ?? "";
+  const nimList = newImprovementLabels.map((s) => s.trim()).filter(Boolean);
+  const hasNewImprovements = Boolean(nimH || nimD || nimList.length > 0);
+
   const hasSection5 = Boolean(
     h5 || d5 || types.length > 0 || hasCta || disc5,
   );
@@ -390,9 +504,14 @@ export function ServiceLandingFifthSixthSection({
     h6 || s6 || steps.length > 0 || disc6,
   );
 
+  /** When improvements is present, its top/bottom hairlines replace this separator. */
+  const showMidSeparator =
+    !hasNewImprovements &&
+    ((hasSection5 && !hasSection6) || (hasSection6 && hasSection5));
+
   const bgUrl = getAcfImageUrl(background);
 
-  if (!hasSection5 && !hasSection6) {
+  if (!hasSection5 && !hasSection6 && !hasNewImprovements) {
     return null;
   }
 
@@ -464,7 +583,15 @@ export function ServiceLandingFifthSixthSection({
               </div>
             </div>
           ) : null}
-          {hasSection5 ? <ServiceLandingSection5Separator /> : null}
+          {hasNewImprovements ? (
+            <ServiceLandingNewImprovementsBand
+              heading={nimH}
+              description={nimD}
+              items={nimList}
+              hasSection5Above={hasSection5}
+            />
+          ) : null}
+          {showMidSeparator ? <ServiceLandingSection5Separator /> : null}
 
           {hasSection6 ? (
             <div>

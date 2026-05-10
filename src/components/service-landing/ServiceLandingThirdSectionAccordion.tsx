@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 import type { ServiceLandingThirdAccordionItem } from "@/types/wordpress";
 
 const chevron = (
@@ -20,10 +20,12 @@ const chevron = (
 
 type Props = {
   items: ServiceLandingThirdAccordionItem[];
+  /** Stable prefix for panel ids (e.g. URL slug). Avoids useId() SSR/client mismatches in Next 15. */
+  idPrefix: string;
 };
 
-export function ServiceLandingThirdSectionAccordion({ items }: Props) {
-  const baseId = useId();
+export function ServiceLandingThirdSectionAccordion({ items, idPrefix }: Props) {
+  const baseId = idPrefix.replace(/[^a-zA-Z0-9_-]/g, "-") || "third-acc";
   const [openIndex, setOpenIndex] = useState<number>(-1);
 
   if (items.length === 0) {

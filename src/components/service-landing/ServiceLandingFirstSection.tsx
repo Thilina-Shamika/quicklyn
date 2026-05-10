@@ -53,17 +53,17 @@ export function ServiceLandingFirstSection({
           {/* Left column: heading, then 2 sub-columns (1st desc | image) */}
           <div className="min-w-0 space-y-0">
             <h1 className="font-sans leading-[0.9] text-white">
-              <span className="block font-semibold tracking-tight text-[clamp(2.75rem,7vw+1.25rem,111px)] lg:text-[111px]">
+              <span className="block font-semibold tracking-tight text-[clamp(2.75rem,7vw+1.25rem,111px)] lg:text-[85px] lg:leading-[85px]">
                 {first}
               </span>
               {second && (
-                <span className="mt-1 block font-extralight italic tracking-tight text-[clamp(2.25rem,5.5vw+1rem,86px)] lg:text-[86px]">
+                <span className="mt-1 block font-extralight italic tracking-tight text-[clamp(2.25rem,5.5vw+1rem,86px)] lg:text-[85px] lg:leading-[85px]">
                   {second}
                 </span>
               )}
             </h1>
-            <div className="mt-6 grid grid-cols-1 gap-8 translate-y-0 sm:-mt-11 sm:-translate-y-[45px] sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-center sm:gap-5 md:-mt-14 lg:-mt-[4.5rem] lg:gap-6">
-              <div className="min-w-0 text-[18px] leading-[33px] text-white/95 max-sm:mt-[20px]">
+            <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-center sm:gap-5 md:mt-12 lg:mt-12 lg:gap-6">
+              <div className="min-w-0 text-[18px] leading-[33px] text-white/95">
                 {description1}
               </div>
               {imageUrl ? (

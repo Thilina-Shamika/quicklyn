@@ -99,6 +99,187 @@ function normalizeWhyChooseQuicklyn(
   return [];
 }
 
+function acfTrimmedString(v: unknown): string {
+  if (v == null) return "";
+  if (typeof v === "string") return v.replace(/\r\n/g, "\n").trim();
+  if (typeof v === "number" && Number.isFinite(v)) return String(v);
+  if (isAcfGroup(v) && typeof v["rendered"] === "string") {
+    return v["rendered"].replace(/\r\n/g, "\n").trim();
+  }
+  return "";
+}
+
+function acfFirstNonEmpty(...candidates: unknown[]): string {
+  for (const c of candidates) {
+    const s = acfTrimmedString(c);
+    if (s) return s;
+  }
+  return "";
+}
+
+type WpAcfGroup = Record<string, unknown>;
+
+function isAcfGroup(v: unknown): v is WpAcfGroup {
+  return Boolean(v) && typeof v === "object" && !Array.isArray(v);
+}
+
+/** Collect repeater rows for the “improvements” band from flat + grouped ACF shapes. */
+function collectImprovementsRepeaterRows(
+  acf: Record<string, unknown>,
+): unknown[] {
+  const repeaterKeys = [
+    "new_improvements",
+    "improvements",
+    "improvements_list",
+    "improvement_items",
+    "section_improvements",
+    "improvements_points",
+  ];
+
+  const tryObject = (obj: Record<string, unknown>): unknown[] | null => {
+    for (const k of repeaterKeys) {
+      const raw = obj[k];
+      if (Array.isArray(raw) && raw.length > 0) return raw;
+    }
+    const altNested = ["items", "list", "points", "rows"];
+    for (const k of altNested) {
+      const raw = obj[k];
+      if (Array.isArray(raw) && raw.length > 0) return raw;
+    }
+    return null;
+  };
+
+  const top = tryObject(acf);
+  if (top) return top;
+
+  const groupKeys = [
+    "new_improvements_section",
+    "improvements_section",
+    "new_improvements_block",
+    "improvements_block",
+    "section_new_improvements",
+  ];
+  for (const gk of groupKeys) {
+    const grp = acf[gk];
+    if (!isAcfGroup(grp)) continue;
+    const nested = tryObject(grp);
+    if (nested) return nested;
+  }
+
+  return [];
+}
+
+function rowLabelFromImprovementRow(row: unknown): string {
+  if (typeof row === "string") return acfTrimmedString(row);
+  if (!isAcfGroup(row)) return "";
+
+  const keys = [
+    "improvement_point",
+    "improvement_text",
+    "point_name",
+    "new_improvement_item",
+    "improvement",
+    "improvement_title",
+    "improvement_name",
+    "title",
+    "heading",
+    "label",
+    "text",
+    "item",
+    "name",
+    "description",
+    "point",
+  ];
+  for (const k of keys) {
+    const s = acfFirstNonEmpty(row[k]);
+    if (s) return s;
+  }
+  return "";
+}
+
+/** Heading + description + list lines for the improvements band (multiple ACF layouts). */
+function extractNewImprovementsFromAcf(
+  acf: Record<string, unknown> | null | undefined,
+): { heading: string; description: string; labels: string[] } {
+  if (!acf || typeof acf !== "object") {
+    return { heading: "", description: "", labels: [] };
+  }
+
+  let heading = acfFirstNonEmpty(
+    acf["improvements_section_heading"],
+    acf["new_improvements_heading"],
+    acf["improvements_heading"],
+    acf["improvement_section_heading"],
+    acf["heading_improvements"],
+  );
+
+  let description = acfFirstNonEmpty(
+    acf["improvements_description"],
+    acf["new_improvements_description"],
+    acf["improvement_section_description"],
+    acf["improvements_section_description"],
+    acf["description_improvements"],
+  );
+
+  const groupKeys = [
+    "new_improvements_section",
+    "improvements_section",
+    "new_improvements_block",
+    "improvements_block",
+    "section_new_improvements",
+  ];
+  for (const gk of groupKeys) {
+    const grp = acf[gk];
+    if (!isAcfGroup(grp)) continue;
+    if (!heading) {
+      heading = acfFirstNonEmpty(
+        grp["heading"],
+        grp["title"],
+        grp["section_heading"],
+        grp["improvements_section_heading"],
+        grp["new_improvements_heading"],
+        grp["improvements_heading"],
+      );
+    }
+    if (!description) {
+      description = acfFirstNonEmpty(
+        grp["description"],
+        grp["body"],
+        grp["copy"],
+        grp["text"],
+        grp["improvements_section_description"],
+        grp["new_improvements_description"],
+        grp["improvements_description"],
+      );
+    }
+  }
+
+  const rawPoints = acf["improvements_points"];
+  let labels: string[] = [];
+  if (Array.isArray(rawPoints) && rawPoints.length > 0) {
+    labels = rawPoints
+      .map(rowLabelFromImprovementRow)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  if (labels.length === 0) {
+    const rows = collectImprovementsRepeaterRows(acf);
+    labels = rows
+      .map(rowLabelFromImprovementRow)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  return { heading, description, labels };
+}
+
+function normalizeImprovementCopy(s: string): string {
+  return s
+    .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function excerptPlain(text: string, max = 160): string {
   const t = text.replace(/\s+/g, " ").trim();
   if (t.length <= max) return t;
@@ -198,6 +379,27 @@ export default async function ServiceLandingPage({
   const sixthSubHeading = acf["6th_section_sub_heading"]?.trim();
   const whatToExpect = normalizeWhatToExpect(acfRec);
   const whatToExpectDisclaimer = acf["what_to_expect_disclaimer"]?.trim();
+  const improvementsExtracted = extractNewImprovementsFromAcf(acfRec);
+  const newImprovementsHeading = normalizeImprovementCopy(
+    acfFirstNonEmpty(
+      acfRec["improvements_section_heading"],
+      improvementsExtracted.heading,
+    ),
+  );
+  const newImprovementsDescription = normalizeImprovementCopy(
+    acfFirstNonEmpty(
+      acfRec["improvements_description"],
+      improvementsExtracted.description,
+    ),
+  );
+  const rawImprovementsPoints = acfRec["improvements_points"];
+  const newImprovementLabels =
+    Array.isArray(rawImprovementsPoints) && rawImprovementsPoints.length > 0
+      ? rawImprovementsPoints
+          .map(rowLabelFromImprovementRow)
+          .map((s) => normalizeImprovementCopy(s))
+          .filter(Boolean)
+      : improvementsExtracted.labels.map((s) => normalizeImprovementCopy(s)).filter(Boolean);
   const seventhHeading = acf["7th_section_heading"]?.trim();
   const seventhDescription = acf["7th_section_description"]?.trim();
   const seventhStructure = acfRec["structure"] as string | undefined;
@@ -235,6 +437,7 @@ export default async function ServiceLandingPage({
         heading={thirdHeading}
         description={thirdDescription}
         accordion={thirdSectionAccordion}
+        accordionIdPrefix={`${slug}-s3`}
         background={thirdBackground}
         topCurve={thirdTopCurve}
         bottomCurve={thirdBottomCurve}
@@ -257,6 +460,9 @@ export default async function ServiceLandingPage({
         buttonUrl={bookButtonUrl}
         apartmentTypes={apartmentTypes}
         serviceDisclaimer={serviceDisclaimer}
+        newImprovementsHeading={newImprovementsHeading}
+        newImprovementsDescription={newImprovementsDescription}
+        newImprovementLabels={newImprovementLabels}
         section6Heading={sixthHeading}
         section6SubHeading={sixthSubHeading}
         whatToExpect={whatToExpect}

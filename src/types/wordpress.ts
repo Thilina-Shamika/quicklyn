@@ -401,6 +401,13 @@ export interface ServiceLandingACF {
   apartment_types?: ServiceLandingApartmentType[];
   /** Section 5 footer line (ACF field name may be `service_desclaimer`). */
   service_desclaimer?: string;
+  /** Band between section 5 and section 6 (heading + body + list). */
+  improvements_section_heading?: string;
+  improvements_description?: string;
+  improvements_points?: ServiceLandingBannerPoint[];
+  new_improvements_heading?: string;
+  new_improvements_description?: string;
+  new_improvements?: ServiceLandingNewImprovementItem[];
   ["6th_section_heading"]?: string;
   ["6th_section_sub_heading"]?: string;
   what_to_expect?: ServiceLandingWhatToExpectItem[];
@@ -427,6 +434,15 @@ export interface ServiceLandingApartmentType {
   apartment_type_name?: string;
   approx_time?: string;
   service_description?: string;
+}
+
+/** Repeater: “new improvements” row (between section 5 and 6). */
+export interface ServiceLandingNewImprovementItem {
+  acf_fc_layout?: string;
+  /** Primary subfield name; CMS may also send `improvement_text` or `point_name`. */
+  improvement_point?: string;
+  improvement_text?: string;
+  point_name?: string;
 }
 
 /** Repeater: numbered “what to expect” step (section 6). */

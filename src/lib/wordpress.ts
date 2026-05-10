@@ -583,6 +583,72 @@ export async function getPublishedServicesForNav(): Promise<ServiceNavItem[]> {
   }
 }
 
+function isEmptyAcfValue(v: unknown): boolean {
+  if (v == null || v === false) return true;
+  if (typeof v === "string") return v.trim() === "";
+  if (Array.isArray(v)) return v.length === 0;
+  return false;
+}
+
+/** ACF REST often sends `false` for empty repeaters; never clobber real rows with that. */
+const ACF_REPEATER_FALSE_KEYS = new Set([
+  "improvements_points",
+  "new_improvements",
+  "what_to_expect",
+  "apartment_types",
+  "banner_contents",
+  "features",
+  "2nd_section_items",
+  "3rd_section_accordion",
+  "why_choose_quicklyn",
+]);
+
+/**
+ * Merge list + by-id ACF. By-id usually has fuller repeaters, but some installs
+ * return `false` or omit newer fields and would overwrite good list payloads — keep
+ * the non-empty side for those keys.
+ */
+function mergeServiceLandingAcfFields(
+  fromList: Record<string, unknown> | undefined,
+  fromById: Record<string, unknown> | undefined,
+): Record<string, unknown> | undefined {
+  if (!fromList && !fromById) return undefined;
+  if (!fromById) return fromList;
+  if (!fromList) return fromById;
+
+  const out: Record<string, unknown> = { ...fromList };
+  for (const [key, v] of Object.entries(fromById)) {
+    if (v === false && ACF_REPEATER_FALSE_KEYS.has(key)) {
+      const prev = out[key];
+      if (Array.isArray(prev) && prev.length > 0) {
+        continue;
+      }
+      out[key] = v;
+      continue;
+    }
+    out[key] = v;
+  }
+
+  const preferEitherSide = [
+    "improvements_section_heading",
+    "improvements_description",
+    "improvements_points",
+    "new_improvements_heading",
+    "new_improvements_description",
+    "new_improvements",
+  ] as const;
+
+  for (const key of preferEitherSide) {
+    const merged = out[key];
+    const a = fromList[key];
+    const b = fromById[key];
+    if (isEmptyAcfValue(merged) && (!isEmptyAcfValue(a) || !isEmptyAcfValue(b))) {
+      out[key] = !isEmptyAcfValue(b) ? b : a;
+    }
+  }
+  return out;
+}
+
 export async function getServiceLandingBySlug(
   slug: string,
 ): Promise<WPServiceLanding | null> {
@@ -607,7 +673,13 @@ export async function getServiceLandingBySlug(
       if (byId.ok) {
         const one = (await byId.json()) as WPServiceLanding;
         if (one?.acf) {
-          return { ...first, acf: { ...first.acf, ...one.acf } };
+          const listAcf = first.acf as Record<string, unknown> | undefined;
+          const idAcf = one.acf as Record<string, unknown>;
+          const merged = mergeServiceLandingAcfFields(listAcf, idAcf);
+          return {
+            ...first,
+            acf: (merged ?? idAcf) as WPServiceLanding["acf"],
+          };
         }
       }
     }

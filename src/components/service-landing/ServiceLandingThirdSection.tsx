@@ -59,6 +59,8 @@ type Props = {
   heading?: string;
   description?: string;
   accordion: ServiceLandingThirdAccordionItem[];
+  /** Passed to the accordion for stable aria ids (use the service landing slug). */
+  accordionIdPrefix: string;
   background?: WPImage | null;
   topCurve?: WPImage | null;
   bottomCurve?: WPImage | null;
@@ -100,11 +102,13 @@ function ThirdSectionContentGrid({
   d,
   hasAccordion,
   accordion,
+  accordionIdPrefix,
 }: {
   h: string;
   d: string;
   hasAccordion: boolean;
   accordion: ServiceLandingThirdAccordionItem[];
+  accordionIdPrefix: string;
 }) {
   return (
     <div
@@ -128,7 +132,10 @@ function ThirdSectionContentGrid({
       </div>
       {hasAccordion ? (
         <div className="min-w-0 w-full self-start">
-          <ServiceLandingThirdSectionAccordion items={accordion} />
+          <ServiceLandingThirdSectionAccordion
+            items={accordion}
+            idPrefix={accordionIdPrefix}
+          />
         </div>
       ) : null}
     </div>
@@ -139,6 +146,7 @@ export function ServiceLandingThirdSection({
   heading,
   description,
   accordion,
+  accordionIdPrefix,
   background,
   topCurve,
   bottomCurve,
@@ -197,6 +205,7 @@ export function ServiceLandingThirdSection({
             d={d}
             hasAccordion={hasAccordion}
             accordion={accordion}
+            accordionIdPrefix={accordionIdPrefix}
           />
         </div>
       </div>
