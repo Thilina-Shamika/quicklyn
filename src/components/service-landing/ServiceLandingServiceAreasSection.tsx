@@ -133,7 +133,7 @@ export function ServiceLandingServiceAreasSection({
 
   return (
     <section
-      className="relative w-full bg-[#2d7a77] text-white"
+      className="relative w-full bg-[#2a787a] text-white"
       aria-labelledby={hasHeadingBlock ? "service-areas-heading" : undefined}
     >
       <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-10 sm:px-6 md:px-8 md:pb-[120px] md:pt-[150px]">
