@@ -4,6 +4,7 @@ import { getServiceLandingBySlug } from "@/lib/wordpress";
 import { ServiceLandingFirstSection } from "@/components/service-landing/ServiceLandingFirstSection";
 import { ServiceLandingSecondSection } from "@/components/service-landing/ServiceLandingSecondSection";
 import { ServiceLandingThirdSection } from "@/components/service-landing/ServiceLandingThirdSection";
+import { ServiceLandingServiceAreasSection } from "@/components/service-landing/ServiceLandingServiceAreasSection";
 import { ServiceLandingFourthSection } from "@/components/service-landing/ServiceLandingFourthSection";
 import { ServiceLandingFifthSixthSection } from "@/components/service-landing/ServiceLandingFifthSixthSection";
 import { ServiceLandingSections789Block } from "@/components/service-landing/ServiceLandingSections789Block";
@@ -19,6 +20,7 @@ import type {
   ServiceLandingApartmentType,
   ServiceLandingWhatToExpectItem,
   ServiceLandingWhyChooseItem,
+  ServiceLandingServiceAreaItem,
 } from "@/types/wordpress";
 
 /** ACF can send `false` for empty repeaters; `false ?? []` is still `false`. */
@@ -95,6 +97,17 @@ function normalizeWhyChooseQuicklyn(
   const raw = acf["why_choose_quicklyn"];
   if (Array.isArray(raw)) {
     return raw as ServiceLandingWhyChooseItem[];
+  }
+  return [];
+}
+
+function normalizeServiceAreasItems(
+  acf: Record<string, unknown> | null | undefined,
+): ServiceLandingServiceAreaItem[] {
+  if (!acf || typeof acf !== "object") return [];
+  const raw = acf["service_areas_items"];
+  if (Array.isArray(raw)) {
+    return raw as ServiceLandingServiceAreaItem[];
   }
   return [];
 }
@@ -357,6 +370,9 @@ export default async function ServiceLandingPage({
   const thirdBottomCurve =
     acf["bottom_curve"] ?? acf["3rd_section_bottom_curve"];
   const acfRec = acf as Record<string, unknown>;
+  const serviceAreaItems = normalizeServiceAreasItems(acfRec);
+  const serviceAreaHeading = acf["service_area_heading"]?.trim();
+  const serviceAreaDescription = acf["service_area_description"]?.trim();
   const fourthFeatures = normalizeFourthSectionFeatures(acfRec);
   const fourthBannerPoints = normalizeBannerContents(acfRec);
   const fourthHeading = acf["4th_section_heading"]?.trim();
@@ -441,6 +457,11 @@ export default async function ServiceLandingPage({
         background={thirdBackground}
         topCurve={thirdTopCurve}
         bottomCurve={thirdBottomCurve}
+      />
+      <ServiceLandingServiceAreasSection
+        heading={serviceAreaHeading}
+        description={serviceAreaDescription}
+        items={serviceAreaItems}
       />
       <ServiceLandingFourthSection
         heading={fourthHeading}

@@ -601,6 +601,7 @@ const ACF_REPEATER_FALSE_KEYS = new Set([
   "2nd_section_items",
   "3rd_section_accordion",
   "why_choose_quicklyn",
+  "service_areas_items",
 ]);
 
 /**

@@ -33,7 +33,7 @@ const EMPHASIS_5 = "Different Layouts";
 const EMPHASIS_6 = "What to Expect";
 
 const FIFTH_HEADING_BASE_CLASS =
-  "max-w-[19ch] text-balance text-[32px] font-light leading-[42px] text-white mx-auto text-center md:max-w-[20ch] sm:mx-0 sm:text-left sm:text-[53px] sm:leading-[63px] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
+  "max-w-[19ch] text-balance text-[32px] font-light leading-[42px] text-white mx-auto text-center md:max-w-[20ch] sm:mx-0 sm:text-left sm:text-[47px] sm:leading-[62px] [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold";
 
 const SECTION_DISCLAIMER_CLASS =
   "mx-auto max-w-[56rem] text-center text-[18px] font-light italic leading-[29px] text-[#f5f5f5]";
@@ -514,10 +514,9 @@ export function ServiceLandingFifthSixthSection({
     h6 || s6 || steps.length > 0 || disc6,
   );
 
-  /** When improvements is present, its top/bottom hairlines replace this separator. */
+  /** Hairline between section 5 (or 5 + disclaimer) and section 6 only — not when nothing follows. */
   const showMidSeparator =
-    !hasNewImprovements &&
-    ((hasSection5 && !hasSection6) || (hasSection6 && hasSection5));
+    !hasNewImprovements && hasSection5 && hasSection6;
 
   const bgUrl = getAcfImageUrl(background);
 

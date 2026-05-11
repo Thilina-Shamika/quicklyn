@@ -358,6 +358,12 @@ export interface ServiceLandingWhyChooseItem {
   why_choose_text?: string;
 }
 
+/** Repeater: neighborhood / service area (band after 3rd section). */
+export interface ServiceLandingServiceAreaItem {
+  acf_fc_layout?: string;
+  service_area_name?: string;
+}
+
 /** Local / SEO service landing pages (CPT `services` in WordPress). */
 export interface ServiceLandingACF {
   ["1st_section_heading"]?: string;
@@ -426,6 +432,10 @@ export interface ServiceLandingACF {
   why_choose_us_disclaimer?: string;
   final_thoughts?: string;
   final_thoughts_description?: string;
+  /** Heading (e.g. “Service Areas in Brooklyn”); split on “ in ” for title + subtitle when present. */
+  service_area_heading?: string;
+  service_area_description?: string;
+  service_areas_items?: ServiceLandingServiceAreaItem[];
 }
 
 /** Repeater: apartment layout card (section 5). */
