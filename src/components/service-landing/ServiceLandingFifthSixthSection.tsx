@@ -407,10 +407,20 @@ function WhatToExpectList({ items }: { items: string[] }) {
   );
 }
 
-function CtaButton({ label, href }: { label: string; href: string }) {
+function CtaButton({
+  label,
+  href,
+  className,
+}: {
+  label: string;
+  href: string;
+  className?: string;
+}) {
   const isExternal = /^https?:\/\//i.test(href);
-  const className =
-    "inline-flex h-12 min-w-0 max-w-full items-center justify-center gap-2 rounded-full bg-[#FFDA00] px-6 text-sm font-semibold text-[#1B5B5D] shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition hover:opacity-95 sm:px-8 sm:text-base";
+  const merged = cn(
+    "inline-flex h-12 min-w-0 max-w-full items-center justify-center gap-2 rounded-full bg-[#FFDA00] px-6 text-sm font-semibold text-[#1B5B5D] shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition hover:opacity-95 sm:px-8 sm:text-base",
+    className,
+  );
   const child = (
     <>
       {label}
@@ -423,7 +433,7 @@ function CtaButton({ label, href }: { label: string; href: string }) {
     return (
       <a
         href={href}
-        className={className}
+        className={merged}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -432,7 +442,7 @@ function CtaButton({ label, href }: { label: string; href: string }) {
     );
   }
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={merged}>
       {child}
     </Link>
   );
@@ -550,7 +560,11 @@ export function ServiceLandingFifthSixthSection({
                   ) : null}
                   {hasCta ? (
                     <div className="flex justify-center sm:contents">
-                      <CtaButton label={btnLabel} href={btnHref} />
+                      <CtaButton
+                        label={btnLabel}
+                        href={btnHref}
+                        className="!mt-[30px]"
+                      />
                     </div>
                   ) : null}
                 </div>

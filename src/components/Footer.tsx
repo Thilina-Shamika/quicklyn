@@ -66,6 +66,50 @@ function SocialIcon({ slug, className }: { slug: string; className?: string }) {
   );
 }
 
+function MapPinIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      aria-hidden
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+      />
+    </svg>
+  );
+}
+
+const FOOTER_GOOGLE_MAP_EMBED_SRC =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3028.9214855892446!2d-73.95376159999999!3d40.6095559!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2449429a8ca73%3A0xac339fa245d6ff4d!2sQuicklyn%20Inc.!5e0!3m2!1sen!2sus!4v1778172553050!5m2!1sen!2sus";
+
+function FooterGoogleMapEmbed({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <iframe
+        title="Quicklyn Inc. on Google Maps"
+        src={FOOTER_GOOGLE_MAP_EMBED_SRC}
+        width={600}
+        height={300}
+        className="block h-[300px] w-full max-w-full rounded-lg border-0 md:rounded-xl"
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+    </div>
+  );
+}
+
 export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -146,6 +190,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   ];
   const contactEmail = acf.contact_email?.trim() || "";
   const contactPhone = acf.contact_phone?.trim() || "";
+  const contactAddress = acf.address?.trim() || "";
   const subscriptionText = acf.subscription_text?.trim() || "Sign Up To Our Newsletter";
   const downloadText = acf.download_text?.trim() || "Download The Quicklyn App Today";
   const copyrightText = acf.copyright_and_branding?.trim() || "Copyright ©2025 Quicklyn | All rights reserved.";
@@ -209,18 +254,18 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
         </div>
       )}
       <div className="relative z-10 hidden md:block">
-        <div className="mx-auto flex min-h-[720px] max-w-[1320px] items-center px-10 pb-[70px] pt-[110px] lg:min-h-[820px] lg:px-14 lg:pb-[70px] lg:pt-[130px]">
+        <div className="mx-auto flex min-h-[720px] max-w-[1320px] items-center px-10 pb-[120px] pt-[250px] lg:min-h-[820px] lg:px-14 lg:pb-[120px] lg:pt-[250px]">
           <div className="grid w-full translate-y-8 grid-cols-[260px_1px_minmax(0,1fr)] gap-10 lg:translate-y-10 lg:grid-cols-[300px_1px_minmax(0,1fr)] lg:gap-14">
-            <div className="flex min-h-[360px] flex-col">
-              <div>
+            <div className="flex h-full min-h-[360px] flex-col self-stretch">
+              <div className="shrink-0">
                 {logo && (
                   <Link href="/" className="mb-5 inline-block">
                     <Image
                       src={logo}
                       alt="Quicklyn"
-                      width={140}
-                      height={32}
-                      className="h-8 w-auto object-contain"
+                      width={176}
+                      height={40}
+                      className="h-11 w-auto object-contain lg:h-12"
                       unoptimized={
                         logo.includes("quicklyn-headless.local") ||
                         logo.includes("quick.rootholdings")
@@ -229,18 +274,18 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                   </Link>
                 )}
                 {description && (
-                  <p className="max-w-[210px] text-[12px] leading-relaxed text-white/90">
+                  <p className="max-w-[210px] text-[12px] leading-[24px] text-white/90">
                     {highlightNewYork(description)}
                   </p>
                 )}
               </div>
 
-              <div className="mt-auto">
-                {(contactEmail || contactPhone) && (
-                  <div className="-mt-3 mb-12 flex flex-col gap-2 text-[14px] font-medium text-white">
+              <div className="flex min-h-0 flex-1 flex-col justify-center py-6">
+                {(contactEmail || contactPhone || contactAddress) && (
+                  <div className="flex w-full flex-col items-start gap-5 text-left text-[14px] font-medium text-white">
                     {contactEmail && (
                       <a
-                        href={`mailto:${contactEmail}`}
+                        href={`mailto:${contactEmail.replace(/\s/g, "")}`}
                         className="flex items-center gap-2.5 transition hover:text-white/90"
                       >
                         <svg
@@ -282,11 +327,26 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                         {contactPhone}
                       </a>
                     )}
+                    {contactPhone && contactAddress ? (
+                      <div
+                        className="h-px w-full max-w-[210px] shrink-0 bg-[linear-gradient(90deg,transparent_0%,#ffffff_50%,transparent_100%)]"
+                        aria-hidden
+                      />
+                    ) : null}
+                    {contactAddress ? (
+                      <div className="flex items-start gap-2.5 text-balance font-medium text-white/95">
+                        <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-white" />
+                        <span className="min-w-0 leading-snug">{contactAddress}</span>
+                      </div>
+                    ) : null}
                   </div>
                 )}
+              </div>
+
+              <div className="mt-auto shrink-0">
                 <p className="mb-3 text-[11px] text-white/75">{subscriptionText}</p>
                 <form
-                  className="flex w-full max-w-[210px] overflow-hidden rounded border border-white/35"
+                  className="flex w-full overflow-hidden rounded border border-white/35"
                   onSubmit={(e) => e.preventDefault()}
                   data-lpignore="true"
                   data-form-type="other"
@@ -314,43 +374,45 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
             <div className="w-px self-stretch bg-white/20" />
 
             <div className="flex min-h-[360px] flex-col">
-              <div className="grid grid-cols-3 gap-x-10 gap-y-3 pt-4 lg:gap-x-14">
-                <nav className="flex flex-col gap-3" aria-label="Footer navigation">
+              <div className="grid grid-cols-3 items-end gap-x-10 gap-y-3 pt-4 lg:gap-x-14">
+                <nav className="flex flex-col gap-3 lg:gap-2" aria-label="Footer navigation">
                   {footerMenuColumn1.map((item) => (
                     <Link
                       key={`${item.label}-${item.href}`}
                       href={item.href}
                       target={item.target}
                       rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
-                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white"
+                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white lg:leading-[30px]"
                     >
                       {item.label}
                     </Link>
                   ))}
                 </nav>
-                <nav className="mt-6 flex flex-col gap-3 lg:mt-8" aria-label="Footer navigation secondary">
+                <nav className="flex flex-col gap-3 lg:gap-2" aria-label="Footer navigation secondary">
                   {footerMenuColumn2.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white"
+                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white lg:leading-[30px]"
                     >
                       {item.label}
                     </Link>
                   ))}
                 </nav>
-                <nav className="mt-12 flex flex-col gap-3 lg:mt-16" aria-label="Footer navigation tertiary">
+                <nav className="flex flex-col gap-3 lg:gap-2" aria-label="Footer navigation tertiary">
                   {footerMenuColumn3.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white"
+                      className="text-[16px] leading-[36px] text-white/90 transition hover:text-white lg:leading-[30px]"
                     >
                       {item.label}
                     </Link>
                   ))}
                 </nav>
               </div>
+
+              <FooterGoogleMapEmbed className="mt-8 w-full shrink-0 lg:mt-10" />
 
               <div className="mt-auto flex items-end justify-between gap-8 pt-10">
                 <div className="flex items-center gap-5">
@@ -421,7 +483,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
       </div>
 
       <div className="relative z-10 md:hidden">
-        <div className="mx-auto max-w-5xl px-[74px] pb-[164px] pt-[154px]">
+        <div className="mx-auto max-w-5xl px-[74px] pb-[70px] pt-[154px]">
           {/* Logo + description */}
           <div className="mb-10">
             {logo && (
@@ -440,14 +502,14 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
               </Link>
             )}
             {description && (
-              <p className="max-w-md text-[12px] leading-relaxed text-white/95">
+              <p className="max-w-md text-[12px] leading-[24px] text-white/95">
                 {highlightNewYork(description)}
               </p>
             )}
           </div>
 
           {/* Two columns of navigation: 60% / 40% */}
-          <div className="mb-0 grid gap-x-8 gap-y-1" style={{ gridTemplateColumns: "60% 40%" }}>
+          <div className="mb-0 grid items-end gap-x-8 gap-y-1" style={{ gridTemplateColumns: "60% 40%" }}>
             <nav className="flex flex-col gap-2" aria-label="Footer navigation">
               {leftNav.map((item) => {
                 const isFaq =
@@ -485,17 +547,20 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
               })}
             </nav>
           </div>
+
+          <FooterGoogleMapEmbed className="mt-8 w-full" />
+
           <div
             className="mb-10 mt-[30px] h-px w-full bg-gradient-to-r from-white to-transparent"
             aria-hidden
           />
 
           {/* Contact email & phone (above newsletter) */}
-          {(contactEmail || contactPhone) && (
-            <div className="mb-8 flex flex-col gap-3 text-left">
+          {(contactEmail || contactPhone || contactAddress) && (
+            <div className="mb-8 flex flex-col gap-5 text-left">
               {contactEmail && (
                 <a
-                  href={`mailto:${contactEmail}`}
+                  href={`mailto:${contactEmail.replace(/\s/g, "")}`}
                   className="flex items-center gap-3 text-[13px] text-white/95 transition hover:text-white"
                 >
                   <svg
@@ -537,6 +602,18 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
                   <span>{contactPhone}</span>
                 </a>
               )}
+              {contactPhone && contactAddress ? (
+                <div
+                  className="h-px w-full bg-[linear-gradient(90deg,transparent_0%,#ffffff_50%,transparent_100%)]"
+                  aria-hidden
+                />
+              ) : null}
+              {contactAddress ? (
+                <div className="flex items-start gap-3 text-[13px] font-medium text-white/95">
+                  <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-white" />
+                  <span className="min-w-0 leading-snug">{contactAddress}</span>
+                </div>
+              ) : null}
             </div>
           )}
 

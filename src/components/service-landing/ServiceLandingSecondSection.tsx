@@ -161,7 +161,7 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
                   <div
                     className="relative z-10 grid min-w-0 grid-cols-[72px_minmax(0,1fr)] grid-rows-[auto_auto] items-start gap-x-4 gap-y-1.5 py-0 sm:grid-cols-[minmax(0,35fr)_minmax(0,10fr)_minmax(0,65fr)] sm:grid-rows-1 sm:items-stretch sm:gap-0 sm:py-6 md:py-7 lg:py-8"
                   >
-                    <div className="col-start-2 row-start-1 flex min-h-0 w-full min-w-0 items-start justify-start pr-0 pb-0 sm:col-start-1 sm:row-start-1 sm:h-full sm:min-h-0 sm:justify-end sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3">
+                    <div className="col-start-2 row-start-1 flex min-h-0 w-full min-w-0 items-start justify-start pr-0 pb-0 sm:col-start-1 sm:row-start-1 sm:h-full sm:min-h-0 sm:justify-end sm:pb-0 sm:pr-2 sm:pl-0 md:pr-3 lg:items-center">
                       <h3 className="min-w-0 text-balance text-left text-[14px] font-bold uppercase italic leading-snug tracking-wide transition-[font-weight] duration-200 group-hover/feat:font-semibold sm:text-right sm:text-[33px] sm:font-light sm:normal-case sm:tracking-tight sm:italic">
                         {label}
                       </h3>
