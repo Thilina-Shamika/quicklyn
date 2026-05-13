@@ -4,10 +4,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { WPTestimonial } from "@/lib/wordpress";
 
+const TRUSTINDEX_LOADER_SRC =
+  "https://cdn.trustindex.io/loader.js?48b05ff7197e7125d34610527b1";
+
 interface TestimonialsSectionProps {
   testimonials: WPTestimonial[];
   /** When true, section has no background (e.g. on Our Mission so page background shows). Default false = use teal section background (e.g. home). */
   transparentBackground?: boolean;
+  /** When true (e.g. home page), load TrustIndex embed and hide the built-in carousel (code kept for reuse). */
+  embedTrustIndex?: boolean;
 }
 
 function StarRating({ count = 5 }: { count?: number }) {
@@ -35,7 +40,11 @@ function QuoteIcon({ className }: { className?: string }) {
   );
 }
 
-export function TestimonialsSection({ testimonials, transparentBackground }: TestimonialsSectionProps) {
+export function TestimonialsSection({
+  testimonials,
+  transparentBackground,
+  embedTrustIndex = false,
+}: TestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const count = testimonials.length;
   const isDraggingRef = useRef(false);
@@ -45,12 +54,33 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
   const touchIdRef = useRef<number | null>(null);
   const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const trustIndexMountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!embedTrustIndex) return;
+    const mount = trustIndexMountRef.current;
+    if (!mount || mount.querySelector('script[src*="cdn.trustindex.io/loader.js"]')) return;
+
+    // TrustIndex replaces this <script> with the widget in-place. next/script loads at
+    // document end, which puts the widget below the footer — inject here instead.
+    const script = document.createElement("script");
+    script.src = TRUSTINDEX_LOADER_SRC;
+    script.defer = true;
+    script.async = false;
+    mount.appendChild(script);
+
+    return () => {
+      mount.replaceChildren();
+    };
+  }, [embedTrustIndex]);
 
   const goPrev = useCallback(() => {
+    if (count <= 0) return;
     setCurrentIndex((i) => (i <= 0 ? count - 1 : i - 1));
   }, [count]);
 
   const goNext = useCallback(() => {
+    if (count <= 0) return;
     setCurrentIndex((i) => (i >= count - 1 ? 0 : i + 1));
   }, [count]);
 
@@ -87,7 +117,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
   // iOS: document-level touch + direction lock so swipe ON the card works: horizontal = carousel, vertical = page scroll.
   useEffect(() => {
     const el = carouselRef.current;
-    if (!el) return;
+    if (!el || count <= 0) return;
 
     const DIRECTION_THRESHOLD = 8;
     const SWIPE_THRESHOLD = 40;
@@ -152,9 +182,9 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
       document.removeEventListener("touchend", onTouchEnd, capture);
       document.removeEventListener("touchcancel", onTouchEnd, capture);
     };
-  }, [goPrev, goNext]);
+  }, [goPrev, goNext, count]);
 
-  if (!count) return null;
+  if (!embedTrustIndex && !count) return null;
 
   return (
     <section
@@ -167,6 +197,25 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
           Trusted by Our Community
         </h2>
 
+        {embedTrustIndex ? (
+          <>
+            <h2 className="mx-auto mb-6 hidden max-w-md text-center text-[32px] font-semibold leading-[1.05] text-white md:block lg:mb-8 lg:text-[44px]">
+              Trusted by
+              <br />
+              Our Community
+            </h2>
+            <div
+              ref={trustIndexMountRef}
+              className="relative z-0 mx-auto w-full min-h-[120px] max-w-[1180px]"
+            />
+          </>
+        ) : null}
+
+        {/* Built-in carousel — hidden when TrustIndex is used on home; markup retained to turn back on easily */}
+        <div
+          className={embedTrustIndex ? "hidden" : undefined}
+          aria-hidden={embedTrustIndex ? true : undefined}
+        >
         {/* Desktop / Tablet testimonials */}
         <div className="hidden md:block">
           <h2 className="mx-auto mb-0 max-w-md text-center text-[32px] font-semibold leading-[1.05] text-white lg:text-[44px]">
@@ -366,6 +415,7 @@ export function TestimonialsSection({ testimonials, transparentBackground }: Tes
               </svg>
             </button>
           </div>
+        </div>
         </div>
       </div>
     </section>

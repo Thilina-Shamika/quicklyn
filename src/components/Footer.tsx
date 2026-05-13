@@ -110,6 +110,59 @@ function FooterGoogleMapEmbed({ className }: { className?: string }) {
   );
 }
 
+/** Renders after mount so password-manager extensions (LastPass, etc.) cannot inject into SSR HTML and break hydration. */
+function FooterNewsletterForm({ variant }: { variant: "desktop" | "mobile" }) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
+  const formClass =
+    variant === "desktop"
+      ? "flex w-full overflow-hidden rounded border border-white/35"
+      : "flex w-full overflow-hidden rounded-lg border border-[#AAAAAA]";
+
+  if (!hydrated) {
+    return (
+      <div
+        className={formClass}
+        aria-hidden
+        style={{ minHeight: variant === "desktop" ? 38 : 46 }}
+      />
+    );
+  }
+
+  const inputClass =
+    variant === "desktop"
+      ? "w-[72%] min-w-0 border-0 bg-transparent px-3 py-2 text-[11px] text-white placeholder:text-white/45 focus:outline-none focus:ring-0"
+      : "w-[72%] min-w-0 border-0 bg-[#1E1E1E] px-4 py-2.5 text-sm text-white placeholder:text-[#888888] focus:border-0 focus:outline-none focus:ring-0";
+
+  const buttonClass =
+    variant === "desktop"
+      ? "w-[28%] shrink-0 border-l border-white/35 bg-white px-2 py-2 text-[9px] font-medium uppercase tracking-wide text-[#141414]"
+      : "w-[28%] shrink-0 border-0 border-l border-[#AAAAAA] bg-white px-4 py-2.5 text-sm font-medium text-[#1E1E1E] transition hover:bg-gray-50";
+
+  return (
+    <form
+      className={formClass}
+      onSubmit={(e) => e.preventDefault()}
+      data-lpignore="true"
+      data-form-type="other"
+    >
+      <input
+        type="email"
+        name="newsletter-email"
+        placeholder="Email"
+        className={inputClass}
+        aria-label="Email for newsletter"
+        autoComplete="off"
+        data-lpignore="true"
+      />
+      <button type="submit" className={buttonClass}>
+        {variant === "desktop" ? "Submit" : "SUBMIT"}
+      </button>
+    </form>
+  );
+}
+
 export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -345,28 +398,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
 
               <div className="mt-auto shrink-0">
                 <p className="mb-3 text-[11px] text-white/75">{subscriptionText}</p>
-                <form
-                  className="flex w-full overflow-hidden rounded border border-white/35"
-                  onSubmit={(e) => e.preventDefault()}
-                  data-lpignore="true"
-                  data-form-type="other"
-                  suppressHydrationWarning
-                >
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="w-[72%] min-w-0 border-0 bg-transparent px-3 py-2 text-[11px] text-white placeholder:text-white/45 focus:outline-none focus:ring-0"
-                      aria-label="Email for newsletter"
-                      autoComplete="off"
-                      data-lpignore="true"
-                    />
-                    <button
-                      type="submit"
-                      className="w-[28%] shrink-0 border-l border-white/35 bg-white px-2 py-2 text-[9px] font-medium uppercase tracking-wide text-[#141414]"
-                    >
-                      Submit
-                    </button>
-                  </form>
+                <FooterNewsletterForm variant="desktop" />
                 <p className="mt-7 max-w-[240px] text-[10px] text-white/55">{copyrightText}</p>
               </div>
             </div>
@@ -620,28 +652,7 @@ export function Footer({ data, appLink, socialLinks = [] }: FooterProps) {
           {/* Newsletter */}
           <div className="mb-0 text-left">
             <h3 className="mb-4 text-[13px] font-light text-white">{subscriptionText}</h3>
-            <form
-              className="flex w-full overflow-hidden rounded-lg border border-[#AAAAAA]"
-              onSubmit={(e) => e.preventDefault()}
-              data-lpignore="true"
-              data-form-type="other"
-              suppressHydrationWarning
-            >
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-[72%] min-w-0 border-0 bg-[#1E1E1E] px-4 py-2.5 text-sm text-white placeholder:text-[#888888] focus:border-0 focus:outline-none focus:ring-0"
-                aria-label="Email for newsletter"
-                autoComplete="off"
-                data-lpignore="true"
-              />
-              <button
-                type="submit"
-                className="w-[28%] shrink-0 border-0 border-l border-[#AAAAAA] bg-white px-4 py-2.5 text-sm font-medium text-[#1E1E1E] transition hover:bg-gray-50"
-              >
-                SUBMIT
-              </button>
-            </form>
+            <FooterNewsletterForm variant="mobile" />
           </div>
 
           {/* App download */}

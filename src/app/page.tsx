@@ -53,7 +53,7 @@ export default async function HomePage() {
         />
       </div>
       <ServiceAreasSection data={page.acf} />
-      <TestimonialsSection testimonials={testimonials} />
+      <TestimonialsSection testimonials={testimonials} embedTrustIndex />
       <FAQSection
         faqs={faqs}
         backgroundDesktop={page.acf.faq_background_desktop}
