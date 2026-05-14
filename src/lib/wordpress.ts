@@ -583,6 +583,57 @@ export async function getPublishedServicesForNav(): Promise<ServiceNavItem[]> {
   }
 }
 
+/**
+ * One-segment paths handled by `app/<name>/page.tsx`. Dynamic `/[slug]` service landings
+ * must not duplicate these (Next.js resolves the static route first).
+ */
+export const RESERVED_TOP_LEVEL_ROUTE_SLUGS = new Set([
+  "about-us",
+  "blogs",
+  "book-a-cleaning",
+  "careers",
+  "category",
+  "contact-us",
+  "get-the-app",
+  "gift-cards",
+  "our-mission",
+  "our-services",
+  "privacy-policy",
+  "tag",
+  "terms-and-conditions",
+]);
+
+/** All published `services` CPT URLs for `app/[slug]/page.tsx` (paginated; excludes reserved slugs). */
+export async function getAllServiceLandingSlugsForSitemap(): Promise<
+  { slug: string; modified: string }[]
+> {
+  const out: { slug: string; modified: string }[] = [];
+  let page = 1;
+  const perPage = 100;
+  while (true) {
+    const res = await fetch(
+      getApiUrl(
+        `/services?status=publish&per_page=${perPage}&page=${page}&_fields=slug,modified`,
+      ),
+      { next: { revalidate: 60 } },
+    );
+    if (!res.ok) break;
+    const data = (await res.json()) as Array<{
+      slug?: string;
+      modified?: string;
+    }>;
+    if (!Array.isArray(data) || data.length === 0) break;
+    for (const p of data) {
+      const slug = (p.slug ?? "").trim();
+      if (!slug || RESERVED_TOP_LEVEL_ROUTE_SLUGS.has(slug)) continue;
+      out.push({ slug, modified: p.modified ?? "" });
+    }
+    if (data.length < perPage) break;
+    page++;
+  }
+  return out;
+}
+
 function isEmptyAcfValue(v: unknown): boolean {
   if (v == null || v === false) return true;
   if (typeof v === "string") return v.trim() === "";

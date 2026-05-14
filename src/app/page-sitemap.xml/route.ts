@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSiteUrl } from "@/lib/wordpress";
+import { getAllServiceLandingSlugsForSitemap, getSiteUrl } from "@/lib/wordpress";
 import { buildUrlSetXml } from "@/lib/sitemap-xml";
 
 export const dynamic = "force-dynamic";
@@ -23,12 +23,22 @@ const STATIC_PAGES: Array<{ path: string; priority?: string; changefreq?: string
 export async function GET() {
   const base = getSiteUrl();
   const lastmod = new Date().toISOString().split("T")[0];
-  const urls = STATIC_PAGES.map((p) => ({
+  const staticUrls = STATIC_PAGES.map((p) => ({
     loc: `${base}${p.path}`,
     lastmod,
     changefreq: p.changefreq,
     priority: p.priority,
   }));
+
+  const serviceSlugs = await getAllServiceLandingSlugsForSitemap();
+  const serviceUrls = serviceSlugs.map((p) => ({
+    loc: `${base}/${p.slug}`,
+    lastmod: p.modified ? p.modified.split("T")[0] : lastmod,
+    changefreq: "weekly" as const,
+    priority: "0.85",
+  }));
+
+  const urls = [...staticUrls, ...serviceUrls];
   const xml = buildUrlSetXml(urls);
   return new NextResponse(xml, {
     headers: {
