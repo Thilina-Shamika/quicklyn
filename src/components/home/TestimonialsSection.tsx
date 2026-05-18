@@ -5,7 +5,7 @@ import type React from "react";
 import type { WPTestimonial } from "@/lib/wordpress";
 
 const TRUSTINDEX_LOADER_SRC =
-  "https://cdn.trustindex.io/loader.js?48b05ff7197e7125d34610527b1";
+  "https://cdn.trustindex.io/loader.js?6497e26716dc984eb846b82a01e";
 
 interface TestimonialsSectionProps {
   testimonials: WPTestimonial[];
@@ -61,12 +61,12 @@ export function TestimonialsSection({
     const mount = trustIndexMountRef.current;
     if (!mount || mount.querySelector('script[src*="cdn.trustindex.io/loader.js"]')) return;
 
-    // TrustIndex replaces this <script> with the widget in-place. next/script loads at
-    // document end, which puts the widget below the footer — inject here instead.
+    // TrustIndex replaces this <script> with the widget in-place (same as their default
+    // defer+async embed). next/script alone would mount the widget below the footer.
     const script = document.createElement("script");
     script.src = TRUSTINDEX_LOADER_SRC;
     script.defer = true;
-    script.async = false;
+    script.async = true;
     mount.appendChild(script);
 
     return () => {
