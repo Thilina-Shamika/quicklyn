@@ -62,12 +62,12 @@ export function ServiceLandingFirstSection({
                 </span>
               )}
             </h1>
-            <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-center sm:gap-5 md:mt-12 lg:mt-12 lg:gap-6">
+            <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-start sm:gap-5 md:mt-12 lg:mt-12 lg:gap-6">
               <div className="min-w-0 text-[18px] leading-[33px] text-white/95">
                 {description1}
               </div>
               {imageUrl ? (
-                <div className="mx-auto w-full min-w-0 max-w-[min(100%,40rem)] sm:mx-0 sm:ml-auto sm:max-w-[36rem]">
+                <div className="mx-auto w-full min-w-0 max-w-[min(100%,40rem)] sm:-mt-[150px] sm:mx-0 sm:ml-auto sm:max-w-[36rem]">
                   <Image
                     src={imageUrl}
                     alt={alt}
