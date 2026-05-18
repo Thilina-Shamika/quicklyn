@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { HomePageACF } from "@/types/wordpress";
 import type { WPAppLink, WPHeader } from "@/lib/wordpress";
+import { HomeRichText, isLikelyServiceLandingHtml } from "@/components/home/HomeRichText";
+import { sanitizeHomeHeadingInline } from "@/lib/sanitizeHtml";
 
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80";
@@ -71,12 +73,16 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
   const popImg1 = data.pop_img_1?.url;
   const popImg2 = data.pop_img_2?.url;
   const popImg3 = data.pop_img_3?.url;
-  const desktopHeadingParts = (data.section_1_heading || "")
-    .replace(/Premium\s+/i, "Premium\n")
-    .replace(/Services\s+in/i, "Services\nin")
-    .split(/\n+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
+  const sectionHeadingRaw = data.section_1_heading || "";
+  const headingIsHtml = isLikelyServiceLandingHtml(sectionHeadingRaw);
+  const desktopHeadingParts = headingIsHtml
+    ? []
+    : sectionHeadingRaw
+        .replace(/Premium\s+/i, "Premium\n")
+        .replace(/Services\s+in/i, "Services\nin")
+        .split(/\n+/)
+        .map((part) => part.trim())
+        .filter(Boolean);
   // Mobile: on load show zoomed in, then animate to zoomed out (no scroll trigger)
   useEffect(() => {
     const t = setTimeout(() => {
@@ -198,7 +204,15 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
               transition: "opacity 0.6s ease-out",
             }}
           >
-            {data.section_1_heading}
+            {headingIsHtml ? (
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHomeHeadingInline(sectionHeadingRaw),
+                }}
+              />
+            ) : (
+              sectionHeadingRaw
+            )}
           </h1>
         </div>
 
@@ -254,9 +268,16 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
             </div>
 
             {/* Description */}
-            <p className="hero-text-shadow relative z-[20] mb-6 max-w-[280px] text-[16px] leading-relaxed text-white/90">
-              {data.section_1_description}
-            </p>
+            {isLikelyServiceLandingHtml(data.section_1_description) ? (
+              <HomeRichText
+                content={data.section_1_description || ""}
+                className="hero-text-shadow relative z-[20] mb-6 max-w-[280px] text-[16px] leading-relaxed text-white/90"
+              />
+            ) : (
+              <p className="hero-text-shadow relative z-[20] mb-6 max-w-[280px] text-[16px] leading-relaxed text-white/90">
+                {data.section_1_description}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -340,20 +361,33 @@ export function HeroSection({ data, header, appLink }: HeroSectionProps) {
                 <h1
                   className="hero-text-shadow font-semibold tracking-[-0.03em] text-white md:max-w-[880px] lg:max-w-[560px] text-[40px] leading-[47px] lg:text-[60px] lg:leading-[59px]"
                 >
-                  {desktopHeadingParts.length > 0 ? (
+                  {headingIsHtml ? (
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHomeHeadingInline(sectionHeadingRaw),
+                      }}
+                    />
+                  ) : desktopHeadingParts.length > 0 ? (
                     desktopHeadingParts.map((part, index) => (
                       <span key={`${part}-${index}`} className="block">
                         {part}
                       </span>
                     ))
                   ) : (
-                    data.section_1_heading
+                    sectionHeadingRaw
                   )}
                 </h1>
 
-                <p className="hero-text-shadow mt-6 max-w-[500px] text-[19px] leading-[1.45] text-white/90 lg:mt-7 lg:max-w-[500px] lg:text-[20px]">
-                  {data.section_1_description}
-                </p>
+                {isLikelyServiceLandingHtml(data.section_1_description) ? (
+                  <HomeRichText
+                    content={data.section_1_description || ""}
+                    className="hero-text-shadow mt-6 max-w-[500px] text-[19px] leading-[1.45] text-white/90 lg:mt-7 lg:max-w-[500px] lg:text-[20px]"
+                  />
+                ) : (
+                  <p className="hero-text-shadow mt-6 max-w-[500px] text-[19px] leading-[1.45] text-white/90 lg:mt-7 lg:max-w-[500px] lg:text-[20px]">
+                    {data.section_1_description}
+                  </p>
+                )}
 
                 <div className="mt-8 flex flex-wrap items-center gap-4 lg:mt-10">
                   {googlePlayUrl && (

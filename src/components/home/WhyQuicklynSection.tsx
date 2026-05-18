@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState, type ReactNode } from "react";
 import type { WhyListItem } from "@/types/wordpress";
+import { HomeRichText, isLikelyServiceLandingHtml } from "@/components/home/HomeRichText";
+import { sanitizeHomeHeadingInline } from "@/lib/sanitizeHtml";
 
 /** Line-art SVG icons matching the Why Quicklyn design */
 function ClockDollarIcon() {
@@ -91,7 +93,16 @@ function WhyGridCell({
         </div>
         <div className="min-w-0 flex-1 text-left">
           <h3 className="text-[29px] font-normal leading-snug text-white">
-            {item.list_heading}
+            {item.list_heading &&
+              (isLikelyServiceLandingHtml(item.list_heading) ? (
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHomeHeadingInline(item.list_heading),
+                  }}
+                />
+              ) : (
+                item.list_heading
+              ))}
           </h3>
           {hasContent && (
             <button
@@ -127,9 +138,16 @@ function WhyGridCell({
           }`}
         >
           <div className="overflow-hidden">
-            <p className="mt-4 border-t border-white/20 pt-4 text-[14px] leading-relaxed text-white/90 md:text-[15px]">
-              {item.list_description}
-            </p>
+            {isLikelyServiceLandingHtml(item.list_description) ? (
+              <HomeRichText
+                content={item.list_description}
+                className="mt-4 border-t border-white/20 pt-4 text-[14px] leading-relaxed text-white/90 md:text-[15px]"
+              />
+            ) : (
+              <p className="mt-4 border-t border-white/20 pt-4 text-[14px] leading-relaxed text-white/90 md:text-[15px]">
+                {item.list_description}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -153,7 +171,11 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
     <section className="relative w-full overflow-hidden bg-transparent py-8 md:py-20">
       <div className="relative z-10 mx-auto max-w-4xl px-6">
         <h2 className="mt-10 mb-4 text-center text-[36px] font-semibold leading-tight text-white md:mb-16 md:text-[66px]">
-          {heading}
+          {isLikelyServiceLandingHtml(heading) ? (
+            <span dangerouslySetInnerHTML={{ __html: sanitizeHomeHeadingInline(heading) }} />
+          ) : (
+            heading
+          )}
         </h2>
 
         {/* Mobile: previous vertical list design */}
@@ -203,7 +225,16 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-[20px] font-normal leading-[25px] text-white">
-                    {item.list_heading}
+                    {item.list_heading &&
+                      (isLikelyServiceLandingHtml(item.list_heading) ? (
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHomeHeadingInline(item.list_heading),
+                          }}
+                        />
+                      ) : (
+                        item.list_heading
+                      ))}
                   </p>
                   {!isOpen && (
                     <button
@@ -220,11 +251,17 @@ export function WhyQuicklynSection({ heading = "Why Quicklyn?", items = [] }: Wh
                     }`}
                     aria-hidden={!isOpen}
                   >
-                    {item.list_description && (
-                      <p className="text-[14px] leading-relaxed text-white/80">
-                        {item.list_description}
-                      </p>
-                    )}
+                    {item.list_description &&
+                      (isLikelyServiceLandingHtml(item.list_description) ? (
+                        <HomeRichText
+                          content={item.list_description}
+                          className="text-[14px] leading-relaxed text-white/80"
+                        />
+                      ) : (
+                        <p className="text-[14px] leading-relaxed text-white/80">
+                          {item.list_description}
+                        </p>
+                      ))}
                     {isOpen && (
                       <button
                         type="button"

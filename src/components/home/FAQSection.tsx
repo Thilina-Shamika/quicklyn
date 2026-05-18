@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import type { WPFAQ, WPAppLink } from "@/lib/wordpress";
+import { mapWordPressUrlToNextPath, type WPAppLink, type WPFAQ } from "@/lib/wordpress";
 import type { WPImage } from "@/types/wordpress";
+import { HomeRichText, isLikelyServiceLandingHtml } from "@/components/home/HomeRichText";
 import { HomeAppDownloadSection } from "./HomeAppDownloadSection";
 
 interface FAQSectionProps {
@@ -91,7 +92,8 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
                 const part1 = acf?.answer_part_01?.trim() || "";
                 const part2 = acf?.answer_part_02?.trim() || "";
                 const linkText = acf?.link_text_01?.trim();
-                const linkUrl = acf?.link01?.url || "#";
+                const rawLinkUrl = acf?.link01?.url || "#";
+                const linkHref = mapWordPressUrlToNextPath(rawLinkUrl);
                 const hasAnswer = !!(part1 || part2 || linkText);
 
                 return (
@@ -139,12 +141,20 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
                         }`}
                       >
                         <div className="overflow-hidden">
-                          <div className="pb-4 pr-8 text-[13px] leading-relaxed text-white/90 lg:pr-10 lg:text-[14px]">
-                            {part1 && <p>{part1}</p>}
+                          <div className="pb-4 pr-8 text-white/90 lg:pr-10">
+                            {part1 &&
+                              (isLikelyServiceLandingHtml(part1) ? (
+                                <HomeRichText
+                                  content={part1}
+                                  className="text-[13px] leading-relaxed lg:text-[14px]"
+                                />
+                              ) : (
+                                <p className="text-[13px] leading-relaxed lg:text-[14px]">{part1}</p>
+                              ))}
                             {linkText && (
-                              <p className={part1 ? "mt-2" : ""}>
+                              <p className={part1 ? "mt-2 text-[13px] leading-relaxed lg:text-[14px]" : "text-[13px] leading-relaxed lg:text-[14px]"}>
                                 <Link
-                                  href={linkUrl}
+                                  href={linkHref}
                                   target={acf?.link01?.target || "_self"}
                                   className="inline-flex items-center gap-1.5 font-medium text-[#ffda00] hover:text-[#ffda00]/90"
                                 >
@@ -166,7 +176,19 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
                                 </Link>
                               </p>
                             )}
-                            {part2 && <p className={part1 || linkText ? "mt-2" : ""}>{part2}</p>}
+                            {part2 &&
+                              (isLikelyServiceLandingHtml(part2) ? (
+                                <HomeRichText
+                                  content={part2}
+                                  className={`text-[13px] leading-relaxed lg:text-[14px] ${part1 || linkText ? "mt-2" : ""}`}
+                                />
+                              ) : (
+                                <p
+                                  className={`text-[13px] leading-relaxed lg:text-[14px] ${part1 || linkText ? "mt-2" : ""}`}
+                                >
+                                  {part2}
+                                </p>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -191,7 +213,8 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
               const part1 = acf?.answer_part_01?.trim() || "";
               const part2 = acf?.answer_part_02?.trim() || "";
               const linkText = acf?.link_text_01?.trim();
-              const linkUrl = acf?.link01?.url || "#";
+              const rawLinkUrl = acf?.link01?.url || "#";
+              const linkHref = mapWordPressUrlToNextPath(rawLinkUrl);
               const hasAnswer = !!(part1 || part2 || linkText);
 
               return (
@@ -244,11 +267,16 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
                       <div className="overflow-hidden">
                         <div className="border-t border-white/15 px-5 pb-4 pt-2">
                           <div className="space-y-2 text-[12px] leading-relaxed text-white/95">
-                            {part1 && <p>{part1}</p>}
+                            {part1 &&
+                              (isLikelyServiceLandingHtml(part1) ? (
+                                <HomeRichText content={part1} className="text-[12px] leading-relaxed text-white/95" />
+                              ) : (
+                                <p>{part1}</p>
+                              ))}
                             {linkText && (
                               <p>
                                 <Link
-                                  href={linkUrl}
+                                  href={linkHref}
                                   target={acf?.link01?.target || "_self"}
                                   className="inline-flex items-center gap-1.5 font-medium text-[#ffda00] underline underline-offset-2 hover:text-[#ffda00]/90"
                                 >
@@ -270,7 +298,12 @@ export function FAQSection({ faqs, backgroundDesktop, downloadData }: FAQSection
                                 </Link>
                               </p>
                             )}
-                            {part2 && <p>{part2}</p>}
+                            {part2 &&
+                              (isLikelyServiceLandingHtml(part2) ? (
+                                <HomeRichText content={part2} className="text-[12px] leading-relaxed text-white/95" />
+                              ) : (
+                                <p>{part2}</p>
+                              ))}
                           </div>
                         </div>
                       </div>

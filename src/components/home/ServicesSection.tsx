@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { CounterItem, WPImage, WhyListItem } from "@/types/wordpress";
 import type { WPService } from "@/lib/wordpress";
+import { HomeRichText, isLikelyServiceLandingHtml } from "@/components/home/HomeRichText";
 import { WhyQuicklynSection } from "@/components/home/WhyQuicklynSection";
 
 interface ServicesSectionProps {
@@ -491,9 +492,20 @@ export function ServicesSection({
                       )}
                     </h3>
 
-                    <p className="mt-3 line-clamp-3 font-normal text-white/90 lg:mt-4" style={{ fontSize: "16px", lineHeight: "27px" }}>
-                      {desc}
-                    </p>
+                    {isLikelyServiceLandingHtml(desc) ? (
+                      <HomeRichText
+                        content={desc}
+                        className="mt-3 max-h-[81px] overflow-hidden font-normal text-white/90 lg:mt-4"
+                        style={{ fontSize: "16px", lineHeight: "27px" }}
+                      />
+                    ) : (
+                      <p
+                        className="mt-3 line-clamp-3 font-normal text-white/90 lg:mt-4"
+                        style={{ fontSize: "16px", lineHeight: "27px" }}
+                      >
+                        {desc}
+                      </p>
+                    )}
                   </div>
                 </article>
               );
@@ -545,6 +557,7 @@ export function ServicesSection({
           >
           {mobileServices.map((service, index) => {
             const title = service.acf?.service_heading || service.title.rendered || "";
+            const mobileDesc = service.acf?.service_description || "";
             const isDeepCleaning = title.toLowerCase().includes("deep");
             const href = isDeepCleaning
               ? "/our-services#extras-deep-cleaning"
@@ -598,9 +611,16 @@ export function ServicesSection({
                 </h3>
               </div>
 
-              <p className="mb-3 line-clamp-3 text-[12px] leading-normal text-white/80">
-                {service.acf?.service_description}
-              </p>
+              {isLikelyServiceLandingHtml(mobileDesc) ? (
+                <HomeRichText
+                  content={mobileDesc}
+                  className="mb-3 max-h-[54px] overflow-hidden text-[12px] leading-normal text-white/80"
+                />
+              ) : (
+                <p className="mb-3 line-clamp-3 text-[12px] leading-normal text-white/80">
+                  {mobileDesc}
+                </p>
+              )}
             </article>
           );
           })}
@@ -668,7 +688,13 @@ export function ServicesSection({
         {(sectionHeading || whyList.length > 0) && (
           <div className="mt-6 w-full md:mt-20">
             <WhyQuicklynSection
-              heading={sectionHeading ? `${sectionHeading}?` : "Why Quicklyn?"}
+              heading={
+                sectionHeading
+                  ? isLikelyServiceLandingHtml(sectionHeading)
+                    ? sectionHeading
+                    : `${sectionHeading}?`
+                  : "Why Quicklyn?"
+              }
               items={whyList}
             />
           </div>

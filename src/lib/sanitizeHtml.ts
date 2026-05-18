@@ -18,6 +18,62 @@ function isExternalHttpHref(href: string): boolean {
   }
 }
 
+/** Shared by service landings + home: rewrite WP URLs on `<a href>`, strip risky attrs. */
+function transformServiceLandingAnchor(
+  _tagName: string,
+  attribs: Record<string, string>,
+): { tagName: string; attribs: Record<string, string> } {
+  const raw = (attribs.href ?? "").trim();
+  const next: Record<string, string> = { ...attribs };
+
+  if (!raw || raw === "#") {
+    next.href = "#";
+    return { tagName: "a", attribs: next };
+  }
+
+  if (/^(mailto:|tel:)/i.test(raw)) {
+    return { tagName: "a", attribs: next };
+  }
+
+  const mapped = mapWordPressUrlToNextPath(raw);
+  next.href = mapped;
+  delete next.style;
+
+  if (isExternalHttpHref(mapped)) {
+    next.target = "_blank";
+    const rel = (attribs.rel ?? "").toLowerCase();
+    if (!rel.includes("noopener")) {
+      next.rel = attribs.rel
+        ? `${attribs.rel} noopener noreferrer`
+        : "noopener noreferrer";
+    }
+  } else {
+    delete next.target;
+    delete next.rel;
+  }
+
+  return { tagName: "a", attribs: next };
+}
+
+/**
+ * Home / section titles: inline emphasis, line breaks, links (no block tags).
+ */
+export function sanitizeHomeHeadingInline(html: string | null | undefined): string {
+  if (!html) return "";
+  return sanitizeHtml(html, {
+    allowedTags: ["br", "strong", "b", "i", "em", "a", "span", "u"],
+    allowedAttributes: {
+      a: ["href", "name", "target", "rel"],
+      span: ["class"],
+    },
+    allowedSchemes: ["http", "https", "mailto", "tel"],
+    allowProtocolRelative: false,
+    transformTags: {
+      a: transformServiceLandingAnchor,
+    },
+  });
+}
+
 /**
  * Sanitize WYSIWYG HTML for service landings and map WP / frontend URLs in `href` to Next paths.
  */
@@ -42,38 +98,7 @@ export function sanitizeServiceLandingWysiwyg(html: string | null | undefined): 
     allowedSchemes: ["http", "https", "mailto", "tel"],
     allowProtocolRelative: false,
     transformTags: {
-      a: (_tagName, attribs) => {
-        const raw = (attribs.href ?? "").trim();
-        const next: Record<string, string> = { ...attribs };
-
-        if (!raw || raw === "#") {
-          next.href = "#";
-          return { tagName: "a", attribs: next };
-        }
-
-        if (/^(mailto:|tel:)/i.test(raw)) {
-          return { tagName: "a", attribs: next };
-        }
-
-        const mapped = mapWordPressUrlToNextPath(raw);
-        next.href = mapped;
-        delete next.style;
-
-        if (isExternalHttpHref(mapped)) {
-          next.target = "_blank";
-          const rel = (attribs.rel ?? "").toLowerCase();
-          if (!rel.includes("noopener")) {
-            next.rel = attribs.rel
-              ? `${attribs.rel} noopener noreferrer`
-              : "noopener noreferrer";
-          }
-        } else {
-          delete next.target;
-          delete next.rel;
-        }
-
-        return { tagName: "a", attribs: next };
-      },
+      a: transformServiceLandingAnchor,
     },
   });
 }

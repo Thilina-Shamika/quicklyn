@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { HomePageACF } from "@/types/wordpress";
+import { HomeRichText, isLikelyServiceLandingHtml } from "@/components/home/HomeRichText";
+import { sanitizeHomeHeadingInline } from "@/lib/sanitizeHtml";
 
 interface ServiceAreasSectionProps {
   data: HomePageACF;
@@ -86,22 +88,34 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
         <div className="relative z-10 mx-auto w-full max-w-4xl px-6">
           {heading && (
             <h2 className="mb-8 text-center text-[40px] font-semibold leading-[42px] text-white">
-              {heading}
+              {isLikelyServiceLandingHtml(heading) ? (
+                <span dangerouslySetInnerHTML={{ __html: sanitizeHomeHeadingInline(heading) }} />
+              ) : (
+                heading
+              )}
             </h2>
           )}
 
           <div className="flex items-center gap-4">
             <div className="w-[45%] text-left">
-              {subHeading && (
-                <p className="mb-3 text-[20px] font-normal leading-snug text-white">
-                  {subHeading}
-                </p>
-              )}
-              {description && (
-                <p className="text-[12px] leading-relaxed text-white/85">
-                  {description}
-                </p>
-              )}
+              {subHeading &&
+                (isLikelyServiceLandingHtml(subHeading) ? (
+                  <HomeRichText
+                    content={subHeading}
+                    className="mb-3 text-[20px] font-normal leading-snug text-white"
+                  />
+                ) : (
+                  <p className="mb-3 text-[20px] font-normal leading-snug text-white">{subHeading}</p>
+                ))}
+              {description &&
+                (isLikelyServiceLandingHtml(description) ? (
+                  <HomeRichText
+                    content={description}
+                    className="text-[12px] leading-relaxed text-white/85"
+                  />
+                ) : (
+                  <p className="text-[12px] leading-relaxed text-white/85">{description}</p>
+                ))}
             </div>
 
             {/* Map image aligned to text block */}
@@ -131,11 +145,15 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
                   isMapInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
               >
-                {heading.split(/\s+/).map((word, index) => (
-                  <span key={`${word}-${index}`} className="block">
-                    {word}
-                  </span>
-                ))}
+                {isLikelyServiceLandingHtml(heading) ? (
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeHomeHeadingInline(heading) }} />
+                ) : (
+                  heading.split(/\s+/).map((word, index) => (
+                    <span key={`${word}-${index}`} className="block">
+                      {word}
+                    </span>
+                  ))
+                )}
               </h2>
             )}
           </div>
@@ -181,16 +199,28 @@ export function ServiceAreasSection({ data }: ServiceAreasSectionProps) {
           </div>
 
           <div className="col-span-4 pl-2 text-left lg:pl-6">
-            {subHeading && (
-              <h3 className="text-[30px] font-medium leading-tight text-white lg:text-[40px]">
-                {subHeading}
-              </h3>
-            )}
-            {description && (
-              <p className="mt-5 max-w-[290px] text-[13px] leading-[1.75] text-white/90 lg:mt-6 lg:max-w-[340px] lg:text-[16px] lg:leading-[1.8]">
-                {description}
-              </p>
-            )}
+            {subHeading &&
+              (isLikelyServiceLandingHtml(subHeading) ? (
+                <HomeRichText
+                  content={subHeading}
+                  className="text-[30px] font-medium leading-tight text-white lg:text-[40px]"
+                />
+              ) : (
+                <h3 className="text-[30px] font-medium leading-tight text-white lg:text-[40px]">
+                  {subHeading}
+                </h3>
+              ))}
+            {description &&
+              (isLikelyServiceLandingHtml(description) ? (
+                <HomeRichText
+                  content={description}
+                  className="mt-5 max-w-[290px] text-[13px] leading-[1.75] text-white/90 lg:mt-6 lg:max-w-[340px] lg:text-[16px] lg:leading-[1.8]"
+                />
+              ) : (
+                <p className="mt-5 max-w-[290px] text-[13px] leading-[1.75] text-white/90 lg:mt-6 lg:max-w-[340px] lg:text-[16px] lg:leading-[1.8]">
+                  {description}
+                </p>
+              ))}
           </div>
         </div>
       </div>

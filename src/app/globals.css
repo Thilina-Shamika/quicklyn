@@ -82,9 +82,37 @@
   margin-top: 0.5em;
 }
 
-/* Service landing WYSIWYG: link styles must live here so production builds don’t purge
+/* Service landing + home WYSIWYG: lists (Tailwind preflight removes bullets by default). */
+.service-landing-rich-text ul,
+.service-landing-rich-text ol,
+.home-wysiwyg ul,
+.home-wysiwyg ol {
+  margin: 0.75em 0;
+  padding-left: 1.25em;
+  list-style-position: outside;
+}
+.service-landing-rich-text ul,
+.home-wysiwyg ul {
+  list-style-type: disc;
+}
+.service-landing-rich-text ol,
+.home-wysiwyg ol {
+  list-style-type: decimal;
+}
+.service-landing-rich-text li,
+.home-wysiwyg li {
+  margin-bottom: 0.35em;
+  display: list-item;
+}
+.service-landing-rich-text li::marker,
+.home-wysiwyg li::marker {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Service landing + home WYSIWYG: link styles must live here so production builds don’t purge
    Tailwind arbitrary variants that only appear in src/lib or runtime class strings. */
-.service-landing-rich-text a {
+.service-landing-rich-text a,
+.home-wysiwyg a {
   font-weight: 500;
   color: #ffda00;
   text-decoration: underline;
@@ -94,7 +122,8 @@
     color 150ms ease,
     text-decoration-color 150ms ease;
 }
-.service-landing-rich-text a:hover {
+.service-landing-rich-text a:hover,
+.home-wysiwyg a:hover {
   color: #ffffff;
   text-decoration-color: #ffffff;
 }
