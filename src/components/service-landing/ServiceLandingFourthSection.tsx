@@ -1,5 +1,9 @@
 import { Fragment } from "react";
 import Image from "next/image";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import type {
   ServiceLandingBannerPoint,
   ServiceLandingFeatureItem,
@@ -202,9 +206,16 @@ export function ServiceLandingFourthSection({
         ) : null}
 
         {descriptionText ? (
-          <p className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base">
-            {descriptionText}
-          </p>
+          isLikelyServiceLandingHtml(descriptionText) ? (
+            <ServiceLandingRichText
+              content={descriptionText}
+              className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base [&_p]:mb-0"
+            />
+          ) : (
+            <p className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base">
+              {descriptionText}
+            </p>
+          )
         ) : null}
 
         {hasBannerImage && (
@@ -273,9 +284,16 @@ export function ServiceLandingFourthSection({
                         </ul>
                       ) : null}
                       {descriptionBanner ? (
-                        <p className="w-full max-w-[16rem] text-left text-[18px] font-normal leading-[29px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]">
-                          {descriptionBanner}
-                        </p>
+                        isLikelyServiceLandingHtml(descriptionBanner) ? (
+                          <ServiceLandingRichText
+                            content={descriptionBanner}
+                            className="w-full max-w-[16rem] text-left text-[18px] font-normal leading-[29px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]"
+                          />
+                        ) : (
+                          <p className="w-full max-w-[16rem] text-left text-[18px] font-normal leading-[29px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]">
+                            {descriptionBanner}
+                          </p>
+                        )
                       ) : null}
                     </div>
                   )}

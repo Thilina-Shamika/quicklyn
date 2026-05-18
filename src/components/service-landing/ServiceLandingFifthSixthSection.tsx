@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import { cn } from "@/lib/utils";
+import { getSiteUrl, mapWordPressUrlToNextPath } from "@/lib/wordpress";
 import {
   decodeCommonWpHtmlEntities,
   sanitizeServiceLandingHeadingLine,
@@ -114,9 +119,16 @@ function ServiceLandingNewImprovementsBand({
             <div className="min-w-0 space-y-5 text-left">
               {h ? <NewImprovementsHeading text={h} /> : null}
               {d ? (
-                <p className="m-0 max-w-xl text-[17px] font-normal leading-[1.65] text-white sm:text-[18px] sm:leading-[29px]">
-                  {d}
-                </p>
+                isLikelyServiceLandingHtml(d) ? (
+                  <ServiceLandingRichText
+                    content={d}
+                    className="m-0 max-w-xl text-[17px] font-normal leading-[1.65] text-white sm:text-[18px] sm:leading-[29px]"
+                  />
+                ) : (
+                  <p className="m-0 max-w-xl text-[17px] font-normal leading-[1.65] text-white sm:text-[18px] sm:leading-[29px]">
+                    {d}
+                  </p>
+                )
               ) : null}
             </div>
             {list.length > 0 ? (
@@ -304,9 +316,16 @@ function ApartmentTypeCard({
       ) : null}
       {body ? (
         <div className="bg-[#347C7C]/60 px-6 py-6 sm:px-8 sm:py-8">
-          <p className="m-0 w-full min-w-0 text-left text-[12px] font-normal text-white sm:text-[18px] sm:leading-[29px]">
-            {body}
-          </p>
+          {isLikelyServiceLandingHtml(body) ? (
+            <ServiceLandingRichText
+              content={body}
+              className="m-0 w-full min-w-0 text-left text-[12px] font-normal text-white sm:text-[18px] sm:leading-[29px]"
+            />
+          ) : (
+            <p className="m-0 w-full min-w-0 text-left text-[12px] font-normal text-white sm:text-[18px] sm:leading-[29px]">
+              {body}
+            </p>
+          )}
         </div>
       ) : null}
     </article>
@@ -416,7 +435,15 @@ function CtaButton({
   href: string;
   className?: string;
 }) {
-  const isExternal = /^https?:\/\//i.test(href);
+  const mapped = mapWordPressUrlToNextPath(href);
+  const isExternal = (() => {
+    if (!/^https?:\/\//i.test(mapped)) return false;
+    try {
+      return new URL(mapped).origin !== new URL(getSiteUrl()).origin;
+    } catch {
+      return true;
+    }
+  })();
   const merged = cn(
     "inline-flex h-12 min-w-0 max-w-full items-center justify-center gap-2 rounded-full bg-[#FFDA00] px-6 text-sm font-semibold text-[#1B5B5D] shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition hover:opacity-95 sm:px-8 sm:text-base",
     className,
@@ -432,7 +459,7 @@ function CtaButton({
   if (isExternal) {
     return (
       <a
-        href={href}
+        href={mapped}
         className={merged}
         target="_blank"
         rel="noopener noreferrer"
@@ -442,7 +469,7 @@ function CtaButton({
     );
   }
   return (
-    <Link href={href} className={merged}>
+    <Link href={mapped} className={merged}>
       {child}
     </Link>
   );
@@ -553,9 +580,16 @@ export function ServiceLandingFifthSixthSection({
                 <div className="min-w-0 w-full max-w-sm space-y-5 text-center sm:text-left md:pr-2">
                   {h5 ? <FifthSectionHeading text={h5} /> : null}
                   {d5 ? (
-                    <p className="mx-auto max-w-[40ch] text-center text-[18px] font-normal leading-[29px] text-white/95 sm:mx-0 sm:text-left">
-                      {d5}
-                    </p>
+                    isLikelyServiceLandingHtml(d5) ? (
+                      <ServiceLandingRichText
+                        content={d5}
+                        className="mx-auto max-w-[40ch] text-center text-[18px] font-normal leading-[29px] text-white/95 sm:mx-0 sm:text-left"
+                      />
+                    ) : (
+                      <p className="mx-auto max-w-[40ch] text-center text-[18px] font-normal leading-[29px] text-white/95 sm:mx-0 sm:text-left">
+                        {d5}
+                      </p>
+                    )
                   ) : null}
                   {hasCta ? (
                     <div className="flex justify-center sm:contents">
@@ -583,14 +617,24 @@ export function ServiceLandingFifthSixthSection({
                     );
                   })}
                   {disc5 ? (
-                    <p
-                      className={cn(
-                        SECTION_DISCLAIMER_CLASS,
-                        "mt-8 w-full text-[12px] leading-[21px] sm:mt-10 sm:text-[18px] sm:leading-[29px]",
-                      )}
-                    >
-                      {disc5}
-                    </p>
+                    isLikelyServiceLandingHtml(disc5) ? (
+                      <ServiceLandingRichText
+                        content={disc5}
+                        className={cn(
+                          SECTION_DISCLAIMER_CLASS,
+                          "mt-8 w-full text-[12px] leading-[21px] sm:mt-10 sm:text-[18px] sm:leading-[29px]",
+                        )}
+                      />
+                    ) : (
+                      <p
+                        className={cn(
+                          SECTION_DISCLAIMER_CLASS,
+                          "mt-8 w-full text-[12px] leading-[21px] sm:mt-10 sm:text-[18px] sm:leading-[29px]",
+                        )}
+                      >
+                        {disc5}
+                      </p>
+                    )
                   ) : null}
                 </div>
               </div>
@@ -611,18 +655,32 @@ export function ServiceLandingFifthSixthSection({
               <div className="mb-10 space-y-3 text-center sm:mb-12 md:mb-14">
                 {h6 ? <SixthSectionHeading text={h6} /> : null}
                 {s6 ? (
-                  <p className="mx-auto max-w-3xl text-[16px] font-normal leading-relaxed text-white/95 sm:text-[17px]">
-                    {s6}
-                  </p>
+                  isLikelyServiceLandingHtml(s6) ? (
+                    <ServiceLandingRichText
+                      content={s6}
+                      className="mx-auto max-w-3xl text-center text-[16px] font-normal leading-relaxed text-white/95 sm:text-[17px]"
+                    />
+                  ) : (
+                    <p className="mx-auto max-w-3xl text-[16px] font-normal leading-relaxed text-white/95 sm:text-[17px]">
+                      {s6}
+                    </p>
+                  )
                 ) : null}
               </div>
               <div className="w-full min-w-0 md:pt-1">
                 <WhatToExpectList items={steps} />
               </div>
               {disc6 ? (
-                <p className={`${SECTION_DISCLAIMER_CLASS} my-[100px]`}>
-                  {disc6}
-                </p>
+                isLikelyServiceLandingHtml(disc6) ? (
+                  <ServiceLandingRichText
+                    content={disc6}
+                    className={`${SECTION_DISCLAIMER_CLASS} my-[100px]`}
+                  />
+                ) : (
+                  <p className={`${SECTION_DISCLAIMER_CLASS} my-[100px]`}>
+                    {disc6}
+                  </p>
+                )
               ) : null}
             </div>
           ) : null}

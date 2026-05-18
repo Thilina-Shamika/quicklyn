@@ -1,4 +1,8 @@
 import Image from "next/image";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import type { ServiceLandingSecondItem, WPImage } from "@/types/wordpress";
 import type { ReactNode } from "react";
 
@@ -182,9 +186,18 @@ export function ServiceLandingSecondSection({ items: itemsIn }: Props) {
                       </div>
                     </div>
                     <div className="col-start-2 row-start-2 flex min-h-0 w-full min-w-0 items-start justify-start pl-0 sm:col-start-3 sm:row-start-1 sm:h-full sm:min-h-0 sm:justify-start sm:pl-2 sm:pr-0 md:pl-3">
-                      <p className="min-w-0 w-full max-w-[50ch] text-balance text-left text-[15px] leading-[24px] text-white/95 sm:pl-1 sm:text-[17px] sm:leading-[30px] md:text-[18px] md:leading-[33px]">
-                        {desc ? <RichSecondDescription text={desc} /> : null}
-                      </p>
+                      <div className="min-w-0 w-full max-w-[50ch] text-balance text-left text-[15px] leading-[24px] text-white/95 sm:pl-1 sm:text-[17px] sm:leading-[30px] md:text-[18px] md:leading-[33px]">
+                        {desc ? (
+                          isLikelyServiceLandingHtml(desc) ? (
+                            <ServiceLandingRichText
+                              content={desc}
+                              className="max-w-[50ch] text-balance [&_p]:mb-2 [&_p:last-child]:mb-0"
+                            />
+                          ) : (
+                            <RichSecondDescription text={desc} />
+                          )
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </a>

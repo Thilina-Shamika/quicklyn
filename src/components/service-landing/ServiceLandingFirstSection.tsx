@@ -1,5 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import type { WPImage } from "@/types/wordpress";
 
 function splitHeading(heading: string): { first: string; second: string | null } {
@@ -31,6 +35,7 @@ export function ServiceLandingFirstSection({
     .split(/\r?\n\r?\n/)
     .map((p) => p.trim())
     .filter(Boolean);
+  const desc2AsHtml = isLikelyServiceLandingHtml(description2);
   const imageUrl = image?.url;
   const alt = image?.alt?.trim() || heading;
   const imageWidth = image?.width && image.width > 0 ? image.width : 1200;
@@ -64,7 +69,14 @@ export function ServiceLandingFirstSection({
             </h1>
             <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:items-start sm:gap-5 md:mt-12 lg:mt-12 lg:gap-6">
               <div className="min-w-0 text-[18px] leading-[33px] text-white/95">
-                {description1}
+                {isLikelyServiceLandingHtml(description1) ? (
+                  <ServiceLandingRichText
+                    content={description1}
+                    className="[&_p]:mb-3 [&_p:last-child]:mb-0"
+                  />
+                ) : (
+                  description1
+                )}
               </div>
               {imageUrl ? (
                 <div className="mx-auto w-full min-w-0 max-w-[min(100%,40rem)] sm:-mt-[150px] sm:mx-0 sm:ml-auto sm:max-w-[36rem]">
@@ -84,11 +96,18 @@ export function ServiceLandingFirstSection({
 
           {/* Right column: 2nd description */}
           <div className="min-w-0 w-full max-w-[50ch] space-y-4 text-[18px] leading-[33px] text-white/95">
-            {rightParagraphs.map((p, i) => (
-              <p key={i} className="text-balance">
-                {p}
-              </p>
-            ))}
+            {desc2AsHtml ? (
+              <ServiceLandingRichText
+                content={description2}
+                className="space-y-4 [&_p]:mb-0 [&_p+p]:mt-4"
+              />
+            ) : (
+              rightParagraphs.map((p, i) => (
+                <p key={i} className="text-balance">
+                  {p}
+                </p>
+              ))
+            )}
           </div>
         </div>
       </div>

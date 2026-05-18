@@ -999,20 +999,38 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
   try {
     const parsed = new URL(u, "https://example.com");
     const host = parsed.host.toLowerCase();
+
+    let frontendHosts: string[] = [];
+    try {
+      const h = new URL(getSiteUrl()).host.toLowerCase();
+      if (h) {
+        frontendHosts.push(h);
+        if (h.startsWith("www.")) frontendHosts.push(h.slice(4));
+        else frontendHosts.push(`www.${h}`);
+      }
+    } catch {
+      /* ignore */
+    }
+
+    const isFrontendHost = frontendHosts.length > 0 && frontendHosts.includes(host);
     const isKnownWpHost =
-      !host || // relative URLs
+      !host ||
       host.includes("quicklyn-headless.local") ||
       host.includes("quick.rootholdings.com.mv");
 
-    // If this URL is not on a known WordPress host, treat it as external.
-    if (!isKnownWpHost) {
+    const isOurSite = isKnownWpHost || isFrontendHost;
+
+    if (!isOurSite) {
       return u;
     }
 
     const path = parsed.pathname.toLowerCase().replace(/\/$/, "") || "/";
 
     // Known internal routes – keep using Next.js paths for these
-    if (path === "/home" || path === "/") return "/";
+    if (path === "/home") return "/";
+    if (path === "/") {
+      return `${parsed.pathname}${parsed.search}${parsed.hash}` || "/";
+    }
     if (path.includes("our-services")) return "/our-services";
     /** Marketing landing pages: WP `/services/{slug}` → Next `/{slug}` */
     const servicesLanding = path.match(/^\/services\/([^/]+)\/?$/);
@@ -1032,12 +1050,7 @@ export function mapWordPressUrlToNextPath(wpUrl: string | undefined): string {
     if (path.includes("privacy-policy")) return "/privacy-policy";
     if (path.includes("blogs")) return "/blogs";
 
-    // Keep hash for same-page anchors on the home page
-    const hash = parsed.hash;
-    if (hash && path === "/") return `/${hash}`;
-
-    // For any other WP URL we don't recognize, return the original URL as-is
-    return u;
+    return `${parsed.pathname}${parsed.search}${parsed.hash}` || "/";
   } catch {
     return u.startsWith("#") ? u : u;
   }

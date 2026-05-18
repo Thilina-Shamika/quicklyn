@@ -1,8 +1,11 @@
 import {
   decodeCommonWpHtmlEntities,
+  isLikelyServiceLandingHtml,
   sanitizeServiceLandingSection6Heading,
-  sanitizeWordPressHtml,
+  sanitizeServiceLandingWysiwyg,
+  SERVICE_LANDING_RICH_TEXT_LINK_CLASS,
 } from "@/lib/sanitizeHtml";
+import { ServiceLandingRichText } from "@/components/service-landing/ServiceLandingRichText";
 
 const EMPHASIS_7 = "Apartment Cleaning";
 
@@ -41,7 +44,7 @@ function SeventhSectionHeading({ text }: { text: string }) {
 }
 
 const STRUCTURE_CLASS =
-  "m-0 text-[15px] font-light leading-relaxed text-white/95 sm:text-[16px] [&>p]:m-0 [&>p]:mb-2 [&>p]:text-[15px] [&>p]:text-white/90 [&>p]:last:mb-0 sm:[&>p]:text-[16px] [&_li]:pl-0.5 [&_strong]:font-bold [&_ul]:m-0 [&_ul]:mt-1.5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5";
+  `m-0 text-[15px] font-light leading-relaxed text-white/95 sm:text-[16px] [&>p]:m-0 [&>p]:mb-2 [&>p]:text-[15px] [&>p]:text-white/90 [&>p]:last:mb-0 sm:[&>p]:text-[16px] [&_li]:pl-0.5 [&_strong]:font-bold [&_ul]:m-0 [&_ul]:mt-1.5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 ${SERVICE_LANDING_RICH_TEXT_LINK_CLASS}`;
 
 type Props = {
   section7Heading?: string;
@@ -60,7 +63,7 @@ export function ServiceLandingSeventhSection({
   const d7 = section7Description?.replace(/\r\n/g, "\n").trim() ?? "";
   const structure = structureRaw?.trim() ?? "";
   const bottom = bottomDescription?.replace(/\r\n/g, "\n").trim() ?? "";
-  const structureHtml = structure ? sanitizeWordPressHtml(structure) : "";
+  const structureHtml = structure ? sanitizeServiceLandingWysiwyg(structure) : "";
 
   const hasContent = Boolean(
     h7 || d7 || structureHtml || bottom,
@@ -78,9 +81,16 @@ export function ServiceLandingSeventhSection({
             <div className="min-w-0 space-y-4">
               {h7 ? <SeventhSectionHeading text={h7} /> : null}
               {d7 ? (
-                <p className="max-w-prose text-[17px] font-light leading-relaxed text-white/90 sm:text-[18px]">
-                  {d7}
-                </p>
+                isLikelyServiceLandingHtml(d7) ? (
+                  <ServiceLandingRichText
+                    content={d7}
+                    className="max-w-prose text-[17px] font-light leading-relaxed text-white/90 sm:text-[18px]"
+                  />
+                ) : (
+                  <p className="max-w-prose text-[17px] font-light leading-relaxed text-white/90 sm:text-[18px]">
+                    {d7}
+                  </p>
+                )
               ) : null}
             </div>
             {structureHtml ? (

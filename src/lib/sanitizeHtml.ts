@@ -1,4 +1,87 @@
 import sanitizeHtml from "sanitize-html";
+import { getSiteUrl, mapWordPressUrlToNextPath } from "@/lib/wordpress";
+
+/**
+ * Shared Tailwind hooks so WYSIWYG `<a>` tags read as real links on teal service pages.
+ */
+export const SERVICE_LANDING_RICH_TEXT_LINK_CLASS =
+  "[&_a]:font-medium [&_a]:text-[#ffda00] [&_a]:underline [&_a]:decoration-[#ffda00]/70 [&_a]:underline-offset-[3px] hover:[&_a]:text-white hover:[&_a]:decoration-white [&_a]:transition-colors";
+
+/** Heuristic: string contains HTML tags from the CMS rich text / WYSIWYG. */
+export function isLikelyServiceLandingHtml(text: string | null | undefined): boolean {
+  if (!text) return false;
+  return /<\s*[a-z][\s\S]*?>/i.test(text);
+}
+
+function isExternalHttpHref(href: string): boolean {
+  if (!/^https?:\/\//i.test(href)) return false;
+  try {
+    const site = new URL(getSiteUrl());
+    const link = new URL(href);
+    return link.origin !== site.origin;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Sanitize WYSIWYG HTML for service landings and map WP / frontend URLs in `href` to Next paths.
+ */
+export function sanitizeServiceLandingWysiwyg(html: string | null | undefined): string {
+  if (!html) return "";
+
+  return sanitizeHtml(html, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+      "img",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+    ]),
+    allowedAttributes: {
+      a: ["href", "name", "target", "rel"],
+      img: ["src", "alt", "title", "width", "height"],
+      "*": ["class", "style"],
+    },
+    allowedSchemes: ["http", "https", "mailto", "tel"],
+    allowProtocolRelative: false,
+    transformTags: {
+      a: (_tagName, attribs) => {
+        const raw = (attribs.href ?? "").trim();
+        const next: Record<string, string> = { ...attribs };
+
+        if (!raw || raw === "#") {
+          next.href = "#";
+          return { tagName: "a", attribs: next };
+        }
+
+        if (/^(mailto:|tel:)/i.test(raw)) {
+          return { tagName: "a", attribs: next };
+        }
+
+        const mapped = mapWordPressUrlToNextPath(raw);
+        next.href = mapped;
+
+        if (isExternalHttpHref(mapped)) {
+          next.target = "_blank";
+          const rel = (attribs.rel ?? "").toLowerCase();
+          if (!rel.includes("noopener")) {
+            next.rel = attribs.rel
+              ? `${attribs.rel} noopener noreferrer`
+              : "noopener noreferrer";
+          }
+        } else {
+          delete next.target;
+          delete next.rel;
+        }
+
+        return { tagName: "a", attribs: next };
+      },
+    },
+  });
+}
 
 /**
  * Sanitize WordPress HTML content before rendering with dangerouslySetInnerHTML.

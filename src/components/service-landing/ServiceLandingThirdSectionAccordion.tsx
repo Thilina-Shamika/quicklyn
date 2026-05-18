@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ServiceLandingRichText } from "@/components/service-landing/ServiceLandingRichText";
 import type { ServiceLandingThirdAccordionItem } from "@/types/wordpress";
 
 const chevron = (
@@ -72,10 +73,9 @@ export function ServiceLandingThirdSectionAccordion({ items, idPrefix }: Props) 
               className={isOpen ? "block h-auto w-full" : "hidden"}
             >
               {rawHtml ? (
-                <div
-                  className="max-w-prose pb-5 pl-0 pr-2 text-white/90 sm:pr-0 [&_a]:text-[#ffda00] [&_a]:underline [&_p]:mb-3 [&_p]:text-[15px] [&_p]:leading-7 sm:[&_p]:text-[16px] sm:[&_p]:leading-8 md:[&_p]:text-[17px] md:[&_p]:leading-9 [&_p]:last:mb-0 [&_ul]:mb-2 [&_ul]:mt-1 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1.5"
-                  dangerouslySetInnerHTML={{ __html: rawHtml }}
-                />
+                <div className="max-w-prose pb-5 pl-0 pr-2 text-white/90 sm:pr-0 [&_p]:mb-3 [&_p]:text-[15px] [&_p]:leading-7 sm:[&_p]:text-[16px] sm:[&_p]:leading-8 md:[&_p]:text-[17px] md:[&_p]:leading-9 [&_p]:last:mb-0 [&_ul]:mb-2 [&_ul]:mt-1 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1.5">
+                  <ServiceLandingRichText content={rawHtml} />
+                </div>
               ) : null}
             </div>
           </li>

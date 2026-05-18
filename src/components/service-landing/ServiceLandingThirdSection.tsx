@@ -1,4 +1,8 @@
 import Image from "next/image";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import { ServiceLandingThirdSectionAccordion } from "./ServiceLandingThirdSectionAccordion";
 import type { ServiceLandingThirdAccordionItem, WPImage } from "@/types/wordpress";
 
@@ -125,9 +129,16 @@ function ThirdSectionContentGrid({
           </h2>
         ) : null}
         {d ? (
-          <p className="max-w-[52ch] text-[18px] font-normal leading-[33px] text-white/95 max-sm:mx-auto max-sm:text-center sm:mx-0 sm:text-left">
-            {d}
-          </p>
+          isLikelyServiceLandingHtml(d) ? (
+            <ServiceLandingRichText
+              content={d}
+              className="max-w-[52ch] text-[18px] font-normal leading-[33px] text-white/95 max-sm:mx-auto max-sm:text-center sm:mx-0 sm:text-left [&_p]:mb-3 [&_p:last-child]:mb-0"
+            />
+          ) : (
+            <p className="max-w-[52ch] text-[18px] font-normal leading-[33px] text-white/95 max-sm:mx-auto max-sm:text-center sm:mx-0 sm:text-left">
+              {d}
+            </p>
+          )
         ) : null}
       </div>
       {hasAccordion ? (

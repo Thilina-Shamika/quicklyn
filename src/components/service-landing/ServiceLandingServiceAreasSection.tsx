@@ -1,4 +1,8 @@
 import type { ServiceLandingServiceAreaItem } from "@/types/wordpress";
+import {
+  isLikelyServiceLandingHtml,
+  ServiceLandingRichText,
+} from "@/components/service-landing/ServiceLandingRichText";
 import { cn } from "@/lib/utils";
 
 function ServiceAreaPinIcon({ className }: { className?: string }) {
@@ -154,9 +158,16 @@ export function ServiceLandingServiceAreasSection({
               ) : null}
             </div>
             {primaryDescription ? (
-              <p className="m-0 max-w-none text-[18px] font-normal leading-[31px] text-white lg:pt-1">
-                {primaryDescription}
-              </p>
+              isLikelyServiceLandingHtml(primaryDescription) ? (
+                <ServiceLandingRichText
+                  content={primaryDescription}
+                  className="m-0 max-w-none text-[18px] font-normal leading-[31px] text-white lg:pt-1 [&_p]:mb-3 [&_p:last-child]:mb-0"
+                />
+              ) : (
+                <p className="m-0 max-w-none text-[18px] font-normal leading-[31px] text-white lg:pt-1">
+                  {primaryDescription}
+                </p>
+              )
             ) : null}
           </div>
         ) : null}

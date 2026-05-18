@@ -1,5 +1,9 @@
 import { Fragment } from "react";
-import { sanitizeServiceLandingHeadingLine } from "@/lib/sanitizeHtml";
+import { ServiceLandingRichText } from "@/components/service-landing/ServiceLandingRichText";
+import {
+  isLikelyServiceLandingHtml,
+  sanitizeServiceLandingHeadingLine,
+} from "@/lib/sanitizeHtml";
 
 type Props = {
   finalThoughtsHeading?: string;
@@ -17,12 +21,32 @@ export function ServiceLandingNinthSection({
     .map((p) => p.trim())
     .filter(Boolean);
 
-  if (!h9 && paragraphs.length === 0) return null;
+  const hasDesc = raw.length > 0;
+  if (!h9 && !hasDesc) return null;
 
   const headingSegments = h9
     .split(/<\s*br\s*\/?>/i)
     .map((s) => s.trim())
     .filter(Boolean);
+
+  const descBody =
+    !hasDesc ? null : isLikelyServiceLandingHtml(raw) ? (
+      <ServiceLandingRichText
+        content={raw}
+        className="text-[16px] font-light leading-[1.65] text-white/95 sm:text-[17px] md:leading-8 [&_p]:mb-4 [&_p:last-child]:mb-0"
+      />
+    ) : (
+      <>
+        {paragraphs.map((p, i) => (
+          <p
+            key={i}
+            className="m-0 text-[16px] font-light leading-[1.65] text-white/95 sm:text-[17px] md:leading-8"
+          >
+            {p}
+          </p>
+        ))}
+      </>
+    );
 
   return (
     <div
@@ -49,28 +73,10 @@ export function ServiceLandingNinthSection({
                 </Fragment>
               ))}
             </h2>
-            <div className="min-w-0 space-y-4">
-              {paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  className="m-0 text-[16px] font-light leading-[1.65] text-white/95 sm:text-[17px] md:leading-8"
-                >
-                  {p}
-                </p>
-              ))}
-            </div>
+            <div className="min-w-0 space-y-4">{descBody}</div>
           </div>
         ) : (
-          <div className="min-w-0 space-y-4">
-            {paragraphs.map((p, i) => (
-              <p
-                key={i}
-                className="m-0 text-[16px] font-light leading-[1.65] text-white/95 sm:text-[17px] md:leading-8"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
+          <div className="min-w-0 space-y-4">{descBody}</div>
         )}
       </div>
     </div>
