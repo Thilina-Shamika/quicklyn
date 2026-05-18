@@ -1,12 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { getSiteUrl, mapWordPressUrlToNextPath } from "@/lib/wordpress";
 
-/**
- * Shared Tailwind hooks so WYSIWYG `<a>` tags read as real links on teal service pages.
- */
-export const SERVICE_LANDING_RICH_TEXT_LINK_CLASS =
-  "[&_a]:font-medium [&_a]:text-[#ffda00] [&_a]:underline [&_a]:decoration-[#ffda00]/70 [&_a]:underline-offset-[3px] hover:[&_a]:text-white hover:[&_a]:decoration-white [&_a]:transition-colors";
-
 /** Heuristic: string contains HTML tags from the CMS rich text / WYSIWYG. */
 export function isLikelyServiceLandingHtml(text: string | null | undefined): boolean {
   if (!text) return false;
@@ -63,6 +57,7 @@ export function sanitizeServiceLandingWysiwyg(html: string | null | undefined): 
 
         const mapped = mapWordPressUrlToNextPath(raw);
         next.href = mapped;
+        delete next.style;
 
         if (isExternalHttpHref(mapped)) {
           next.target = "_blank";

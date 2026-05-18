@@ -3,7 +3,6 @@ import {
   isLikelyServiceLandingHtml,
   sanitizeServiceLandingSection6Heading,
   sanitizeServiceLandingWysiwyg,
-  SERVICE_LANDING_RICH_TEXT_LINK_CLASS,
 } from "@/lib/sanitizeHtml";
 import { ServiceLandingRichText } from "@/components/service-landing/ServiceLandingRichText";
 
@@ -44,7 +43,7 @@ function SeventhSectionHeading({ text }: { text: string }) {
 }
 
 const STRUCTURE_CLASS =
-  `m-0 text-[15px] font-light leading-relaxed text-white/95 sm:text-[16px] [&>p]:m-0 [&>p]:mb-2 [&>p]:text-[15px] [&>p]:text-white/90 [&>p]:last:mb-0 sm:[&>p]:text-[16px] [&_li]:pl-0.5 [&_strong]:font-bold [&_ul]:m-0 [&_ul]:mt-1.5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 ${SERVICE_LANDING_RICH_TEXT_LINK_CLASS}`;
+  "service-landing-rich-text m-0 text-[15px] font-light leading-relaxed text-white/95 sm:text-[16px] [&>p]:m-0 [&>p]:mb-2 [&>p]:text-[15px] [&>p]:text-white/90 [&>p]:last:mb-0 sm:[&>p]:text-[16px] [&_li]:pl-0.5 [&_strong]:font-bold [&_ul]:m-0 [&_ul]:mt-1.5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5";
 
 type Props = {
   section7Heading?: string;

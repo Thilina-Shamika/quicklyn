@@ -82,6 +82,23 @@
   margin-top: 0.5em;
 }
 
+/* Service landing WYSIWYG: link styles must live here so production builds don’t purge
+   Tailwind arbitrary variants that only appear in src/lib or runtime class strings. */
+.service-landing-rich-text a {
+  font-weight: 500;
+  color: #ffda00;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 218, 0, 0.7);
+  text-underline-offset: 3px;
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
+}
+.service-landing-rich-text a:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
 @keyframes desktopPromoMarquee {
   from {
     transform: translateX(0);
