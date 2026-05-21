@@ -2,10 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import legacyData from "@/data/legacy-301-redirects.json";
 
-/** Pathname → Redirect To from spreadsheet (`legacy-301-redirects.json`). */
-const redirectByPath = new Map<string, string>(
-  legacyData.redirects.map(({ source, destination }) => [source, destination]),
-);
+/** Pathnames (with and without trailing slash) → Redirect To from spreadsheet. */
+const redirectByPath = new Map<string, string>();
+for (const { source, destination } of legacyData.redirects) {
+  redirectByPath.set(source, destination);
+  if (source !== "/" && source.endsWith("/")) {
+    redirectByPath.set(source.replace(/\/+$/, "") || "/", destination);
+  } else if (source !== "/" && !source.endsWith("/")) {
+    redirectByPath.set(`${source}/`, destination);
+  }
+}
 
 /**
  * Applies legacy 301s before `[slug]` and other routes. Uses HTTP 301 to match SEO spec.

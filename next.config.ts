@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  /** Let legacy middleware handle `/something/` URLs; avoids Next prepending slash-strip before our 301 map. */
+  skipTrailingSlashRedirect: true,
+
   outputFileTracingRoot: path.join(__dirname),
   images: {
     remotePatterns: [
