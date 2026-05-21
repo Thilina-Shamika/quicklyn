@@ -1,0 +1,1041 @@
+{
+  "generated_from": "404 to 301 redirect mapping.xlsx",
+  "readme": "Import from 404\u2192301 spreadsheet. Wildcard omitted from Next redirects.",
+  "redirects": [
+    {
+      "source": "/10-expert-tips-on-how-to-iron-clothes-at-home",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 3
+    },
+    {
+      "source": "/10-expert-tips-on-how-to-iron-clothes-at-home/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 4
+    },
+    {
+      "source": "/5-signs-you-need-a-professional-maid-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 5
+    },
+    {
+      "source": "/5-signs-youve-hired-the-best-home-cleaners-in-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 6
+    },
+    {
+      "source": "/9-tips-for-maintaining-a-sparkling-clean-bathroom/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 7
+    },
+    {
+      "source": "/advantages-of-hiring-a-local-cleaning-company/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 8
+    },
+    {
+      "source": "/affordable-airbnb-cleaning-in-brooklyn-ny/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 9
+    },
+    {
+      "source": "/airbnb-cleaning-service-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 10
+    },
+    {
+      "source": "/apartment-cleaning-services-in-brooklyn-for-busy-professionals/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 11
+    },
+    {
+      "source": "/be-careful-where-you-sleep-on-mattress-cleaning-tips-that-will-never-disappoint-you/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 12
+    },
+    {
+      "source": "/best-home-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 13
+    },
+    {
+      "source": "/best-home-cleaning-services-near-me-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-apartment-cleaning-service",
+      "spreadsheet_row": 14
+    },
+    {
+      "source": "/blog/",
+      "destination": "https://quicklyn.com/blogs",
+      "spreadsheet_row": 15
+    },
+    {
+      "source": "/book-quicklyn/",
+      "destination": "https://web.quicklyn.com/login",
+      "spreadsheet_row": 16
+    },
+    {
+      "source": "/brooklyn-home-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 17
+    },
+    {
+      "source": "/brooklyn-home-cleaning-a-sparkling-start-to-new-year/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 18
+    },
+    {
+      "source": "/category/airbnb-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 19
+    },
+    {
+      "source": "/category/airbnb-cleaning-service/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 20
+    },
+    {
+      "source": "/category/airbnb-cleaning-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 21
+    },
+    {
+      "source": "/category/airbnb-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 22
+    },
+    {
+      "source": "/category/apartment-cleaning-nyc/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 23
+    },
+    {
+      "source": "/category/apartment-cleaning-nyc/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 24
+    },
+    {
+      "source": "/category/apartment-cleaning-services/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 25
+    },
+    {
+      "source": "/category/apartment-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 26
+    },
+    {
+      "source": "/category/apartment-cleaning-services-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 27
+    },
+    {
+      "source": "/category/apartment-cleaning-services-in-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 28
+    },
+    {
+      "source": "/category/best-airbnb-cleaning-service-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 29
+    },
+    {
+      "source": "/category/best-apartment-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 30
+    },
+    {
+      "source": "/category/best-basement-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 31
+    },
+    {
+      "source": "/category/best-bathroom-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 32
+    },
+    {
+      "source": "/category/best-cleaning-service-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 33
+    },
+    {
+      "source": "/category/best-deep-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 34
+    },
+    {
+      "source": "/category/best-home-apartment-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 35
+    },
+    {
+      "source": "/category/best-home-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 36
+    },
+    {
+      "source": "/category/best-home-cleaning-services/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 37
+    },
+    {
+      "source": "/category/best-house-cleaning-services-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 38
+    },
+    {
+      "source": "/category/best-house-cleaning-services-nyc/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 39
+    },
+    {
+      "source": "/category/best-living-room-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 40
+    },
+    {
+      "source": "/category/best-residential-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 41
+    },
+    {
+      "source": "/category/best-tile-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 42
+    },
+    {
+      "source": "/category/cleaning-service-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 43
+    },
+    {
+      "source": "/category/cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 44
+    },
+    {
+      "source": "/category/deep-cleaning-services-brooklyn/page/4/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 45
+    },
+    {
+      "source": "/category/deep-cleaning-services-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 46
+    },
+    {
+      "source": "/category/deep-house-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 47
+    },
+    {
+      "source": "/category/home-cleaning-services-in-brooklyn/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 48
+    },
+    {
+      "source": "/category/home-cleaning-services-in-brooklyn/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 49
+    },
+    {
+      "source": "/category/home-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 50
+    },
+    {
+      "source": "/category/home-cleaning-services-in-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 51
+    },
+    {
+      "source": "/category/home-cleaning-services-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 52
+    },
+    {
+      "source": "/category/home-cleaning-services-new-york/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 53
+    },
+    {
+      "source": "/category/house-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 54
+    },
+    {
+      "source": "/category/house-cleaning-services-in-new-york/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 55
+    },
+    {
+      "source": "/category/house-cleaning-services-in-new-york/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 56
+    },
+    {
+      "source": "/category/maids/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 57
+    },
+    {
+      "source": "/category/move-in-move-out-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 58
+    },
+    {
+      "source": "/category/move-in-move-out-cleaning-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 59
+    },
+    {
+      "source": "/category/move-in-move-out-cleaning-service-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 60
+    },
+    {
+      "source": "/category/move-out-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 61
+    },
+    {
+      "source": "/category/professional-cleaning-services-in-brooklyn/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 62
+    },
+    {
+      "source": "/category/professional-deep-cleaning-services-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 63
+    },
+    {
+      "source": "/category/professional-house-cleaning-services-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 64
+    },
+    {
+      "source": "/category/quicklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 65
+    },
+    {
+      "source": "/category/quicklyn/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 66
+    },
+    {
+      "source": "/category/same-day-airbnb-cleaning-service-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 67
+    },
+    {
+      "source": "/checklist-for-move-out-cleaning-in-manhattan-apartments/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 68
+    },
+    {
+      "source": "/cleaning-and-disinfecting-tips-to-ensure-a-corona-free-home/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 69
+    },
+    {
+      "source": "/cleaning-hacks-for-busy-parents-quick-easy-tips/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 70
+    },
+    {
+      "source": "/deep-cleaning-in-long-island-brooklyn-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 71
+    },
+    {
+      "source": "/deep-cleaning-service-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 72
+    },
+    {
+      "source": "/easy-tips-for-kitchen-sink-and-drain-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 73
+    },
+    {
+      "source": "/effective-spring-cleaning-strategies-for-a-fresh-start/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 74
+    },
+    {
+      "source": "/essential-supplies-to-supercharge-your-summer-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 75
+    },
+    {
+      "source": "/everyone-in-brooklyn-talking-about-quicklyn-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 76
+    },
+    {
+      "source": "/expert-maid-services-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 78
+    },
+    {
+      "source": "/faq/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 79
+    },
+    {
+      "source": "/find-reliable-and-affordable-cleaning-services-in-your-area/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 80
+    },
+    {
+      "source": "/fur-today-gone-tomorrow-a-handy-guide-to-a-clean-home-for-dog-owners",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 81
+    },
+    {
+      "source": "/fur-today-gone-tomorrow-a-handy-guide-to-a-clean-home-for-dog-owners/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 82
+    },
+    {
+      "source": "/get-your-house-cleaned-by-a-maids-for-perfect-cleaning-services",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 83
+    },
+    {
+      "source": "/get-your-house-cleaned-by-a-maids-for-perfect-cleaning-services/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 84
+    },
+    {
+      "source": "/gift-card/",
+      "destination": "https://quicklyn.com/gift-cards",
+      "spreadsheet_row": 85
+    },
+    {
+      "source": "/give-your-loved-ones-a-cleaning-service-gift-certificate-this-christmas/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 86
+    },
+    {
+      "source": "/green-clean-best-eco-friendly-cleaning-services-in-manhattan-right-now/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 87
+    },
+    {
+      "source": "/hire-airbnb-cleaning-service-for-a-flawless-holiday-home/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 88
+    },
+    {
+      "source": "/hiring-a-maid-in-manhattan-what-to-expect-and-how-to-prepare/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 89
+    },
+    {
+      "source": "/home-cleaning-in-manhattan-brooklyn/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 90
+    },
+    {
+      "source": "/home-cleaning-services-in-brooklyn-manhattan-ny/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 91
+    },
+    {
+      "source": "/house-cleaning-during-covid-19-how-our-workers-are-staying-safe/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 92
+    },
+    {
+      "source": "/house-cleaning-gift-certificates-a-present-for-every-occasion/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 93
+    },
+    {
+      "source": "/how-can-you-find-reliable-apartment-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 94
+    },
+    {
+      "source": "/how-does-move-in-move-out-cleaning-service-in-brooklyn-streamline-your-transition/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 95
+    },
+    {
+      "source": "/how-do-you-choose-a-cleaning-company-for-a-move-out-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 96
+    },
+    {
+      "source": "/how-long-does-it-take-to-clean-a-house/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 97
+    },
+    {
+      "source": "/how-much-does-it-cost-to-hire-a-house-cleaning-service-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 98
+    },
+    {
+      "source": "/how-often-should-you-hire-a-deep-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 99
+    },
+    {
+      "source": "/how-professional-cleaning-reduces-allergies-in-manhattan-residences/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 100
+    },
+    {
+      "source": "/how-quicklyn-is-revolutionizing-the-nyc-house-cleaning-industry/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 101
+    },
+    {
+      "source": "/how-to-book-home-cleaning-services-online-in-manhattan-fast-easy/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 102
+    },
+    {
+      "source": "/how-to-choose-the-best-cleaning-service-in-brooklyn-ny/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 103
+    },
+    {
+      "source": "/how-to-choose-the-right-cleaning-service-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 104
+    },
+    {
+      "source": "/how-to-find-the-best-apartment-cleaning-services-in-brooklyn-on-a-budget/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 105
+    },
+    {
+      "source": "/how-to-find-the-best-dish-washing-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 106
+    },
+    {
+      "source": "/how-to-find-the-best-home-cleaning-company-top-five-considerations/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 107
+    },
+    {
+      "source": "/how-to-find-the-best-tile-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 108
+    },
+    {
+      "source": "/how-to-get-a-sparkly-clean-bathtub/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 109
+    },
+    {
+      "source": "/how-to-keep-your-apartment-ready-for-new-tenants-cleaning-tips-every-landlord-should-know/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 110
+    },
+    {
+      "source": "/how-to-revitalize-your-space-with-expert-carpet-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 111
+    },
+    {
+      "source": "/is-a-stinky-toilet-your-worst-nemesis-here-are-some-cleaning-tips-to-keep-your-toilet-as-good-as-new/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 112
+    },
+    {
+      "source": "/is-it-worth-paying-for-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 113
+    },
+    {
+      "source": "/jobs/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 114
+    },
+    {
+      "source": "/keep-your-living-room-clean-with-this-easy-checklist/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 115
+    },
+    {
+      "source": "/make-house-cleaning-fun-tips-to-keep-you-engaged-while-you-spruce-up-your-abode",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 116
+    },
+    {
+      "source": "/make-house-cleaning-fun-tips-to-keep-you-engaged-while-you-spruce-up-your-abode/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 117
+    },
+    {
+      "source": "/mobile-app/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 118
+    },
+    {
+      "source": "/most-effective-ways-to-remove-grease-get-quicklyn-s-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 119
+    },
+    {
+      "source": "/office-cleaning-services-in-brooklyn-ny/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 120
+    },
+    {
+      "source": "/perfect-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 121
+    },
+    {
+      "source": "/pet-friendly-cleaning-tips-for-nyc-apartment-dwellers/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 122
+    },
+    {
+      "source": "/post-party-cleanup-simple-steps-to-clean-your-home/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 123
+    },
+    {
+      "source": "/product-category/product/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 124
+    },
+    {
+      "source": "/products/hurricane-spin-mop-home/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 125
+    },
+    {
+      "source": "/product-tag/hurricane-spin-mop/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 126
+    },
+    {
+      "source": "/professional-home-cleaning-services-brooklyn-ny/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 127
+    },
+    {
+      "source": "/professional-home-cleaning-services-in-brooklyn-for-all/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 128
+    },
+    {
+      "source": "/professional-house-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 129
+    },
+    {
+      "source": "/professional-move-in-move-out-cleaning-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 130
+    },
+    {
+      "source": "/pro-tips-to-keep-your-airbnb-neat-clean/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 131
+    },
+    {
+      "source": "/removing-pet-stains-how-cleaning-companies-do-it/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 132
+    },
+    {
+      "source": "/reviews/",
+      "destination": "https://quicklyn.com/",
+      "spreadsheet_row": 133
+    },
+    {
+      "source": "/same-day-house-cleaning-for-events-fast-reliable/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 134
+    },
+    {
+      "source": "/say-goodbye-to-hazy-and-foggy-reflections-with-these-super-effective-mirror-cleaning-guide",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 135
+    },
+    {
+      "source": "/say-goodbye-to-hazy-and-foggy-reflections-with-these-super-effective-mirror-cleaning-guide/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 136
+    },
+    {
+      "source": "/services",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 137
+    },
+    {
+      "source": "/services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 138
+    },
+    {
+      "source": "/services/airbnb-cleaning-services",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 139
+    },
+    {
+      "source": "/services/airbnb-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 140
+    },
+    {
+      "source": "/services/apartment-cleaning-services",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 142
+    },
+    {
+      "source": "/services/apartment-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 143
+    },
+    {
+      "source": "/services/deep-cleaning-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 145
+    },
+    {
+      "source": "/services/deep-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 146
+    },
+    {
+      "source": "/services/home-cleaning-services",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 147
+    },
+    {
+      "source": "/services/home-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 148
+    },
+    {
+      "source": "/services/housekeeping-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 149
+    },
+    {
+      "source": "/services/move-in-move-out-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 150
+    },
+    {
+      "source": "/sparkling-clean-home-for-christmas-book-quicklyn-now/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 151
+    },
+    {
+      "source": "/superior-cleaning-services-now-in-brooklyn-ny/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 152
+    },
+    {
+      "source": "/tag/airbnb-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 153
+    },
+    {
+      "source": "/tag/airbnb-cleaning-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 154
+    },
+    {
+      "source": "/tag/apartment-cleaners-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 155
+    },
+    {
+      "source": "/tag/apartment-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 156
+    },
+    {
+      "source": "/tag/basement-cleaners-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 157
+    },
+    {
+      "source": "/tag/best-basement-cleaning-services-in-brooklyn-prices/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 158
+    },
+    {
+      "source": "/tag/best-deep-cleaning-services-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 159
+    },
+    {
+      "source": "/tag/best-dish-washing-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 160
+    },
+    {
+      "source": "/tag/best-home-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 161
+    },
+    {
+      "source": "/tag/best-house-cleaning-service-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 162
+    },
+    {
+      "source": "/tag/best-residential-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 163
+    },
+    {
+      "source": "/tag/best-tile-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 164
+    },
+    {
+      "source": "/tag/cleaning-service-in-nyc/page/2/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 165
+    },
+    {
+      "source": "/tag/dish-washing-service-in-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 166
+    },
+    {
+      "source": "/tag/home-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 167
+    },
+    {
+      "source": "/tag/home-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 168
+    },
+    {
+      "source": "/tag/home-cleaning-services-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 169
+    },
+    {
+      "source": "/tag/home-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 170
+    },
+    {
+      "source": "/tag/home-cleaning-services-in-long-island/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 171
+    },
+    {
+      "source": "/tag/home-cleaning-services-in-manhattan/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 172
+    },
+    {
+      "source": "/tag/home-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 173
+    },
+    {
+      "source": "/tag/home-deep-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 174
+    },
+    {
+      "source": "/tag/house-cleaning-services-in-brooklyn/page/3/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 175
+    },
+    {
+      "source": "/tag/local-move-in-move-out-cleaning-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 176
+    },
+    {
+      "source": "/tag/maid-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 177
+    },
+    {
+      "source": "/tag/maid-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 178
+    },
+    {
+      "source": "/tag/move-in-move-out-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 179
+    },
+    {
+      "source": "/tag/move-in-move-out-cleaning-service-in-bronx/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 180
+    },
+    {
+      "source": "/tag/move-in-move-out-cleaning-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 181
+    },
+    {
+      "source": "/tag/professional-house-cleaning-services-in-new-york/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 182
+    },
+    {
+      "source": "/the-cost-of-airbnb-cleaning-services-in-brooklyn-2025/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 183
+    },
+    {
+      "source": "/the-evolution-of-home-cleaning-trends-and-innovations-shaping-the-industry/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 184
+    },
+    {
+      "source": "/the-hidden-benefits-of-move-out-cleaning-services-in-2025/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 185
+    },
+    {
+      "source": "/the-ultimate-checklist-for-apartment-cleaning-in-2025/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 186
+    },
+    {
+      "source": "/the-ultimate-guide-to-keeping-your-apartment-spotless/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 187
+    },
+    {
+      "source": "/the-ultimate-spring-cleaning-checklist-2025/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 188
+    },
+    {
+      "source": "/tips-to-find-a-good-airbnb-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 189
+    },
+    {
+      "source": "/tips-to-hire-cleaning-services-at-a-nominal-cost/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 190
+    },
+    {
+      "source": "/top-10-cleaning-services-in-brooklyn-for-every-budget-2026-guide/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 191
+    },
+    {
+      "source": "/top-7-things-to-clean-before-the-advent-of-winter/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 192
+    },
+    {
+      "source": "/top-cleaning-hacks-for-busy-new-yorkers/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 193
+    },
+    {
+      "source": "/top-kitchen-cleaning-mistakes-homeowners-make/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 194
+    },
+    {
+      "source": "/top-reasons-why-house-cleaning-gift-certificate-is-the-ideal-gift-for-2022/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 195
+    },
+    {
+      "source": "/types-of-cleaning-services-you-can-avail-when-you-hire-house-cleaning-maids/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 196
+    },
+    {
+      "source": "/what-are-the-benefits-of-deep-cleaning-your-home/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 197
+    },
+    {
+      "source": "/what-are-the-health-benefits-of-a-clean-home/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 198
+    },
+    {
+      "source": "/what-expectations-should-you-have-from-a-luxury-cleaning-service/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 199
+    },
+    {
+      "source": "/what-is-the-cost-of-housekeeping-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 200
+    },
+    {
+      "source": "/what-is-the-role-of-deep-cleaning-services-in-nyc/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 201
+    },
+    {
+      "source": "/what-manhattan-parents-look-for-in-family-safe-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 202
+    },
+    {
+      "source": "/what-sets-professional-house-cleaning-apart-in-manhattan/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 203
+    },
+    {
+      "source": "/what-to-expect-from-a-cleaning-service-provider/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 204
+    },
+    {
+      "source": "/when-should-you-consider-hiring-house-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 205
+    },
+    {
+      "source": "/where-to-find-the-best-basement-cleaning-service-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 206
+    },
+    {
+      "source": "/where-to-find-the-best-residential-cleaning-services-in-brooklyn/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 207
+    },
+    {
+      "source": "/why-busy-professionals-in-nyc-rely-on-maid-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 208
+    },
+    {
+      "source": "/why-deep-cleaning-is-essential-for-a-healthy-home-in-2025/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 209
+    },
+    {
+      "source": "/why-hiring-professional-cleaners-in-nyc-is-worth-every-penny/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 210
+    },
+    {
+      "source": "/why-should-brooklyn-renters-rely-on-professional-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 211
+    },
+    {
+      "source": "/why-you-need-home-cleaning-services-a-simple-guide/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service",
+      "spreadsheet_row": 212
+    }
+  ]
+}

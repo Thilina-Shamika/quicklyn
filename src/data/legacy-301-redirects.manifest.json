@@ -1,0 +1,34 @@
+{
+  "rows": [
+    {
+      "row_sheet": 2,
+      "status": "skipped",
+      "detail": "wildcard_not_safe_in_next",
+      "URL": "https://quicklyn.com/*",
+      "Redirect To": "https://quicklyn.com/"
+    },
+    {
+      "row_sheet": 77,
+      "status": "deduped_duplicate_row",
+      "source": "/everyone-in-brooklyn-talking-about-quicklyn-cleaning/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service"
+    },
+    {
+      "row_sheet": 141,
+      "status": "deduped_duplicate_row",
+      "source": "/services/airbnb-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service"
+    },
+    {
+      "row_sheet": 144,
+      "status": "deduped_duplicate_row",
+      "source": "/services/apartment-cleaning-services/",
+      "destination": "https://quicklyn.com/brooklyn-house-cleaning-service"
+    }
+  ],
+  "summary": {
+    "data_rows_spreadsheet_excluding_header": 211,
+    "redirect_lines_written": 207,
+    "issue_rows_tracked": 4
+  }
+}
