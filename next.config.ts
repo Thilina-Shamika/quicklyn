@@ -1,12 +1,5 @@
 import type { NextConfig } from "next";
 import path from "path";
-import legacyRedirects from "./src/data/legacy-301-redirects.json";
-
-const legacy301 = legacyRedirects.redirects.map(({ source, destination }) => ({
-  source,
-  destination,
-  permanent: true,
-}));
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
@@ -28,9 +21,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-  async redirects() {
-    return legacy301;
   },
   async headers() {
     return [

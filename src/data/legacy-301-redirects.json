@@ -1,6 +1,6 @@
 {
   "generated_from": "404 to 301 redirect mapping.xlsx",
-  "readme": "Import from 404\u2192301 spreadsheet. Wildcard omitted from Next redirects.",
+  "readme": "Import from 404→301 spreadsheet. Applied via middleware (301). Wildcard omitted.",
   "redirects": [
     {
       "source": "/10-expert-tips-on-how-to-iron-clothes-at-home",
