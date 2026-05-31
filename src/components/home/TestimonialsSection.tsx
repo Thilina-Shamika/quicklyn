@@ -3,9 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { WPTestimonial } from "@/lib/wordpress";
-
-const TRUSTINDEX_LOADER_SRC =
-  "https://cdn.trustindex.io/loader.js?6497e26716dc984eb846b82a01e";
+import { TrustIndexEmbed } from "@/components/TrustIndexEmbed";
 
 interface TestimonialsSectionProps {
   testimonials: WPTestimonial[];
@@ -54,25 +52,6 @@ export function TestimonialsSection({
   const touchIdRef = useRef<number | null>(null);
   const gestureDirectionRef = useRef<"horizontal" | "vertical" | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const trustIndexMountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!embedTrustIndex) return;
-    const mount = trustIndexMountRef.current;
-    if (!mount || mount.querySelector('script[src*="cdn.trustindex.io/loader.js"]')) return;
-
-    // TrustIndex replaces this <script> with the widget in-place (same as their default
-    // defer+async embed). next/script alone would mount the widget below the footer.
-    const script = document.createElement("script");
-    script.src = TRUSTINDEX_LOADER_SRC;
-    script.defer = true;
-    script.async = true;
-    mount.appendChild(script);
-
-    return () => {
-      mount.replaceChildren();
-    };
-  }, [embedTrustIndex]);
 
   const goPrev = useCallback(() => {
     if (count <= 0) return;
@@ -204,10 +183,7 @@ export function TestimonialsSection({
               <br />
               Our Community
             </h2>
-            <div
-              ref={trustIndexMountRef}
-              className="relative z-0 mx-auto w-full min-h-[120px] max-w-[1180px]"
-            />
+            <TrustIndexEmbed />
           </>
         ) : null}
 

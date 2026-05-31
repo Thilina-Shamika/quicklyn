@@ -11,6 +11,7 @@ import {
 import { Footer } from "@/components/Footer";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { TrustIndexAboveFooter } from "@/components/TrustIndexAboveFooter";
 import { OrganizationJsonLd } from "@/components/seo/OrganizationJsonLd";
 import { DEFAULT_DESCRIPTION, getMetadataBase, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
@@ -88,6 +89,7 @@ export default async function RootLayout({
         <OrganizationJsonLd />
         <GlobalHeader header={header} serviceNavItems={serviceNavItems} />
         {children}
+        <TrustIndexAboveFooter />
         <Footer data={footer} appLink={appLink} socialLinks={socialLinks} />
       </body>
     </html>
