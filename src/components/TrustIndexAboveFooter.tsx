@@ -5,6 +5,7 @@ import { TrustIndexEmbed } from "@/components/TrustIndexEmbed";
 
 function shouldHideTrustIndexAboveFooter(pathname: string): boolean {
   if (pathname === "/") return true;
+  if (pathname === "/our-mission") return true;
   if (pathname === "/blogs" || pathname.startsWith("/blogs/")) return true;
   return false;
 }

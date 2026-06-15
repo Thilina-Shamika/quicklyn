@@ -278,7 +278,11 @@ export default async function OurMissionPage() {
 
       {/* Testimonials - same as home page */}
       <div className="-mt-2 md:mt-6">
-        <TestimonialsSection testimonials={testimonials} transparentBackground />
+        <TestimonialsSection
+          testimonials={testimonials}
+          transparentBackground
+          embedTrustIndex
+        />
       </div>
 
       {/* Download the app - same as home page, no section background, no duplicate text */}
