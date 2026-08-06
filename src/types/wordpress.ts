@@ -434,6 +434,9 @@ export interface ServiceLandingACF {
   ["8th_section_description"]?: string;
   why_choose_quicklyn?: ServiceLandingWhyChooseItem[];
   why_choose_us_disclaimer?: string;
+  /** FAQ band between section 8 and 9. */
+  faq_heading?: string;
+  faq_list?: ServiceLandingFaqItem[];
   final_thoughts?: string;
   final_thoughts_description?: string;
   /** Heading (e.g. “Service Areas in Brooklyn”); split on “ in ” for title + subtitle when present. */
@@ -484,6 +487,13 @@ export interface ServiceLandingBannerPoint {
 export interface ServiceLandingExtraPointItem {
   acf_fc_layout?: string;
   extra_points_text?: string;
+}
+
+/** Repeater: FAQ row (between section 8 and 9). */
+export interface ServiceLandingFaqItem {
+  acf_fc_layout?: string;
+  question?: string;
+  answer?: string;
 }
 
 export interface WPServiceLanding {

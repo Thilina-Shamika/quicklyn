@@ -9,6 +9,7 @@ import { ServiceLandingFourthSection } from "@/components/service-landing/Servic
 import { ServiceLandingFifthSixthSection } from "@/components/service-landing/ServiceLandingFifthSixthSection";
 import { ServiceLandingSections789Block } from "@/components/service-landing/ServiceLandingSections789Block";
 import { ServiceLandingEighthSection } from "@/components/service-landing/ServiceLandingEighthSection";
+import { ServiceLandingFaqSection } from "@/components/service-landing/ServiceLandingFaqSection";
 import { ServiceLandingNinthSection } from "@/components/service-landing/ServiceLandingNinthSection";
 import { ServiceLandingSeventhSection } from "@/components/service-landing/ServiceLandingSeventhSection";
 import { buildPageMetadata, SITE_NAME } from "@/lib/seo";
@@ -21,6 +22,7 @@ import type {
   ServiceLandingWhatToExpectItem,
   ServiceLandingWhyChooseItem,
   ServiceLandingServiceAreaItem,
+  ServiceLandingFaqItem,
 } from "@/types/wordpress";
 
 /** ACF can send `false` for empty repeaters; `false ?? []` is still `false`. */
@@ -112,6 +114,17 @@ function normalizeWhyChooseQuicklyn(
   const raw = acf["why_choose_quicklyn"];
   if (Array.isArray(raw)) {
     return raw as ServiceLandingWhyChooseItem[];
+  }
+  return [];
+}
+
+function normalizeFaqList(
+  acf: Record<string, unknown> | null | undefined,
+): ServiceLandingFaqItem[] {
+  if (!acf || typeof acf !== "object") return [];
+  const raw = acf["faq_list"];
+  if (Array.isArray(raw)) {
+    return raw as ServiceLandingFaqItem[];
   }
   return [];
 }
@@ -443,8 +456,16 @@ export default async function ServiceLandingPage({
   const eighthHeading = acf["8th_section_heading"]?.trim();
   const eighthDescription = acf["8th_section_description"]?.trim();
   const whyChooseDisclaimer = acf["why_choose_us_disclaimer"]?.trim();
+  const faqHeading = acf["faq_heading"]?.trim();
+  const faqList = normalizeFaqList(acfRec);
   const finalThoughts = acf["final_thoughts"]?.trim();
   const finalThoughtsDescription = acf["final_thoughts_description"]?.trim();
+  const hasFaqContent = Boolean(
+    faqHeading ||
+      faqList.some(
+        (row) => (row.question ?? "").trim() || (row.answer ?? "").trim(),
+      ),
+  );
   const hasSections789Content = Boolean(
     seventhHeading ||
       seventhDescription ||
@@ -454,6 +475,7 @@ export default async function ServiceLandingPage({
       eighthDescription ||
       whyChooseQuicklyn.length > 0 ||
       whyChooseDisclaimer ||
+      hasFaqContent ||
       finalThoughts ||
       finalThoughtsDescription,
   );
@@ -523,6 +545,11 @@ export default async function ServiceLandingPage({
             section8Description={eighthDescription}
             whyChooseItems={whyChooseQuicklyn}
             whyChooseDisclaimer={whyChooseDisclaimer}
+          />
+          <ServiceLandingFaqSection
+            heading={faqHeading}
+            items={faqList}
+            accordionIdPrefix={`${slug}-faq`}
           />
           <ServiceLandingNinthSection
             finalThoughtsHeading={finalThoughts}
