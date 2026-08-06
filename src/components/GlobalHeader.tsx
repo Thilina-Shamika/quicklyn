@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  isCommercialNavItem,
+  isResidentialNavItem,
   isServicesHubNavItem,
   mapWordPressUrlToNextPath,
   type ServiceNavItem,
@@ -104,23 +106,42 @@ const SERVICES_PANEL_SHADOW =
 function ServicesDesktopDropdown({
   label,
   items,
+  hubHref,
 }: {
   label: string;
   items: ServiceNavItem[];
+  /** When omitted or `#`, the trigger label is not a link (dropdown only). */
+  hubHref?: string;
 }) {
   if (items.length === 0) return null;
+
+  const hubLink = hubHref?.trim();
+  const hasHubLink = Boolean(hubLink && hubLink !== "#");
+
+  const triggerLabelClass =
+    "relative z-[1] inline-flex w-max min-w-0 shrink-0 items-center gap-0.5 whitespace-nowrap py-2 text-[19px] font-semibold text-white outline-none ring-offset-2 ring-offset-transparent transition-opacity duration-150 hover:text-[#ffda00] focus-visible:ring-2 focus-visible:ring-[#ffda00]/75 group-hover/menu:pointer-events-none group-hover/menu:opacity-0";
+  const panelLabelClass =
+    "inline-flex max-w-none items-center gap-0.5 whitespace-nowrap text-[19px] font-semibold leading-none text-white outline-none hover:text-[#ffda00] focus-visible:ring-2 focus-visible:ring-[#ffda00]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1c6b71]";
+
+  const triggerLabel = (
+    <>
+      {label}
+      <ChevronDownNav className="-mb-px h-[18px] w-[18px] shrink-0 opacity-90" />
+    </>
+  );
+
   return (
     /* w-max + inline-flex: width follows the label; dropdown shell uses w-max min-w-full to match or grow */
     <div className="group/menu relative z-[130] inline-flex w-max max-w-full shrink-0 flex-col">
-      {/* In-flow label — no extra min-width/padding vs other nav links; fades when panel shows */}
-      <Link
-        href="/our-services"
-        className="relative z-[1] inline-flex w-max min-w-0 shrink-0 items-center gap-0.5 whitespace-nowrap py-2 text-[19px] font-semibold text-white outline-none ring-offset-2 ring-offset-transparent transition-opacity duration-150 hover:text-[#ffda00] focus-visible:ring-2 focus-visible:ring-[#ffda00]/75 group-hover/menu:pointer-events-none group-hover/menu:opacity-0"
-        style={{ fontSize: "19px" }}
-      >
-        {label}
-        <ChevronDownNav className="-mb-px h-[18px] w-[18px] shrink-0 opacity-90" />
-      </Link>
+      {hasHubLink ? (
+        <Link href={hubLink!} className={triggerLabelClass} style={{ fontSize: "19px" }}>
+          {triggerLabel}
+        </Link>
+      ) : (
+        <span className={`${triggerLabelClass} cursor-default`} style={{ fontSize: "19px" }}>
+          {triggerLabel}
+        </span>
+      )}
 
       {/*
         Shell is at least as wide as the trigger (min-w-full) but can grow (w-max) so the top row
@@ -141,14 +162,17 @@ function ServicesDesktopDropdown({
         <div className="relative w-max min-w-full">
           {/* Bleed left + pl so label aligns with trigger; pr-0 at right edge */}
           <div className="relative -left-[10px] w-max min-w-[calc(100%+20px)] rounded-t-[14px] bg-[#1c6b71] py-[11px] pl-[10px] pr-0">
-            <Link
-              href="/our-services"
-              className="inline-flex max-w-none items-center gap-0.5 whitespace-nowrap text-[19px] font-semibold leading-none text-white outline-none hover:text-[#ffda00] focus-visible:ring-2 focus-visible:ring-[#ffda00]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1c6b71]"
-              style={{ fontSize: "19px" }}
-            >
-              {label}
-              <ChevronDownNav className="h-[18px] w-[18px] shrink-0 opacity-90" />
-            </Link>
+            {hasHubLink ? (
+              <Link href={hubLink!} className={panelLabelClass} style={{ fontSize: "19px" }}>
+                {label}
+                <ChevronDownNav className="h-[18px] w-[18px] shrink-0 opacity-90" />
+              </Link>
+            ) : (
+              <span className={`${panelLabelClass} cursor-default`} style={{ fontSize: "19px" }}>
+                {label}
+                <ChevronDownNav className="h-[18px] w-[18px] shrink-0 opacity-90" />
+              </span>
+            )}
           </div>
 
           <ul
@@ -199,6 +223,13 @@ interface GlobalHeaderProps {
 export function GlobalHeader({ header, serviceNavItems }: GlobalHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
+
+  const residentialNavItems = serviceNavItems.filter(
+    (item) => item.pageType === "residential",
+  );
+  const commercialNavItems = serviceNavItems.filter(
+    (item) => item.pageType === "commercial",
+  );
 
   useEffect(() => {
     const handleScroll = () =>
@@ -343,6 +374,31 @@ export function GlobalHeader({ header, serviceNavItems }: GlobalHeaderProps) {
                       const label = (item.menu_item_name || item.menu_item_link?.title || "").trim();
                       const href = mapWordPressUrlToNextPath(item.menu_item_link?.url);
                       if (
+                        residentialNavItems.length > 0 &&
+                        isResidentialNavItem(label)
+                      ) {
+                        return (
+                          <ServicesDesktopDropdown
+                            key={`${label}-${index}-residential`}
+                            label={label}
+                            items={residentialNavItems}
+                            hubHref="/our-services"
+                          />
+                        );
+                      }
+                      if (
+                        commercialNavItems.length > 0 &&
+                        isCommercialNavItem(label)
+                      ) {
+                        return (
+                          <ServicesDesktopDropdown
+                            key={`${label}-${index}-commercial`}
+                            label={label}
+                            items={commercialNavItems}
+                          />
+                        );
+                      }
+                      if (
                         serviceNavItems.length > 0 &&
                         isServicesHubNavItem(label, href)
                       ) {
@@ -351,6 +407,7 @@ export function GlobalHeader({ header, serviceNavItems }: GlobalHeaderProps) {
                             key={`${label}-${index}-services`}
                             label={label}
                             items={serviceNavItems}
+                            hubHref="/our-services"
                           />
                         );
                       }
@@ -372,6 +429,22 @@ export function GlobalHeader({ header, serviceNavItems }: GlobalHeaderProps) {
                           key={item.href}
                           label={item.label}
                           items={serviceNavItems}
+                          hubHref="/our-services"
+                        />
+                      ) : item.label === "Residential" &&
+                        residentialNavItems.length > 0 ? (
+                        <ServicesDesktopDropdown
+                          key={item.href}
+                          label={item.label}
+                          items={residentialNavItems}
+                          hubHref="/our-services"
+                        />
+                      ) : item.label === "Commercial" &&
+                        commercialNavItems.length > 0 ? (
+                        <ServicesDesktopDropdown
+                          key={item.href}
+                          label={item.label}
+                          items={commercialNavItems}
                         />
                       ) : (
                         <Link

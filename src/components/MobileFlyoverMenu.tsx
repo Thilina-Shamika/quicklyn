@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  isCommercialNavItem,
+  isResidentialNavItem,
   isServicesHubNavItem,
   mapWordPressUrlToNextPath,
   type ServiceNavItem,
@@ -59,11 +61,100 @@ export function MobileFlyoverMenu({
   header,
   serviceNavItems,
 }: MobileFlyoverMenuProps) {
-  const [servicesSubmenuOpen, setServicesSubmenuOpen] = useState(false);
+  const [openSubmenuKey, setOpenSubmenuKey] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!open) setServicesSubmenuOpen(false);
+    if (!open) setOpenSubmenuKey(null);
   }, [open]);
+
+  const residentialNavItems = serviceNavItems.filter(
+    (item) => item.pageType === "residential",
+  );
+  const commercialNavItems = serviceNavItems.filter(
+    (item) => item.pageType === "commercial",
+  );
+
+  const renderMobileNavSubmenu = (
+    key: string,
+    label: string,
+    items: ServiceNavItem[],
+    hubHref?: string,
+  ) => {
+    const submenuId = `mobile-nav-submenu-${key}`;
+    const isOpen = openSubmenuKey === key;
+    const hubLink = hubHref?.trim();
+    const hasHubLink = Boolean(hubLink && hubLink !== "#");
+
+    return (
+      <div key={key} className="flex flex-col gap-2">
+        <div className="flex min-h-[44px] items-center gap-2">
+          {hasHubLink ? (
+            <Link
+              href={hubLink!}
+              onClick={onClose}
+              className="flex min-w-0 flex-1 items-center self-stretch py-1 text-left text-[16px] font-medium leading-snug text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
+            >
+              {label}
+            </Link>
+          ) : (
+            <span className="flex min-w-0 flex-1 items-center self-stretch py-1 text-left text-[16px] font-medium leading-snug text-white">
+              {label}
+            </span>
+          )}
+          <button
+            type="button"
+            id={`${submenuId}-toggle`}
+            aria-expanded={isOpen}
+            aria-controls={submenuId}
+            aria-label={
+              isOpen ? `Collapse ${label} submenu` : `Expand ${label} submenu`
+            }
+            onClick={(e) => {
+              e.preventDefault();
+              setOpenSubmenuKey((prev) => (prev === key ? null : key));
+            }}
+            className="flex h-11 w-11 shrink-0 items-center justify-center self-center rounded-lg text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
+          >
+            <MobileServicesChevronDown
+              className={`h-5 w-5 transition-transform duration-300 ease-out motion-reduce:transition-none ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        </div>
+        <div
+          className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
+            isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <ul
+              id={submenuId}
+              role="list"
+              aria-hidden={!isOpen}
+              className={`ml-3 flex flex-col gap-2 border-l border-white/25 pl-4 ${
+                isOpen ? "pointer-events-auto" : "pointer-events-none"
+              }`}
+              aria-label={`${label} service pages`}
+            >
+              {items.map((s) => (
+                <li key={s.slug}>
+                  <Link
+                    href={`/${s.slug}`}
+                    onClick={onClose}
+                    tabIndex={isOpen ? undefined : -1}
+                    className="text-left text-[14px] font-medium italic leading-snug text-white/90 hover:text-[#ffda00] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
+                  >
+                    {s.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const navItems = header?.acf?.navitgation ?? [];
   const menuDescription = header?.acf?.menu_description?.trim() ?? "";
@@ -137,76 +228,40 @@ export function MobileFlyoverMenu({
               const wpUrl = item.menu_item_link?.url ?? "#";
               const href = mapWordPressUrlToNextPath(wpUrl);
               const isCta = label.toUpperCase() === "GET THE APP";
+
+              if (
+                residentialNavItems.length > 0 &&
+                isResidentialNavItem(label)
+              ) {
+                return renderMobileNavSubmenu(
+                  `residential-${index}`,
+                  label,
+                  residentialNavItems,
+                  "/our-services",
+                );
+              }
+
+              if (
+                commercialNavItems.length > 0 &&
+                isCommercialNavItem(label)
+              ) {
+                return renderMobileNavSubmenu(
+                  `commercial-${index}`,
+                  label,
+                  commercialNavItems,
+                );
+              }
+
               const servicesSubmenu =
                 serviceNavItems.length > 0 &&
                 isServicesHubNavItem(label, href);
 
               if (servicesSubmenu) {
-                const submenuId = `mobile-services-submenu-${index}`;
-                return (
-                  <div key={index} className="flex flex-col gap-2">
-                    <div className="flex min-h-[44px] items-center gap-2">
-                      <Link
-                        href="/our-services"
-                        onClick={onClose}
-                        className="flex min-w-0 flex-1 items-center self-stretch py-1 text-left text-[16px] font-medium leading-snug text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
-                      >
-                        {label}
-                      </Link>
-                      <button
-                        type="button"
-                        id={`${submenuId}-toggle`}
-                        aria-expanded={servicesSubmenuOpen}
-                        aria-controls={submenuId}
-                        aria-label={
-                          servicesSubmenuOpen
-                            ? `Collapse ${label} submenu`
-                            : `Expand ${label} submenu`
-                        }
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setServicesSubmenuOpen((prev) => !prev);
-                        }}
-                        className="flex h-11 w-11 shrink-0 items-center justify-center self-center rounded-lg text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
-                      >
-                        <MobileServicesChevronDown
-                          className={`h-5 w-5 transition-transform duration-300 ease-out motion-reduce:transition-none ${
-                            servicesSubmenuOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    </div>
-                    <div
-                      className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
-                        servicesSubmenuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                      }`}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <ul
-                          id={submenuId}
-                          role="list"
-                          aria-hidden={!servicesSubmenuOpen}
-                          className={`ml-3 flex flex-col gap-2 border-l border-white/25 pl-4 ${
-                            servicesSubmenuOpen ? "pointer-events-auto" : "pointer-events-none"
-                          }`}
-                          aria-label="Service pages"
-                        >
-                          {serviceNavItems.map((s) => (
-                            <li key={s.slug}>
-                              <Link
-                                href={`/${s.slug}`}
-                                onClick={onClose}
-                                tabIndex={servicesSubmenuOpen ? undefined : -1}
-                                className="text-left text-[14px] font-medium leading-snug text-white/90 hover:text-[#ffda00] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1a5d5f]"
-                              >
-                                {s.title}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                return renderMobileNavSubmenu(
+                  `services-${index}`,
+                  label,
+                  serviceNavItems,
+                  "/our-services",
                 );
               }
 

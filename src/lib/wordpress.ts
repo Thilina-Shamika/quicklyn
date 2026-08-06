@@ -536,8 +536,14 @@ export async function getServices(): Promise<WPService[]> {
  * Local marketing / SEO landing pages from the `services` post type
  * (`/wp/v2/services?slug=…`), distinct from the `/service` listing items.
  */
-/** Published `services` CPT items for header / mobile nav (title + slug only). */
-export type ServiceNavItem = { slug: string; title: string };
+/** Published `services` CPT items for header / mobile nav. */
+export type ServiceNavPageType = "residential" | "commercial";
+
+export type ServiceNavItem = {
+  slug: string;
+  title: string;
+  pageType: ServiceNavPageType;
+};
 
 /** Match CMS “Services” / “Our services” row pointing at the hub for dropdown behavior. */
 export function isServicesHubNavItem(label: string, nextHref: string): boolean {
@@ -545,6 +551,19 @@ export function isServicesHubNavItem(label: string, nextHref: string): boolean {
   if (lbl === "services" || lbl === "our services") return true;
   const path = nextHref.trim().replace(/\/$/, "").split(/[?#]/)[0] ?? "";
   return path === "/our-services";
+}
+
+export function isResidentialNavItem(label: string): boolean {
+  return label.trim().toLowerCase() === "residential";
+}
+
+export function isCommercialNavItem(label: string): boolean {
+  return label.trim().toLowerCase() === "commercial";
+}
+
+function normalizeServiceNavPageType(raw: unknown): ServiceNavPageType {
+  const v = typeof raw === "string" ? raw.trim().toLowerCase() : "";
+  return v === "commercial" ? "commercial" : "residential";
 }
 
 function stripWpRenderedTitle(html: string): string {
@@ -562,7 +581,7 @@ export async function getPublishedServicesForNav(): Promise<ServiceNavItem[]> {
   try {
     const res = await fetch(
       getApiUrl(
-        "/services?per_page=100&status=publish&orderby=title&order=asc",
+        "/services?per_page=100&status=publish&orderby=title&order=asc&acf_format=standard",
       ),
       { next: { revalidate: 60 } },
     );
@@ -570,12 +589,14 @@ export async function getPublishedServicesForNav(): Promise<ServiceNavItem[]> {
     const data = (await res.json()) as Array<{
       slug?: string;
       title?: { rendered?: string };
+      acf?: { page_type_selection?: string };
     }>;
     if (!Array.isArray(data)) return [];
     return data
       .map((p) => ({
         slug: (p.slug ?? "").trim(),
         title: stripWpRenderedTitle(p.title?.rendered ?? ""),
+        pageType: normalizeServiceNavPageType(p.acf?.page_type_selection),
       }))
       .filter((x) => x.slug.length > 0 && x.title.length > 0);
   } catch {
