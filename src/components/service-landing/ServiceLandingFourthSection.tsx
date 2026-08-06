@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Image from "next/image";
+import { ServiceLandingExtraPointsSection } from "@/components/service-landing/ServiceLandingExtraPointsSection";
 import {
   isLikelyServiceLandingHtml,
   ServiceLandingRichText,
@@ -116,7 +117,35 @@ type Props = {
   bannerPoints: ServiceLandingBannerPoint[];
   /** `acf.4th_section_description_banner` */
   descriptionBanner?: string;
+  /** `acf.heading` — extra points band below the banner */
+  extraHeading?: string;
+  /** `acf.description` — extra points band below the banner */
+  extraDescription?: string;
+  /** `acf.extra_points` — bullet list in the band below the banner */
+  extraPoints?: string[];
 };
+
+function hasBannerCopy(p: Props): boolean {
+  const points = (p.bannerPoints ?? [])
+    .map((b) => (b?.point_name ?? "").trim())
+    .filter(Boolean);
+  return Boolean(
+    p.bannerHeading?.trim() ||
+      p.descriptionBanner?.trim() ||
+      points.length > 0,
+  );
+}
+
+function hasExtraPointsContent(p: {
+  extraHeading?: string;
+  extraDescription?: string;
+  extraPoints?: string[];
+}): boolean {
+  const points = (p.extraPoints ?? []).filter(Boolean);
+  return Boolean(
+    p.extraHeading?.trim() || p.extraDescription?.trim() || points.length > 0,
+  );
+}
 
 function hasContent(p: Props): boolean {
   const f = p.features?.filter(
@@ -127,7 +156,9 @@ function hasContent(p: Props): boolean {
       p.subHeading?.trim() ||
       p.descriptionText?.trim() ||
       (f && f.length > 0) ||
-      p.bannerImage,
+      p.bannerImage ||
+      hasBannerCopy(p) ||
+      hasExtraPointsContent(p),
   );
 }
 
@@ -140,6 +171,9 @@ export function ServiceLandingFourthSection({
   bannerHeading,
   bannerPoints,
   descriptionBanner,
+  extraHeading,
+  extraDescription,
+  extraPoints = [],
 }: Props) {
   if (
     !hasContent({
@@ -151,6 +185,9 @@ export function ServiceLandingFourthSection({
       bannerHeading,
       bannerPoints,
       descriptionBanner,
+      extraHeading,
+      extraDescription,
+      extraPoints,
     })
   ) {
     return null;
@@ -164,90 +201,135 @@ export function ServiceLandingFourthSection({
     .filter(Boolean);
   const bannerUrl = getAcfImageUrl(bannerImage ?? undefined);
   const alt = bannerImage?.alt?.trim() || "Banner";
-  const showBannerText =
-    Boolean(bannerHeading?.trim()) ||
-    points.length > 0 ||
-    Boolean(descriptionBanner?.trim());
+  const hasBannerCopyData = hasBannerCopy({
+    heading,
+    subHeading,
+    features,
+    descriptionText,
+    bannerImage,
+    bannerHeading,
+    bannerPoints,
+    descriptionBanner,
+  });
+  const showBannerOverlay = hasBannerCopyData;
+  const showExtraPointsBelow = hasExtraPointsContent({
+    extraHeading,
+    extraDescription,
+    extraPoints,
+  });
   const hasBannerImage = Boolean(bannerUrl);
+  const hasUpperFourthContent = Boolean(
+    heading?.trim() ||
+      subHeading?.trim() ||
+      descriptionText?.trim() ||
+      featureNames.length > 0,
+  );
 
   return (
     <section className="w-full text-white">
-      <div className="mx-auto w-full max-w-[1280px] px-5 py-16 sm:px-6 md:py-20 lg:px-8 lg:py-24">
-        {heading ? <FourthSectionTitle text={heading} /> : null}
+      {hasUpperFourthContent ? (
+        <div
+          className={[
+            "mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8",
+            hasBannerImage
+              ? "pt-16 md:pt-20 lg:pt-24"
+              : "py-16 md:py-20 lg:py-24",
+          ].join(" ")}
+        >
+          {heading ? <FourthSectionTitle text={heading} /> : null}
 
-        {subHeading ? (
-          <p className="mt-5 text-center text-sm text-white/95 sm:text-base md:mt-6">
-            {subHeading}
-          </p>
-        ) : null}
-
-        {featureNames.length > 0 ? (
-          <div
-            className="mt-8 flex flex-col gap-0 md:mt-10 md:flex-row md:items-stretch md:justify-center md:divide-x md:divide-y-0 md:divide-white/30"
-            role="list"
-          >
-            {featureNames.map((name, i) => (
-              <Fragment key={`${name}-${i}`}>
-                {i > 0 ? (
-                  <div
-                    className="h-px w-full shrink-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_50%,transparent_100%)] md:hidden"
-                    aria-hidden
-                  />
-                ) : null}
-                <div
-                  className="flex-1 px-2 py-4 text-center text-xs font-medium leading-snug text-white/95 first:pl-0 last:pr-0 sm:px-4 sm:text-sm md:py-0"
-                  role="listitem"
-                >
-                  {name}
-                </div>
-              </Fragment>
-            ))}
-          </div>
-        ) : null}
-
-        {descriptionText ? (
-          isLikelyServiceLandingHtml(descriptionText) ? (
-            <ServiceLandingRichText
-              content={descriptionText}
-              className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base [&_p]:mb-0"
-            />
-          ) : (
-            <p className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base">
-              {descriptionText}
+          {subHeading ? (
+            <p className="mt-5 text-center text-sm text-white/95 sm:text-base md:mt-6">
+              {subHeading}
             </p>
-          )
-        ) : null}
+          ) : null}
 
-        {hasBannerImage && (
+          {featureNames.length > 0 ? (
+            <div
+              className="mt-8 flex flex-col gap-0 md:mt-10 md:flex-row md:items-stretch md:justify-center md:divide-x md:divide-y-0 md:divide-white/30"
+              role="list"
+            >
+              {featureNames.map((name, i) => (
+                <Fragment key={`${name}-${i}`}>
+                  {i > 0 ? (
+                    <div
+                      className="h-px w-full shrink-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.45)_50%,transparent_100%)] md:hidden"
+                      aria-hidden
+                    />
+                  ) : null}
+                  <div
+                    className="flex-1 px-2 py-4 text-center text-xs font-medium leading-snug text-white/95 first:pl-0 last:pr-0 sm:px-4 sm:text-sm md:py-0"
+                    role="listitem"
+                  >
+                    {name}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          ) : null}
+
+          {descriptionText ? (
+            isLikelyServiceLandingHtml(descriptionText) ? (
+              <ServiceLandingRichText
+                content={descriptionText}
+                className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base [&_p]:mb-0"
+              />
+            ) : (
+              <p className="mt-6 text-center text-sm italic text-white/95 md:mt-8 md:text-base">
+                {descriptionText}
+              </p>
+            )
+          ) : null}
+        </div>
+      ) : null}
+
+      {hasBannerImage ? (
+        <div
+          className={[
+            "mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8",
+            hasUpperFourthContent ? "mt-10 sm:mt-12 md:mt-14" : "",
+            !showExtraPointsBelow ? "pb-16 md:pb-20 lg:pb-24" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <div
             className={[
-              "relative -mx-4 mt-10 w-[calc(100%+2rem)] overflow-x-visible overflow-y-visible sm:-mx-5 sm:mt-12 sm:w-[calc(100%+2.5rem)] md:-mx-6 md:mt-14 md:w-[calc(100%+3rem)] lg:-mx-7 lg:w-[calc(100%+3.5rem)] xl:-mx-8 xl:w-[calc(100%+4rem)]",
-              !showBannerText ? "max-sm:hidden" : "",
+              "relative -mx-4 w-[calc(100%+2rem)] overflow-x-visible overflow-y-visible sm:-mx-5 sm:w-[calc(100%+2.5rem)] md:-mx-6 md:w-[calc(100%+3rem)] lg:-mx-7 lg:w-[calc(100%+3.5rem)] xl:-mx-8 xl:w-[calc(100%+4rem)]",
+              !showBannerOverlay ? "max-sm:hidden" : "",
             ]
               .filter(Boolean)
               .join(" ")}
           >
-            {/*
-              Rounded image panel (no inset shadow) + overlay copy; points/description
-              column inset from the left to clear the figure in the art.
-            */}
-            <div className="relative overflow-visible pl-1 pt-6 sm:pl-2 sm:pt-8 md:pl-3 md:pt-10">
+            <div
+              className={[
+                "relative overflow-visible pl-1 sm:pl-2 md:pl-3",
+                hasUpperFourthContent
+                  ? "pt-6 sm:pt-8 md:pt-10"
+                  : "pt-0",
+              ].join(" ")}
+            >
               <div
                 className={[
                   "relative isolate overflow-hidden",
                   "rounded-[1.5rem] sm:rounded-[1.75rem] md:rounded-[2.25rem] lg:rounded-[2.5rem]",
-                  showBannerText ? "max-sm:bg-[#2a7a7c]" : "",
+                  showBannerOverlay ? "max-sm:bg-[#2a7a7c]" : "",
                 ]
                   .filter(Boolean)
                   .join(" ")}
               >
                 <div
-                  className="pointer-events-none absolute inset-0 z-0 max-sm:hidden"
-                  aria-hidden={showBannerText}
+                  className={[
+                    "pointer-events-none absolute inset-0 z-0",
+                    showBannerOverlay ? "max-sm:hidden" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  aria-hidden={showBannerOverlay}
                 >
                   <Image
                     src={bannerUrl!}
-                    alt={showBannerText ? "" : alt}
+                    alt={showBannerOverlay ? "" : alt}
                     fill
                     className="object-cover object-center md:object-left"
                     sizes="(min-width: 1280px) 1500px, 100vw"
@@ -255,7 +337,7 @@ export function ServiceLandingFourthSection({
                     priority={false}
                   />
                 </div>
-              {showBannerText ? (
+              {showBannerOverlay ? (
                 <div
                   className="relative z-10 flex w-full min-h-[min(68vw,26rem)] flex-col justify-center gap-6 px-5 py-8 sm:min-h-[28rem] sm:gap-7 sm:px-7 sm:py-10 md:min-h-[32rem] md:gap-8 md:px-9 md:py-11 lg:min-h-[34rem] lg:px-11"
                 >
@@ -310,11 +392,19 @@ export function ServiceLandingFourthSection({
                   aria-hidden
                 />
               )}
-            </div>
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : null}
+
+      {showExtraPointsBelow ? (
+        <ServiceLandingExtraPointsSection
+          heading={extraHeading}
+          description={extraDescription}
+          points={extraPoints}
+        />
+      ) : null}
     </section>
   );
 }

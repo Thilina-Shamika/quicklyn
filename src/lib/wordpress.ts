@@ -648,6 +648,7 @@ const ACF_REPEATER_FALSE_KEYS = new Set([
   "what_to_expect",
   "apartment_types",
   "banner_contents",
+  "extra_points",
   "features",
   "2nd_section_items",
   "3rd_section_accordion",

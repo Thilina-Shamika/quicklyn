@@ -68,6 +68,21 @@ function normalizeBannerContents(
   return [];
 }
 
+function normalizeExtraPoints(
+  acf: Record<string, unknown> | null | undefined,
+): string[] {
+  if (!acf || typeof acf !== "object") return [];
+  const raw = acf["extra_points"];
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((row) => {
+      if (!row || typeof row !== "object") return "";
+      const rec = row as Record<string, unknown>;
+      return String(rec["extra_points_text"] ?? "").trim();
+    })
+    .filter(Boolean);
+}
+
 function normalizeApartmentTypes(
   acf: Record<string, unknown> | null | undefined,
 ): ServiceLandingApartmentType[] {
@@ -382,6 +397,9 @@ export default async function ServiceLandingPage({
   const fourthBannerHeading = acf["banner_heading"]?.trim();
   const fourthDescriptionBanner =
     acf["4th_section_description_banner"]?.trim();
+  const fourthExtraHeading = acf["heading"]?.trim();
+  const fourthExtraDescription = acf["description"]?.trim();
+  const fourthExtraPoints = normalizeExtraPoints(acfRec);
   const fifthSixthBackground = acf["5th_section_background_image"];
   const fifthHeading = acf["5th_section_heading"]?.trim();
   const fifthDescription = acf["5th_section_description"]?.trim();
@@ -472,6 +490,9 @@ export default async function ServiceLandingPage({
         bannerHeading={fourthBannerHeading}
         bannerPoints={fourthBannerPoints}
         descriptionBanner={fourthDescriptionBanner}
+        extraHeading={fourthExtraHeading}
+        extraDescription={fourthExtraDescription}
+        extraPoints={fourthExtraPoints}
       />
       <ServiceLandingFifthSixthSection
         background={fifthSixthBackground}

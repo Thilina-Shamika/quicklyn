@@ -398,6 +398,10 @@ export interface ServiceLandingACF {
   ["4th_section_description_banner"]?: string;
   /** Subheading above bullets inside the lower banner. */
   banner_heading?: string;
+  /** Extra points band below the 4th section banner (heading + body + bullets). */
+  heading?: string;
+  description?: string;
+  extra_points?: ServiceLandingExtraPointItem[];
   /** Section 5–6 shared full-bleed background (teal + art; used for both blocks). */
   ["5th_section_background_image"]?: WPImage;
   ["5th_section_heading"]?: string;
@@ -471,6 +475,12 @@ export interface ServiceLandingFeatureItem {
 export interface ServiceLandingBannerPoint {
   acf_fc_layout?: string;
   point_name?: string;
+}
+
+/** Repeater: bullet line items below the 4th section banner. */
+export interface ServiceLandingExtraPointItem {
+  acf_fc_layout?: string;
+  extra_points_text?: string;
 }
 
 export interface WPServiceLanding {
