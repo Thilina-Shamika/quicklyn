@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { getSiteUrl, mapWordPressUrlToNextPath } from "@/lib/wordpress";
 import {
   decodeCommonWpHtmlEntities,
+  normalizeWpHtmlInput,
+  sanitizeHomeHeadingInline,
   sanitizeServiceLandingHeadingLine,
   sanitizeServiceLandingSection6Heading,
 } from "@/lib/sanitizeHtml";
@@ -332,97 +334,108 @@ function ApartmentTypeCard({
   );
 }
 
-function WhatToExpectList({ items }: { items: string[] }) {
-  if (items.length === 0) return null;
+type WhatToExpectStep = {
+  title: string;
+  description: string;
+};
+
+function normalizeWhatToExpectSteps(
+  rows: ServiceLandingWhatToExpectItem[],
+): WhatToExpectStep[] {
+  return rows
+    .map((row) => {
+      const title = row.what_to_expect_points?.trim() ?? "";
+      const description = row.what_to_expect_text?.trim() ?? "";
+      if (!title && !description) return null;
+      return { title, description };
+    })
+    .filter((step): step is WhatToExpectStep => step !== null);
+}
+
+const WHAT_TO_EXPECT_PILL_BG =
+  "linear-gradient(90deg, rgba(25,91,93,0.72) 0%, rgba(25,91,93,0.42) 32%, rgba(25,91,93,0.16) 58%, rgba(25,91,93,0.04) 78%, transparent 100%)";
+
+const WHAT_TO_EXPECT_TITLE_CLASS =
+  "m-0 text-[22px] font-medium leading-[1.3] text-white [&_a]:font-medium [&_a]:text-[#ffda00] [&_a]:underline [&_b]:font-bold [&_em]:italic [&_i]:italic [&_strong]:font-bold [&_u]:underline";
+
+const WHAT_TO_EXPECT_DESC_CLASS =
+  "m-0 text-[17px] font-normal leading-[1.65] text-white/60 transition-colors duration-300 ease-out group-hover:text-white/95 [&_a]:font-medium [&_a]:text-[#ffda00] [&_a]:underline [&_b]:font-bold [&_em]:italic [&_i]:italic [&_li]:text-[17px] [&_ol]:my-0 [&_p]:mb-0 [&_p]:text-[17px] [&_p]:font-normal [&_p]:leading-[1.65] [&_strong]:font-bold [&_ul]:my-0";
+
+function WhatToExpectStepTitle({ text }: { text: string }) {
+  const t = normalizeWpHtmlInput(text);
+  if (!t) return null;
   return (
-    <ul className="relative m-0 w-full min-w-0 list-none p-0">
-      {items.map((line, index) => (
-        <li
-          key={index}
-          className="group relative mb-4 w-full min-w-0 last:mb-0 sm:mb-5"
-        >
-          {/* Full-width row hover: linear #195b5d (left) → transparent (right) */}
-          <div
-            className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-l-full rounded-r-none
-              border-0 opacity-0
-              transition-all duration-300 ease-out
-              group-hover:opacity-100"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(25,91,93,0.55) 0%, rgba(25,91,93,0.28) 30%, rgba(25,91,93,0.1) 55%, rgba(25,91,93,0.02) 75%, transparent 100%)",
-            }}
-            aria-hidden
-          />
-          <div
-            className="relative z-10 flex w-full min-w-0
-              items-stretch gap-4
-              rounded-l-full rounded-r-2xl
-              border border-transparent
-              px-2.5
-              py-2.5
-              transition-all
-              duration-300
-              ease-out
-              sm:gap-5
-              sm:px-3.5
-              sm:py-3
-              group-hover:px-3
-              group-hover:py-3.5
-              sm:group-hover:px-4
-              sm:group-hover:py-4"
+    <h4
+      className={WHAT_TO_EXPECT_TITLE_CLASS}
+      dangerouslySetInnerHTML={{ __html: sanitizeHomeHeadingInline(t) }}
+    />
+  );
+}
+
+function WhatToExpectStepDescription({ text }: { text: string }) {
+  const t = normalizeWpHtmlInput(text);
+  if (!t) return null;
+  return (
+    <ServiceLandingRichText content={t} className={WHAT_TO_EXPECT_DESC_CLASS} />
+  );
+}
+
+function WhatToExpectList({ items }: { items: WhatToExpectStep[] }) {
+  if (items.length === 0) return null;
+
+  return (
+    <ol className="relative m-0 w-full min-w-0 max-w-3xl list-none p-0">
+      <span
+        className="pointer-events-none absolute bottom-10 left-[3.375rem] top-10 z-0 w-px border-l border-dashed border-white/30"
+        aria-hidden
+      />
+      {items.map((step, index) => {
+        const hasTitle = Boolean(step.title.trim());
+        const hasDescription = Boolean(step.description.trim());
+        const isSingleLine = hasTitle !== hasDescription;
+        return (
+          <li
+            key={`${index}-${step.title.slice(0, 24)}-${step.description.slice(0, 24)}`}
+            className={cn(
+              "group relative w-full min-w-0",
+              index > 0 ? "mt-5 sm:mt-6" : "",
+            )}
           >
-            <div className="relative isolate flex w-[5.5rem] shrink-0 flex-col items-center self-stretch sm:w-24">
-              {index < items.length - 1 ? (
-                <span
-                  className="absolute left-1/2 top-20 z-[1] w-0 -translate-x-1/2 border-l-2 border-dotted border-white/25
-                    h-[calc(100%-0.75rem)]"
-                  aria-hidden
-                />
-              ) : null}
-              <span
-                className="relative z-20 flex h-20 w-20 shrink-0
-                  items-center justify-center
-                  rounded-full
-                  border-2 border-white/50
-                  bg-[#2a7a7c] p-2.5
-                  text-center
-                  text-[34px] font-normal
-                  leading-[39px] tabular-nums
-                  text-white/50
-                  transition-all
-                  duration-300
-                  ease-out
-                  sm:p-3
-                  group-hover:border-white
-                  group-hover:bg-white
-                  group-hover:font-medium
-                  group-hover:text-[#2a7a7c]"
-                aria-hidden
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </div>
-            <p
-              className="m-0 min-w-0 flex-1 self-center
-                py-1
-                pl-0.5
-                pr-1
-                text-left text-[18px] font-normal
-                leading-[30px]
-                text-white/60
-                transition-all
-                duration-300
-                ease-out
-                sm:pr-1.5
-                sm:text-[22px] sm:leading-[36px]
-                group-hover:text-white"
+            <div
+              className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-l-full rounded-r-2xl opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+              style={{ background: WHAT_TO_EXPECT_PILL_BG }}
+              aria-hidden
+            />
+            <div
+              className={cn(
+                "relative z-10 flex w-full min-w-0 gap-4 rounded-l-full rounded-r-2xl border border-transparent px-2.5 py-2.5 transition-all duration-300 ease-out sm:gap-5 sm:px-3.5 sm:py-3 group-hover:px-3 group-hover:py-3.5 sm:group-hover:px-4 sm:group-hover:py-4",
+                isSingleLine ? "items-center" : "items-start",
+              )}
             >
-              {line}
-            </p>
-          </div>
-        </li>
-      ))}
-    </ul>
+              <div className="relative isolate flex w-[5.5rem] shrink-0 flex-col items-center self-stretch sm:w-24">
+                <span
+                  className="relative z-20 flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-white/50 bg-[#2a7a7c] p-2.5 text-center text-[34px] font-normal leading-none tabular-nums text-white/50 transition-all duration-300 ease-out sm:p-3 group-hover:border-white group-hover:bg-white group-hover:font-medium group-hover:text-[#2a7a7c] group-hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_36px_rgba(255,255,255,0.12),0_0_56px_rgba(255,255,255,0.06)]"
+                  aria-hidden
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <div
+                className={cn(
+                  "min-w-0 flex-1 transition-colors duration-300 ease-out group-hover:text-white",
+                  isSingleLine ? "py-0" : "space-y-1.5 pt-1.5 sm:space-y-2 sm:pt-2",
+                )}
+              >
+                {hasTitle ? <WhatToExpectStepTitle text={step.title} /> : null}
+                {hasDescription ? (
+                  <WhatToExpectStepDescription text={step.description} />
+                ) : null}
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 }
 
@@ -520,9 +533,7 @@ export function ServiceLandingFifthSixthSection({
   );
   const h6 = section6Heading?.trim() ?? "";
   const s6 = section6SubHeading?.trim() ?? "";
-  const steps = whatToExpect
-    .map((r) => r.what_to_expect_points?.trim() ?? "")
-    .filter(Boolean);
+  const steps = normalizeWhatToExpectSteps(whatToExpect);
   const disc5 = serviceDisclaimer?.trim() ?? "";
   const disc6 = whatToExpectDisclaimer?.trim() ?? "";
   const btnLabel = buttonText?.trim() ?? "";

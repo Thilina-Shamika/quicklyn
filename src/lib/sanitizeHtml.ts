@@ -4,7 +4,7 @@ import { getSiteUrl, mapWordPressUrlToNextPath } from "@/lib/wordpress";
 /** Heuristic: string contains HTML tags from the CMS rich text / WYSIWYG. */
 export function isLikelyServiceLandingHtml(text: string | null | undefined): boolean {
   if (!text) return false;
-  return /<\s*[a-z][\s\S]*?>/i.test(text);
+  return /<\/?\s*[a-z][^>]*\/?>/i.test(text);
 }
 
 function isExternalHttpHref(href: string): boolean {
@@ -145,6 +145,14 @@ export function decodeCommonWpHtmlEntities(s: string): string {
     .split("&#0AMP0;")
     .join("&")
     .replace(/&nbsp;/g, " ");
+}
+
+/** Fix common ACF/WYSIWYG quirks before sanitizing or rendering. */
+export function normalizeWpHtmlInput(text: string | null | undefined): string {
+  if (!text) return "";
+  let t = decodeCommonWpHtmlEntities(text.trim());
+  t = t.replace(/<\s*\/\s*br\s*>/gi, "<br />");
+  return t;
 }
 
 /**

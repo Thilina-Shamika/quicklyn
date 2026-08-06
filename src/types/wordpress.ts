@@ -462,7 +462,10 @@ export interface ServiceLandingNewImprovementItem {
 /** Repeater: numbered “what to expect” step (section 6). */
 export interface ServiceLandingWhatToExpectItem {
   acf_fc_layout?: string;
+  /** Step title (bold heading beside the number). */
   what_to_expect_points?: string;
+  /** Step description (textarea below the title). */
+  what_to_expect_text?: string;
 }
 
 /** Repeater: horizontal feature list (4th section, top). */
