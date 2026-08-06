@@ -351,7 +351,7 @@ export function ServiceLandingFourthSection({
                   {(points.length > 0 || descriptionBanner) && (
                     <div className="grid w-full grid-cols-1 items-start gap-6 sm:gap-7 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:gap-x-8 md:gap-y-0 md:pl-[24%] lg:pl-[22%] lg:gap-x-10 xl:pl-[23%]">
                       {points.length > 0 ? (
-                        <ul className="ml-1 w-full list-none space-y-1 p-0 pl-2 text-left text-[23px] font-normal leading-[42px] sm:ml-2 sm:pl-3 md:ml-3 md:pl-4 [text-shadow:0_1px_3px_rgba(0,0,0,0.4)]">
+                        <ul className="ml-1 w-full list-none space-y-1 p-0 pl-2 text-left text-[19px] font-normal leading-[29px] sm:ml-2 sm:pl-3 md:ml-3 md:pl-4 [text-shadow:0_1px_3px_rgba(0,0,0,0.4)]">
                           {points.map((p, i) => (
                             <li key={i} className="group flex gap-3.5">
                               <span
@@ -369,10 +369,10 @@ export function ServiceLandingFourthSection({
                         isLikelyServiceLandingHtml(descriptionBanner) ? (
                           <ServiceLandingRichText
                             content={descriptionBanner}
-                            className="w-full max-w-[16rem] text-left text-[18px] font-normal leading-[29px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]"
+                            className="w-full max-w-[16rem] text-left text-[16px] font-normal leading-[26px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]"
                           />
                         ) : (
-                          <p className="w-full max-w-[16rem] text-left text-[18px] font-normal leading-[29px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]">
+                          <p className="w-full max-w-[16rem] text-left text-[16px] font-normal leading-[26px] text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.35)] sm:max-w-[17rem] md:max-w-[18rem]">
                             {descriptionBanner}
                           </p>
                         )
